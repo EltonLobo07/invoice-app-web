@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { League_Spartan } from "next/font/google";
+
+const leagueSpartan = League_Spartan({
+  subsets: ["latin"],
+  weight: "variable",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -12,8 +18,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`antialiased`}>{children}</body>
+    <html lang="en" className={leagueSpartan.className}>
+      <body className="antialiased font-league-spartan">{children}</body>
     </html>
   );
 }

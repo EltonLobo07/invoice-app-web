@@ -1,1 +1,127 @@
 @import "tailwindcss";
+
+@theme {
+  /* ------------ breakpoints ------------ */
+  --breakpoint-md: 45rem; /* 720px */
+  --breakpoint-lg: 68.75rem; /* 1024px */
+
+  /* ------------ colors ------------ */
+  --color-ds-1: #7c5dfa;
+  --color-ds-2: #9277ff;
+  --color-ds-3: #1e2139;
+  --color-ds-4: #252945;
+  --color-ds-5: #dfe3fa;
+  --color-ds-6: #888eb0;
+  --color-ds-7: #7e88c3;
+  --color-ds-8: #0c0e16;
+  --color-ds-9: #ec5757;
+  --color-ds-10: #ff9797;
+  --color-ds-11: #f8f8fb;
+  --color-ds-12: #141625;
+
+  /* ------------ spacing ------------ */
+  --spacing-1px: 1px;
+  --spacing-2px: 2px;
+  --spacing-4px: 4px;
+  --spacing-8px: 8px;
+  --spacing-12px: 12px;
+  --spacing-16px: 16px;
+  --spacing-20px: 20px;
+  --spacing-24px: 24px;
+  --spacing-28px: 28px;
+  --spacing-32px: 32px;
+  --spacing-36px: 36px;
+  --spacing-40px: 40px;
+  --spacing-44px: 44px;
+  --spacing-48px: 48px;
+  --spacing-52px: 52px;
+  --spacing-56px: 56px;
+  --spacing-60px: 60px;
+  --spacing-64px: 64px;
+  --spacing-72px: 72px;
+  --spacing-80px: 80px;
+  --spacing-96px: 96px;
+  --spacing-100px: 100px;
+  --spacing-104px: 104px;
+  --spacing-108px: 108px;
+  --spacing-112px: 112px;
+  --spacing-116px: 116px;
+  --spacing-120px: 120px;
+
+  /* ------------ font ------------ */
+  --font-league-spartan: "League Spartan", sans-serif;
+
+  /* ------------ font-weight ------------ */
+  --font-weight-heading-l: var(--font-weight-bold);
+  --font-weight-heading-m: var(--font-weight-bold);
+  --font-weight-heading-s: var(--font-weight-bold);
+  --font-weight-heading-s-var: var(--font-weight-bold);
+  --font-weight-body: var(--font-weight-medium);
+  --font-weight-body-var: var(--font-weight-medium);
+
+  /* ------------ font-size ------------ */
+  --text-heading-l: var(--text-4xl);
+  --text-heading-m: var(--text-2xl);
+  --text-heading-s: 0.9375rem; /* 15px */
+  --text-heading-s-var: var(--text-heading-s);
+  --text-body: 0.8125rem; /* 13px */
+  --text-body-var: var(--text-body);
+
+  /* ------------ leading ------------ */
+  --leading-heading-l: 2.0625rem; /* 33px */
+  --leading-heading-m: 1.375rem; /* 22px */
+  --leading-heading-s: 1.5rem; /* 24px */
+  --leading-heading-s-var: 0.9375rem; /* 15px */
+  --leading-body: 1.125rem; /* 18px */
+  --leading-body-var: var(--leading-heading-s-var);
+
+  /* ------------ tracking ------------ */
+  --tracking-heading-l: -0.0625rem; /* -1px */
+  --tracking-heading-m: -0.046875rem; /* -0.75px */
+  --tracking-heading-s: -0.015625rem; /* -0.25px */
+  --tracking-heading-s-var: var(--tracking-heading-s);
+  --tracking-body: -0.00625rem; /* -0.1px */
+  --tracking-body-var: var(--tracking-heading-s);
+}
+
+@utility typography-heading-l {
+  font-weight: var(--font-weight-heading-l);
+  font-size: var(--text-heading-l);
+  line-height: var(--leading-heading-l);
+  letter-spacing: var(--tracking-heading-l);
+}
+
+@utility typography-heading-m {
+  font-weight: var(--font-weight-heading-m);
+  font-size: var(--text-heading-m);
+  line-height: var(--leading-heading-m);
+  letter-spacing: var(--tracking-heading-m);
+}
+
+@utility typography-heading-s {
+  font-weight: var(--font-weight-heading-s);
+  font-size: var(--text-heading-s);
+  line-height: var(--leading-heading-s);
+  letter-spacing: var(--tracking-heading-s);
+}
+
+@utility typography-heading-s-var {
+  font-weight: var(--font-weight-heading-s-var);
+  font-size: var(--text-heading-s-var);
+  line-height: var(--leading-heading-s-var);
+  letter-spacing: var(--tracking-heading-s-var);
+}
+
+@utility typography-body {
+  font-weight: var(--font-weight-body);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  letter-spacing: var(--tracking-body);
+}
+
+@utility typography-body-var {
+  font-weight: var(--font-weight-body-var);
+  font-size: var(--text-body-var);
+  line-height: var(--leading-body-var);
+  letter-spacing: var(--tracking-body-var);
+}
