@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { League_Spartan } from "next/font/google";
-import { classJoin } from "@/utils";
+import { classJoin } from "@/utils/general";
 import { cookies } from "next/headers";
 import { DARK_THEME_CLASS_NAME, IS_DARK_THEME_COOKIE_NAME } from "@/constants";
 import { StoreProvider } from "@/components";

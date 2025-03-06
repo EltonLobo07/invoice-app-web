@@ -1,6 +1,6 @@
 "use client";
 
-import type { Serializable } from "@/utils";
+import type { Serializable } from "@/utils/serialize";
 import React from "react";
 import {
   createStore,
