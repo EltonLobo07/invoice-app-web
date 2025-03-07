@@ -6,12 +6,11 @@ export type FormState<
   TSchema extends GenericFormSchema,
   TSuccessData = unknown
 > =
-  | { type?: undefined; submissionId?: undefined; inputState?: undefined }
+  | { type?: undefined; inputState?: undefined }
   | {
       type: "success";
       message?: string;
       data?: TSuccessData;
-      submissionId?: undefined;
       inputState?: undefined;
     }
   | FormStateError<TSchema>;
@@ -22,7 +21,6 @@ export type FormErrors<TSchema extends GenericFormSchema> = Partial<
 
 type FormStateError<TSchema extends GenericFormSchema> = {
   type: "error";
-  submissionId: string;
   inputState: Record<string, string>;
 } & (
   | {

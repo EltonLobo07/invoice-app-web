@@ -21,10 +21,6 @@ export function getFormErrors<TSchema extends GenericFormSchema>(
   return formErrors;
 }
 
-export function getSubmissionId(): string {
-  return crypto.randomUUID();
-}
-
 export function toObject(formData: FormData): Record<string, string> {
   const res: Record<string, string> = {};
   for (const [k, v] of formData.entries()) {
@@ -32,3 +28,32 @@ export function toObject(formData: FormData): Record<string, string> {
   }
   return res;
 }
+
+function isParseSuccessful(schema: v.GenericSchema, data: unknown): boolean {
+  return v.safeParse(schema, data, { abortEarly: true }).success;
+}
+
+type CreateOnSubmitArgs = {
+  schema: GenericFormSchema;
+  submit: () => void;
+  formRef: React.RefObject<HTMLFormElement | null>;
+};
+
+export function createOnSubmit({
+  schema,
+  submit,
+  formRef,
+}: CreateOnSubmitArgs): (e: React.FormEvent<HTMLFormElement>) => void {
+  return (e: React.FormEvent<HTMLFormElement>) => {
+    if (!isParseSuccessful(schema, toObject(new FormData(e.currentTarget)))) {
+      e.preventDefault();
+      submit();
+      return;
+    }
+    formRef.current?.requestSubmit();
+  };
+}
+
+// export function getSubmissionId(): string {
+//   return crypto.randomUUID();
+// }

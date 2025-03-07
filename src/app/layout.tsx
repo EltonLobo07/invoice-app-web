@@ -40,7 +40,8 @@ export default async function RootLayout({
           "font-league-spartan",
           "relative",
           "h-full",
-          "bg-ds-11 dark:bg-ds-12"
+          "bg-ds-11 dark:bg-ds-12",
+          "text-black dark:text-white"
         )}
       >
         <h1 className="sr-only">invoice application</h1>
