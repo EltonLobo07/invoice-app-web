@@ -1,6 +1,6 @@
 "use client";
 
-import type { CustomProps, OmitKey } from "@/utils/general";
+import { classJoin, CustomProps, OmitKey } from "@/utils/general";
 import React from "react";
 import { Input } from "../Input";
 
@@ -24,7 +24,14 @@ export function InputWithErrMsg({ $errorMsg, ...inputProps }: Props) {
         aria-invalid={isInvalid}
         aria-describedby={errorMsgId}
       />
-      <span id={errorMsgId} className="typography-body-var text-ds-9">
+      <span
+        id={errorMsgId}
+        className={classJoin(
+          "typography-body-var text-ds-9",
+          "inline-block transition-opacity duration-300",
+          isInvalid ? "opacity-100" : "opacity-0"
+        )}
+      >
         {$errorMsg}
       </span>
     </div>

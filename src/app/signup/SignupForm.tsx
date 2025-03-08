@@ -54,21 +54,21 @@ export function SignupForm() {
         $label="Email"
         $errorMsg={errors["email"]?.message}
         $padding="sm"
-        type="text"
+        type="email"
         {...register("email")}
       />
       <LabelledInputWithErrMsg
         $label="Password"
         $errorMsg={errors["password"]?.message}
         $padding="sm"
-        type="text"
+        type="password"
         {...register("password")}
       />
       <LabelledInputWithErrMsg
         $label="Password confirmation"
         $errorMsg={errors["passwordConfirmation"]?.message}
         $padding="sm"
-        type="text"
+        type="password"
         {...register("passwordConfirmation")}
       />
       <SubmitBtn isFormSubmitting={formIsSubmitting} />

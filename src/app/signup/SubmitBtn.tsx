@@ -10,7 +10,8 @@ type Props = {
 
 export function SubmitBtn(props: Props) {
   return (
-    <button
+    <motion.button
+      layout="position"
       type="submit"
       className={classJoin(
         "bg-ds-1 hover:bg-ds-2",
@@ -30,6 +31,6 @@ export function SubmitBtn(props: Props) {
       >
         Submit
       </motion.span>
-    </button>
+    </motion.button>
   );
 }

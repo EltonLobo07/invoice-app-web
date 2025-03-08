@@ -15,7 +15,7 @@ export const SignupSchema = v.pipe(
       v.string(),
       v.trim(),
       v.nonEmpty("can't be empty"),
-      v.email()
+      v.email("invalid email")
     ),
     password: v.pipe(
       v.string(),
