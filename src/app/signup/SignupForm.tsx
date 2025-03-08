@@ -7,9 +7,10 @@ import { valibotResolver } from "@hookform/resolvers/valibot";
 import { SignupSchema } from "./schemas";
 import { classJoin } from "@/utils/general";
 import { LabelledInputWithErrMsg } from "./LabelledInputWithErrMsg";
+import { SubmitBtn } from "./SubmitBtn";
 
 export function SignupForm() {
-  const { formAction, formRef } = useFormAction({
+  const { formAction, formRef, formIsSubmitting } = useFormAction({
     action: signup,
     initialFormState: {},
   });
@@ -70,19 +71,7 @@ export function SignupForm() {
         type="text"
         {...register("passwordConfirmation")}
       />
-      <button
-        type="submit"
-        className={classJoin(
-          "bg-ds-1 hover:bg-ds-2",
-          "text-white",
-          "rounded-sm",
-          "px-16px pt-4 pb-3",
-          "typography-heading-s-var",
-          "w-full text-center"
-        )}
-      >
-        Submit
-      </button>
+      <SubmitBtn isFormSubmitting={formIsSubmitting} />
     </form>
   );
 }
