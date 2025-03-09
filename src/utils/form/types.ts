@@ -21,7 +21,7 @@ export type FormErrors<TSchema extends GenericFormSchema> = Partial<
 
 type FormStateError<TSchema extends GenericFormSchema> = {
   type: "error";
-  inputState: Record<string, string>;
+  inputState: v.InferInput<TSchema>;
 } & (
   | {
       formErrors: FormErrors<TSchema>;
@@ -35,5 +35,5 @@ export type FormAction<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TParams extends any[] = []
 > = (
-  ...params: [...TParams, FormState<TSchema>, FormData]
+  ...params: [...TParams, FormState<TSchema>, v.InferInput<TSchema>]
 ) => Promise<FormState<TSchema>>;

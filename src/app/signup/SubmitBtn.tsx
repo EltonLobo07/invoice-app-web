@@ -12,7 +12,8 @@ export function SubmitBtn(props: Props) {
   return (
     <motion.button
       layout="position"
-      type="submit"
+      aria-disabled={props.isFormSubmitting}
+      type={props.isFormSubmitting ? "button" : "submit"}
       className={classJoin(
         "bg-ds-1 hover:bg-ds-2",
         "text-white",
@@ -20,7 +21,8 @@ export function SubmitBtn(props: Props) {
         "px-16px py-3",
         "typography-heading-s-var",
         "w-full",
-        "flex justify-center items-center gap-x-1"
+        "flex justify-center items-center gap-x-1",
+        props.isFormSubmitting && "cursor-not-allowed"
       )}
     >
       <Spinner isLoading={props.isFormSubmitting} />

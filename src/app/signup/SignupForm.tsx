@@ -1,6 +1,6 @@
 "use client";
 
-import { createOnSubmit, useFormAction } from "@/utils/form";
+import { useFormAction, useResetOnSuccess } from "@/utils/form";
 import { signup } from "./actions";
 import { useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
@@ -8,9 +8,10 @@ import { SignupSchema } from "./schemas";
 import { classJoin } from "@/utils/general";
 import { LabelledInputWithErrMsg } from "./LabelledInputWithErrMsg";
 import { SubmitBtn } from "./SubmitBtn";
+import React from "react";
 
 export function SignupForm() {
-  const { formAction, formRef, formIsSubmitting } = useFormAction({
+  const { formState, formIsSubmitting, formAction } = useFormAction({
     action: signup,
     initialFormState: {},
   });
@@ -19,22 +20,17 @@ export function SignupForm() {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     resolver: valibotResolver(SignupSchema),
     defaultValues: {},
   });
 
-  const onSubmit = createOnSubmit({
-    formRef,
-    schema: SignupSchema,
-    submit: handleSubmit(() => {}),
-  });
+  useResetOnSuccess({ reset, formState });
 
   return (
     <form
-      ref={formRef}
-      action={formAction}
-      onSubmit={onSubmit}
+      onSubmit={handleSubmit(formAction)}
       className={classJoin(
         "p-8",
         "bg-white dark:bg-ds-12",

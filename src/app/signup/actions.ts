@@ -1,25 +1,24 @@
 "use server";
 
-import { type FormAction, getFormErrors, toObject } from "@/utils/form";
-import * as v from "valibot";
+import { type FormAction, isSchemaParseSuccessful } from "@/utils/form";
 import { SignupSchema } from "./schemas";
 // import bcrypt from "bcrypt";
 // import { db } from "../../../db";
 
 export const signup: FormAction<typeof SignupSchema> = async (
   _formState,
-  formData
+  inputState
 ) => {
-  const inputState = toObject(formData);
-  const result = v.safeParse(SignupSchema, inputState);
-  if (!result.success) {
+  // redundant check needed (untrusted senders)
+  if (!isSchemaParseSuccessful(SignupSchema, inputState)) {
     return {
       type: "error",
-      formErrors: getFormErrors(result.issues),
+      message: "invalid input",
       inputState,
     };
   }
-  // const { username, email, password } = result.output;
+  await new Promise((resolve) => setTimeout(resolve, 5000));
+  // const { username, email, password } = inputState;
   // const passwordHash = await bcrypt.hash(password, 10);
   // const { id: userId } = await db
   //   .insertInto("users")
@@ -30,6 +29,7 @@ export const signup: FormAction<typeof SignupSchema> = async (
   //   })
   //   .returning("id")
   //   .executeTakeFirstOrThrow();
+  // console.log(inputState);
   return {
     type: "success",
     message: "signup successful",

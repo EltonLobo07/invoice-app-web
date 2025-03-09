@@ -1,5 +1,6 @@
-import type { FormAction, FormState, GenericFormSchema } from "./types";
+import type { FormAction, FormState, GenericFormSchema } from "../types";
 import React from "react";
+import * as v from "valibot";
 
 type Args<TSchema extends GenericFormSchema> = {
   action: FormAction<TSchema>;
@@ -13,15 +14,17 @@ export function useFormAction<TSchema extends GenericFormSchema>(
     args.action,
     args.initialFormState
   );
-  const id = React.useId();
-  const getId = React.useCallback((name: string) => `${id}-${name}`, [id]);
-  const formRef = React.useRef<HTMLFormElement | null>(null);
+  const [, startTransition] = React.useTransition();
+  const wrappedFormAction = React.useCallback(
+    (data: v.InferInput<TSchema>) => {
+      startTransition(() => formAction(data));
+    },
+    [startTransition, formAction]
+  );
 
   return {
     formState,
-    formAction,
+    formAction: wrappedFormAction,
     formIsSubmitting,
-    formRef,
-    getId,
   };
 }
