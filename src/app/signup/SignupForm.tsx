@@ -9,6 +9,7 @@ import { classJoin } from "@/utils/general";
 import { LabelledInputWithErrMsg } from "./LabelledInputWithErrMsg";
 import { SubmitBtn } from "./SubmitBtn";
 import React from "react";
+import { Announcer } from "@/components";
 
 export function SignupForm() {
   const { formState, formIsSubmitting, formAction } = useFormAction({
@@ -39,6 +40,7 @@ export function SignupForm() {
         "w-full max-w-md"
       )}
     >
+      <Announcer message={formIsSubmitting ? "form submitting" : undefined} />
       <LabelledInputWithErrMsg
         $label="Username"
         $errorMsg={errors["username"]?.message}

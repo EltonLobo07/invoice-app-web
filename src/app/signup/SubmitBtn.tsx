@@ -15,14 +15,14 @@ export function SubmitBtn(props: Props) {
       aria-disabled={props.isFormSubmitting}
       type={props.isFormSubmitting ? "button" : "submit"}
       className={classJoin(
-        "bg-ds-1 hover:bg-ds-2",
+        "hover:bg-ds-2",
         "text-white",
         "rounded-sm",
         "px-16px py-3",
         "typography-heading-s-var",
         "w-full",
         "flex justify-center items-center gap-x-1",
-        props.isFormSubmitting && "cursor-not-allowed"
+        props.isFormSubmitting ? "cursor-not-allowed bg-ds-2" : "bg-ds-1"
       )}
     >
       <Spinner isLoading={props.isFormSubmitting} />
