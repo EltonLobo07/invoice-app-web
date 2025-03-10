@@ -2,38 +2,33 @@ import * as v from "valibot";
 
 export type GenericFormSchema = v.GenericSchema<Record<string, unknown>>;
 
-export type FormState<
-  TSchema extends GenericFormSchema,
-  TSuccessData = unknown
-> =
-  | { type?: undefined; inputState?: undefined }
+export type FormState<TSuccessData = unknown, TFailedData = unknown> =
+  | { type?: undefined; message?: undefined; data?: undefined }
   | {
       type: "success";
       message?: string;
       data?: TSuccessData;
-      inputState?: undefined;
     }
-  | FormStateError<TSchema>;
+  | {
+      type: "error";
+      message: string;
+      data?: TFailedData;
+    };
 
 export type FormErrors<TSchema extends GenericFormSchema> = Partial<
   Record<v.IssueDotPath<TSchema>, string>
 >;
 
-type FormStateError<TSchema extends GenericFormSchema> = {
-  type: "error";
-  inputState: v.InferInput<TSchema>;
-} & (
-  | {
-      formErrors: FormErrors<TSchema>;
-      message?: undefined;
-    }
-  | { message: string; formErrors?: undefined }
-);
-
 export type FormAction<
   TSchema extends GenericFormSchema,
+  TSuccessData = unknown,
+  TFailedData = unknown,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TParams extends any[] = []
 > = (
-  ...params: [...TParams, FormState<TSchema>, v.InferInput<TSchema>]
+  ...params: [
+    ...TParams,
+    FormState<TSuccessData, TFailedData>,
+    v.InferInput<TSchema>
+  ]
 ) => Promise<FormState<TSchema>>;

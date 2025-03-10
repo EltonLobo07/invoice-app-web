@@ -12,10 +12,12 @@ import { useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 
 export function SignupForm() {
-  const { formIsSubmitting, formAction } = useFormAction({
+  const { formState, formIsSubmitting, formAction } = useFormAction({
     action: signup,
     initialFormState: {},
   });
+
+  console.log({ formState });
 
   const {
     register,
