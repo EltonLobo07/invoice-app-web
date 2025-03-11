@@ -1,4 +1,4 @@
-import type { StoreGetter, StoreSetter } from "./types";
+import type { StoreGetter, StoreSetter, ToastWithoutId } from "./types";
 import { Serializable } from "@/utils/serialize";
 import Cookies from "js-cookie";
 import { DARK_THEME_CLASS_NAME } from "@/constants";
@@ -14,6 +14,16 @@ export function toggleIsDarkTheme(set: StoreSetter, get: StoreGetter): boolean {
     rootClassList.remove(DARK_THEME_CLASS_NAME);
   }
   return newIsDarkTheme;
+}
+
+export function createSetToast(
+  set: StoreSetter
+): (toast: ToastWithoutId | null) => void {
+  return function (toast: ToastWithoutId | null) {
+    set({
+      toast: toast === null ? null : { ...toast, id: crypto.randomUUID() },
+    });
+  };
 }
 
 // ------------ middleware ------------

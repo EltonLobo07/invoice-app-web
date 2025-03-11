@@ -7,7 +7,7 @@ import { classJoin } from "@/utils/general";
 import { LabelledInputWithErrMsg } from "./LabelledInputWithErrMsg";
 import { SubmitBtn } from "./SubmitBtn";
 import React from "react";
-import { Announcer } from "@/components";
+import { Announcer, useStoreContext } from "@/components";
 import { useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 
@@ -16,8 +16,7 @@ export function SignupForm() {
     action: signup,
     initialFormState: {},
   });
-
-  console.log({ formState });
+  const setToast = useStoreContext((s) => s.setToast);
 
   const {
     register,
@@ -27,6 +26,12 @@ export function SignupForm() {
     resolver: valibotResolver(SignupSchema),
     defaultValues: {},
   });
+
+  React.useEffect(() => {
+    if (formState.type === "error") {
+      setToast({ type: "Error", message: formState.message });
+    }
+  }, [formState, setToast]);
 
   return (
     <>

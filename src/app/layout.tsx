@@ -4,7 +4,7 @@ import { League_Spartan } from "next/font/google";
 import { classJoin } from "@/utils/general";
 import { cookies } from "next/headers";
 import { DARK_THEME_CLASS_NAME, IS_DARK_THEME_COOKIE_NAME } from "@/constants";
-import { StoreProvider } from "@/components";
+import { AllAboutToast, StoreProvider } from "@/components";
 
 const leagueSpartan = League_Spartan({
   subsets: ["latin"],
@@ -47,6 +47,7 @@ export default async function RootLayout({
         <h1 className="sr-only">invoice application</h1>
         <StoreProvider initialIsDarkTheme={isDarkTheme}>
           {children}
+          <AllAboutToast />
         </StoreProvider>
       </body>
     </html>

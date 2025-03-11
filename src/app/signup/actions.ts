@@ -24,9 +24,9 @@ function getErrMsg(
 ): string {
   switch (constraint) {
     case USERS_UNIQUE_EMAIL_CONSTRAINT:
-      return "email already exists";
+      return "Email already exists";
     case USERS_UNIQUE_USERNAME_CONSTRAINT:
-      return "username already exists";
+      return "Username already exists";
     default:
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const _x: never = constraint;

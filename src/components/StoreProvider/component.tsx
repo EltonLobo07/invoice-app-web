@@ -3,7 +3,7 @@
 import React from "react";
 import { createStore } from "zustand";
 import { Store } from "./types";
-import { syncCookie, toggleIsDarkTheme } from "./runtime";
+import { createSetToast, syncCookie, toggleIsDarkTheme } from "./runtime";
 import { IS_DARK_THEME_COOKIE_NAME } from "@/constants";
 import { StoreContext } from "./context";
 
@@ -14,12 +14,14 @@ export function StoreProvider({ children, initialIsDarkTheme }: Props) {
     () =>
       createStore<Store>((set, get) => ({
         isDarkTheme: initialIsDarkTheme ?? false,
+        toast: null,
         toggleIsDarkTheme: syncCookie(
           set,
           get,
           IS_DARK_THEME_COOKIE_NAME,
           toggleIsDarkTheme
         ),
+        setToast: createSetToast(set),
       })),
     [initialIsDarkTheme]
   );

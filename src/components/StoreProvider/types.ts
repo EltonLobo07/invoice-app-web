@@ -1,10 +1,15 @@
 import type { StateCreator } from "zustand";
 
+export type Toast = { id: string; message: string; type: "Success" | "Error" };
+export type ToastWithoutId = Omit<Toast, "id">;
+
 type StoreState = {
+  toast: Toast | null;
   isDarkTheme: boolean;
 };
 
 type StoreActions = {
+  setToast: (toast: ToastWithoutId | null) => void;
   toggleIsDarkTheme: () => void;
 };
 
