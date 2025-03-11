@@ -4,7 +4,6 @@ import { type FormAction, isSchemaParseSuccessful } from "@/utils/form";
 import { SignupSchema } from "./schemas";
 import bcrypt from "bcrypt";
 import { db } from "../../../db";
-import { redirect } from "next/navigation";
 import * as v from "valibot";
 import {
   USERS_UNIQUE_EMAIL_CONSTRAINT,
@@ -64,5 +63,5 @@ export const signup: FormAction<typeof SignupSchema> = async (
         : GENERIC_ERROR_MESSAGE,
     };
   }
-  redirect("/login");
+  return { type: "success" };
 };

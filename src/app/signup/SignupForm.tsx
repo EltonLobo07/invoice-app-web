@@ -10,6 +10,7 @@ import React from "react";
 import { Announcer, useStoreContext } from "@/components";
 import { useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
+import { useRouter } from "next/navigation";
 
 export function SignupForm() {
   const { formState, formIsSubmitting, formAction } = useFormAction({
@@ -17,6 +18,7 @@ export function SignupForm() {
     initialFormState: {},
   });
   const setToast = useStoreContext((s) => s.setToast);
+  const router = useRouter();
 
   const {
     register,
@@ -32,6 +34,13 @@ export function SignupForm() {
       setToast({ type: "Error", message: formState.message });
     }
   }, [formState, setToast]);
+
+  React.useEffect(() => {
+    if (formState.type === "success") {
+      setToast({ type: "Success", message: "Signup was successful" });
+      router.push("/login");
+    }
+  }, [formState, setToast, router]);
 
   return (
     <>
