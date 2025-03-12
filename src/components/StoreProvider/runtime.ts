@@ -1,19 +1,10 @@
-import type { StoreGetter, StoreSetter, ToastWithoutId } from "./types";
-import { Serializable } from "@/utils/serialize";
-import Cookies from "js-cookie";
-import { DARK_THEME_CLASS_NAME } from "@/constants";
+import type { User } from "@/schemas";
+import type { StoreSetter, ToastWithoutId } from "./types";
 
-// ------------ action creators ------------
-export function toggleIsDarkTheme(set: StoreSetter, get: StoreGetter): boolean {
-  set(({ isDarkTheme }) => ({ isDarkTheme: !isDarkTheme }));
-  const { isDarkTheme: newIsDarkTheme } = get();
-  const rootClassList = document.documentElement.classList;
-  if (newIsDarkTheme) {
-    rootClassList.add(DARK_THEME_CLASS_NAME);
-  } else {
-    rootClassList.remove(DARK_THEME_CLASS_NAME);
-  }
-  return newIsDarkTheme;
+export function createToggleIsDarkTheme(set: StoreSetter): () => void {
+  return function () {
+    set(({ isDarkTheme }) => ({ isDarkTheme: !isDarkTheme }));
+  };
 }
 
 export function createSetToast(
@@ -26,12 +17,8 @@ export function createSetToast(
   };
 }
 
-// ------------ middleware ------------
-export function syncCookie(
-  set: StoreSetter,
-  get: StoreGetter,
-  cookieName: string,
-  fn: (set: StoreSetter, get: StoreGetter) => Serializable
-) {
-  return () => Cookies.set(cookieName, JSON.stringify(fn(set, get)));
+export function createSetUser(set: StoreSetter): (user: User | null) => void {
+  return function (user: User | null) {
+    set({ user });
+  };
 }

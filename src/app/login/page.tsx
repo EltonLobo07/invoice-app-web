@@ -1,3 +1,16 @@
+import { AuthLayout } from "@/components";
+import { LoginForm } from "./LoginForm";
+
 export default function Page() {
-  return <div>Login page</div>;
+  return (
+    <AuthLayout
+      heading="Sign in"
+      alternative={{
+        href: "/signup",
+        text: "sign up for a new account",
+      }}
+    >
+      <LoginForm />
+    </AuthLayout>
+  );
 }

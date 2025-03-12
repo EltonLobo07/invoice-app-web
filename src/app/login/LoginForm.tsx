@@ -1,25 +1,26 @@
 "use client";
 
-import { useFormAction } from "@/utils/form";
-import { signup } from "./actions";
-import { SignupSchema } from "./schemas";
-import React from "react";
 import {
   Announcer,
-  useStoreContext,
   LabelledInputWithErrMsg,
   SubmitBtn,
+  useStoreContext,
 } from "@/components";
-import { useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
+import { useForm } from "react-hook-form";
+import { LoginSchema } from "./schemas";
+import { useFormAction } from "@/utils/form";
+import { login } from "./actions";
+import React from "react";
 import { useRouter } from "next/navigation";
 
-export function SignupForm() {
-  const { formState, formIsSubmitting, formAction } = useFormAction({
-    action: signup,
+export function LoginForm() {
+  const { formState, formAction, formIsSubmitting } = useFormAction({
+    action: login,
     initialFormState: {},
   });
   const setToast = useStoreContext((s) => s.setToast);
+  const setUser = useStoreContext((s) => s.setUser);
   const router = useRouter();
 
   const {
@@ -27,7 +28,7 @@ export function SignupForm() {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: valibotResolver(SignupSchema),
+    resolver: valibotResolver(LoginSchema),
     defaultValues: {},
   });
 
@@ -39,22 +40,16 @@ export function SignupForm() {
 
   React.useEffect(() => {
     if (formState.type === "success") {
-      setToast({ type: "Success", message: "Signup was successful" });
-      router.push("/login");
+      setToast({ type: "Success", message: "Login was successful" });
+      setUser(formState.data ?? null);
+      router.push("/");
     }
-  }, [formState, setToast, router]);
+  }, [formState, setToast, setUser, router]);
 
   return (
     <>
       <Announcer message={formIsSubmitting ? "submitting form" : undefined} />
       <form onSubmit={handleSubmit(formAction)}>
-        <LabelledInputWithErrMsg
-          $label="Username"
-          $errorMsg={errors["username"]?.message}
-          $padding="sm"
-          type="text"
-          {...register("username")}
-        />
         <LabelledInputWithErrMsg
           $label="Email"
           $errorMsg={errors["email"]?.message}
@@ -68,13 +63,6 @@ export function SignupForm() {
           $padding="sm"
           type="password"
           {...register("password")}
-        />
-        <LabelledInputWithErrMsg
-          $label="Password confirmation"
-          $errorMsg={errors["passwordConfirmation"]?.message}
-          $padding="sm"
-          type="password"
-          {...register("passwordConfirmation")}
         />
         <SubmitBtn isFormSubmitting={formIsSubmitting} />
       </form>

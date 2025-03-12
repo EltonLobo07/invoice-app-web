@@ -6,3 +6,5 @@ export { Spinner } from "./Spinner";
 export { Announcer } from "./Announcer";
 export { AllAboutToast } from "./AllAboutToast";
 export { AuthLayout } from "./AuthLayout";
+export { LabelledInputWithErrMsg } from "./LabelledInputWithErrMsg";
+export { SubmitBtn } from "./SubmitBtn";

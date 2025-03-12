@@ -3,8 +3,16 @@ import "./globals.css";
 import { League_Spartan } from "next/font/google";
 import { classJoin } from "@/utils/general";
 import { cookies } from "next/headers";
-import { DARK_THEME_CLASS_NAME, IS_DARK_THEME_COOKIE_NAME } from "@/constants";
+import {
+  DARK_THEME_CLASS_NAME,
+  IS_DARK_THEME_COOKIE_NAME,
+  USER_JWT_COOKIE_NAME,
+} from "@/constants";
 import { AllAboutToast, StoreProvider } from "@/components";
+import jwt from "jsonwebtoken";
+import * as v from "valibot";
+import "dotenv/config";
+import { type User, UserSchema } from "@/schemas";
 
 const leagueSpartan = League_Spartan({
   subsets: ["latin"],
@@ -24,6 +32,18 @@ export default async function RootLayout({
   const cookieStore = await cookies();
   const isDarkTheme =
     cookieStore.get(IS_DARK_THEME_COOKIE_NAME)?.value === "true";
+  const userJwt = cookieStore.get(USER_JWT_COOKIE_NAME)?.value ?? null;
+  let user: User | null = null;
+  try {
+    if (userJwt !== null) {
+      const decoded = jwt.verify(userJwt, process.env.JWT_SECRET!);
+      if (typeof decoded === "string") {
+        user = v.parse(UserSchema, JSON.parse(decoded));
+      }
+    }
+  } catch (error) {
+    console.error(error);
+  }
 
   return (
     <html
@@ -45,7 +65,7 @@ export default async function RootLayout({
         )}
       >
         <h1 className="sr-only">invoice application</h1>
-        <StoreProvider initialIsDarkTheme={isDarkTheme}>
+        <StoreProvider initialIsDarkTheme={isDarkTheme} initialUser={user}>
           {children}
           <AllAboutToast />
         </StoreProvider>

@@ -31,4 +31,4 @@ export type FormAction<
     FormState<TSuccessData, TFailedData>,
     v.InferInput<TSchema>
   ]
-) => Promise<FormState<TSchema>>;
+) => Promise<FormState<TSuccessData, TFailedData>>;

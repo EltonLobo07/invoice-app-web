@@ -1,9 +1,12 @@
-// import { db } from "../../db";
+"use client";
 
-export default async function Home() {
-  // sample
-  // const users = await db.selectFrom("users").selectAll().execute();
-  // console.log(users);
+import { useStoreContext } from "@/components";
 
-  return <div>JSON.stringify(users)</div>;
+export default function Home() {
+  const user = useStoreContext((s) => s.user);
+
+  if (user === null) {
+    return <div>no user</div>;
+  }
+  return <div>{JSON.stringify(user)}</div>;
 }
