@@ -8,9 +8,9 @@ import {
 } from "@/components";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useForm } from "react-hook-form";
-import { LoginSchema } from "./schemas";
+import { LoginSchema } from "./login.schema";
 import { useFormAction } from "@/utils/form";
-import { login } from "./actions";
+import { login } from "./login.action";
 import React from "react";
 import { useRouter } from "next/navigation";
 

@@ -1,8 +1,8 @@
 "use client";
 
 import { useFormAction } from "@/utils/form";
-import { signup } from "./actions";
-import { SignupSchema } from "./schemas";
+import { signup } from "./signup.action";
+import { SignupSchema } from "./signup.schema";
 import React from "react";
 import {
   Announcer,

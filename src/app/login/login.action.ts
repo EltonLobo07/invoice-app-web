@@ -1,7 +1,7 @@
 "use server";
 
 import { isSchemaParseSuccessful, type FormAction } from "@/utils/form";
-import { LoginSchema } from "./schemas";
+import { LoginSchema } from "./login.schema";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { db } from "../../../db";
