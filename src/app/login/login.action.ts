@@ -8,7 +8,9 @@ import { db } from "../../../db";
 import { GENERIC_ERROR_MESSAGE } from "@/constants";
 import type { User } from "@/schemas";
 
-export const login: FormAction<typeof LoginSchema, User> = async (
+type SuccessData = { user: User; jwt: string };
+
+export const login: FormAction<typeof LoginSchema, SuccessData> = async (
   _formState,
   inputState
 ) => {
@@ -37,7 +39,11 @@ export const login: FormAction<typeof LoginSchema, User> = async (
     }
     const appUser = { username: user.username };
     const token = jwt.sign(JSON.stringify(appUser), process.env.JWT_SECRET!);
-    return { type: "success", jwt: token, data: appUser };
+    return {
+      type: "success",
+      message: "Login was successful",
+      data: { user: appUser, jwt: token },
+    };
   } catch (error) {
     console.error(error);
     return { type: "error", message: GENERIC_ERROR_MESSAGE };

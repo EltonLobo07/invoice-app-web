@@ -20,7 +20,7 @@ export function LoginForm() {
     initialFormState: {},
   });
   const setToast = useStoreContext((s) => s.setToast);
-  const setUser = useStoreContext((s) => s.setUser);
+  const loginFromStore = useStoreContext((s) => s.login);
   const router = useRouter();
 
   const {
@@ -40,11 +40,15 @@ export function LoginForm() {
 
   React.useEffect(() => {
     if (formState.type === "success") {
-      setToast({ type: "Success", message: "Login was successful" });
-      setUser(formState.data ?? null);
+      const {
+        message,
+        data: { user, jwt },
+      } = formState;
+      setToast({ type: "Success", message });
+      loginFromStore(user, jwt);
       router.push("/");
     }
-  }, [formState, setToast, setUser, router]);
+  }, [formState, setToast, loginFromStore, router]);
 
   return (
     <>

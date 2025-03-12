@@ -12,7 +12,9 @@ type StoreState = {
 
 type StoreActions = {
   setToast: (toast: ToastWithoutId | null) => void;
-  setUser: (user: User | null) => void;
+  // setUser: (user: User | null) => void;
+  login: (user: User, jwt: string) => void;
+  logout: () => void;
   toggleIsDarkTheme: () => void;
 };
 

@@ -6,8 +6,8 @@ export type FormState<TSuccessData = unknown, TFailedData = unknown> =
   | { type?: undefined; message?: undefined; data?: undefined }
   | {
       type: "success";
-      message?: string;
-      data?: TSuccessData;
+      message: string;
+      data: TSuccessData;
     }
   | {
       type: "error";

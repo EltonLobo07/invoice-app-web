@@ -1,5 +1,7 @@
 import type { User } from "@/schemas";
 import type { StoreSetter, ToastWithoutId } from "./types";
+import Cookies from "js-cookie";
+import { USER_JWT_COOKIE_NAME } from "@/constants";
 
 export function createToggleIsDarkTheme(set: StoreSetter): () => void {
   return function () {
@@ -14,6 +16,22 @@ export function createSetToast(
     set({
       toast: toast === null ? null : { ...toast, id: crypto.randomUUID() },
     });
+  };
+}
+
+export function createLogin(
+  set: StoreSetter
+): (user: User, jwt: string) => void {
+  return function (user, jwt) {
+    set({ user });
+    Cookies.set(USER_JWT_COOKIE_NAME, jwt);
+  };
+}
+
+export function createLogout(set: StoreSetter): () => void {
+  return function () {
+    set({ user: null });
+    Cookies.remove(USER_JWT_COOKIE_NAME);
   };
 }
 

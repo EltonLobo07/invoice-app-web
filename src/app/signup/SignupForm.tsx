@@ -39,7 +39,7 @@ export function SignupForm() {
 
   React.useEffect(() => {
     if (formState.type === "success") {
-      setToast({ type: "Success", message: "Signup was successful" });
+      setToast({ type: "Success", message: formState.message });
       router.push("/login");
     }
   }, [formState, setToast, router]);

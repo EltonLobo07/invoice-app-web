@@ -63,5 +63,5 @@ export const signup: FormAction<typeof SignupSchema> = async (
         : GENERIC_ERROR_MESSAGE,
     };
   }
-  return { type: "success" };
+  return { type: "success", message: "Signup was successful", data: {} };
 };
