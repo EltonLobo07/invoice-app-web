@@ -3,7 +3,7 @@
 import { type FormAction, isSchemaParseSuccessful } from "@/utils/form";
 import { SignupSchema } from "./signup.schema";
 import bcrypt from "bcrypt";
-import { db } from "../../../db";
+import { db } from "@/db";
 import * as v from "valibot";
 import {
   USERS_UNIQUE_EMAIL_CONSTRAINT,

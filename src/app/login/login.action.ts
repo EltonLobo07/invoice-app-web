@@ -4,7 +4,7 @@ import { isSchemaParseSuccessful, type FormAction } from "@/utils/form";
 import { LoginSchema } from "./login.schema";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { db } from "../../../db";
+import { db } from "@/db";
 import { GENERIC_ERROR_MESSAGE } from "@/constants";
 import type { User } from "@/schemas";
 
