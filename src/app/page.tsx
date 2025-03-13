@@ -1,6 +1,6 @@
 "use client";
 
-import { useStoreContext } from "@/components";
+import { useStoreContext } from "@/providers/StoreProvider";
 
 export default function Home() {
   const user = useStoreContext((s) => s.user);

@@ -1,9 +1,8 @@
 import * as RPToast from "@radix-ui/react-toast";
 import { classJoin } from "@/utils/general";
 import { Toast } from "./Toast";
-// import { classJoin } from "@/utils/general";
 
-export function AllAboutToast() {
+export function GlobalToast() {
   return (
     <RPToast.Provider>
       <Toast />

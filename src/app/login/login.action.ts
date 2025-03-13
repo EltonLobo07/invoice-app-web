@@ -5,7 +5,7 @@ import { LoginSchema } from "./login.schema";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { db } from "@/db";
-import { GENERIC_ERROR_MESSAGE } from "@/constants";
+import { GENERIC_ERROR_MESSAGE } from "@/constants/general";
 import type { User } from "@/schemas";
 
 type SuccessData = { user: User; jwt: string };

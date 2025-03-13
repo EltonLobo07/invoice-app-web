@@ -1,7 +1,7 @@
 "use client";
 
-import { Spinner } from "@/components";
-import { motion } from "framer-motion";
+import { Spinner } from "@/components/general";
+import { motion } from "motion/react";
 import { classJoin } from "@/utils/general";
 
 type Props = {

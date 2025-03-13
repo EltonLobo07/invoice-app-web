@@ -1,7 +1,7 @@
 import type { User } from "@/schemas";
-import type { StoreSetter, ToastWithoutId } from "./types";
+import type { StoreSetter, ToastWithoutId } from "./StorePovider.types";
 import Cookies from "js-cookie";
-import { USER_JWT_COOKIE_NAME } from "@/constants";
+import { USER_JWT_COOKIE_NAME } from "@/constants/general";
 
 export function createToggleIsDarkTheme(set: StoreSetter): () => void {
   return function () {

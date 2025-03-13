@@ -2,7 +2,10 @@
 
 import * as RPToast from "@radix-ui/react-toast";
 import { AnimatePresence } from "motion/react";
-import { type Toast as ToastType, useStoreContext } from "../StoreProvider";
+import {
+  type Toast as ToastType,
+  useStoreContext,
+} from "@/providers/StoreProvider";
 import React from "react";
 import { motion } from "motion/react";
 import { classJoin } from "@/utils/general";

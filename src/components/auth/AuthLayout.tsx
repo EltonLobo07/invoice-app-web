@@ -2,7 +2,7 @@
 
 import { classJoin } from "@/utils/general";
 import Link from "next/link";
-import { useStoreContext } from "../StoreProvider";
+import { useStoreContext } from "@/providers/StoreProvider";
 
 type Props = {
   heading: string;

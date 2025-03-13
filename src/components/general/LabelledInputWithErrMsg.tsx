@@ -1,8 +1,8 @@
 "use client";
 
-import { InputWithErrMsg, Label } from "@/components";
+import { InputWithErrMsg, Label } from "@/components/general";
 import { CustomProps, OmitKey } from "@/utils/general";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import React from "react";
 
 type Props = OmitKey<

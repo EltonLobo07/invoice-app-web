@@ -7,12 +7,13 @@ import {
   DARK_THEME_CLASS_NAME,
   IS_DARK_THEME_COOKIE_NAME,
   USER_JWT_COOKIE_NAME,
-} from "@/constants";
-import { AllAboutToast, StoreProvider } from "@/components";
+} from "@/constants/general";
 import jwt from "jsonwebtoken";
 import * as v from "valibot";
 import "dotenv/config";
 import { type User, UserSchema } from "@/schemas";
+import { StoreProvider } from "@/providers/StoreProvider";
+import { GlobalToast } from "@/components/toast";
 
 const leagueSpartan = League_Spartan({
   subsets: ["latin"],
@@ -67,7 +68,7 @@ export default async function RootLayout({
         <h1 className="sr-only">invoice application</h1>
         <StoreProvider initialIsDarkTheme={isDarkTheme} initialUser={user}>
           {children}
-          <AllAboutToast />
+          <GlobalToast />
         </StoreProvider>
       </body>
     </html>

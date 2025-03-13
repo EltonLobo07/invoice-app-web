@@ -8,8 +8,8 @@ import * as v from "valibot";
 import {
   USERS_UNIQUE_EMAIL_CONSTRAINT,
   USERS_UNIQUE_USERNAME_CONSTRAINT,
-} from "@/database";
-import { GENERIC_ERROR_MESSAGE } from "@/constants";
+} from "@/constants/database";
+import { GENERIC_ERROR_MESSAGE } from "@/constants/general";
 
 const ColumnConstraintSchema = v.object({
   constraint: v.picklist([

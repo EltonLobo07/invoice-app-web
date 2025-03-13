@@ -4,15 +4,12 @@ import { useFormAction } from "@/utils/form";
 import { signup } from "./signup.action";
 import { SignupSchema } from "./signup.schema";
 import React from "react";
-import {
-  Announcer,
-  useStoreContext,
-  LabelledInputWithErrMsg,
-  SubmitBtn,
-} from "@/components";
 import { useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useRouter } from "next/navigation";
+import { useStoreContext } from "@/providers/StoreProvider";
+import { Announcer, LabelledInputWithErrMsg } from "@/components/general";
+import { SubmitBtn } from "@/components/auth";
 
 export function SignupForm() {
   const { formState, formIsSubmitting, formAction } = useFormAction({

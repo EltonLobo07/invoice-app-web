@@ -2,7 +2,7 @@
 
 import { classJoin, CustomProps, OmitKey } from "@/utils/general";
 import React from "react";
-import { Input } from "../Input";
+import { Input } from "./Input";
 
 type Props = OmitKey<
   React.ComponentPropsWithRef<typeof Input>,

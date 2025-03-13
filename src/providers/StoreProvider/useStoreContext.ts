@@ -1,6 +1,6 @@
 import React from "react";
-import { StoreContext } from "./context";
-import type { Store } from "./types";
+import { StoreContext } from "./StoreContext";
+import type { Store } from "./StorePovider.types";
 import { useStore } from "zustand";
 
 export function useStoreContext<T>(selector: (store: Store) => T) {

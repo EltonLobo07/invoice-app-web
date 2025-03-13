@@ -1,11 +1,5 @@
 "use client";
 
-import {
-  Announcer,
-  LabelledInputWithErrMsg,
-  SubmitBtn,
-  useStoreContext,
-} from "@/components";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useForm } from "react-hook-form";
 import { LoginSchema } from "./login.schema";
@@ -13,6 +7,9 @@ import { useFormAction } from "@/utils/form";
 import { login } from "./login.action";
 import React from "react";
 import { useRouter } from "next/navigation";
+import { useStoreContext } from "@/providers/StoreProvider";
+import { Announcer, LabelledInputWithErrMsg } from "@/components/general";
+import { SubmitBtn } from "@/components/auth";
 
 export function LoginForm() {
   const { formState, formAction, formIsSubmitting } = useFormAction({

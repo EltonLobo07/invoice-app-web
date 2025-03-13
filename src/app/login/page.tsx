@@ -1,4 +1,4 @@
-import { AuthLayout } from "@/components";
+import { AuthLayout } from "@/components/auth";
 import { LoginForm } from "./LoginForm";
 
 export default function Page() {

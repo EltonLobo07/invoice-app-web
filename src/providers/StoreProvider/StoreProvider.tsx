@@ -2,15 +2,18 @@
 
 import React from "react";
 import { createStore } from "zustand";
-import { Store } from "./types";
+import { Store } from "./StorePovider.types";
 import {
   createLogin,
   createLogout,
   createSetToast,
   createToggleIsDarkTheme,
-} from "./runtime";
-import { DARK_THEME_CLASS_NAME, IS_DARK_THEME_COOKIE_NAME } from "@/constants";
-import { StoreContext } from "./context";
+} from "./StoreProvider.actions";
+import {
+  DARK_THEME_CLASS_NAME,
+  IS_DARK_THEME_COOKIE_NAME,
+} from "@/constants/general";
+import { StoreContext } from "./StoreContext";
 import Cookies from "js-cookie";
 import type { User } from "@/schemas";
 
