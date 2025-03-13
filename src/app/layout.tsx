@@ -14,6 +14,7 @@ import "dotenv/config";
 import { type User, UserSchema } from "@/schemas";
 import { StoreProvider } from "@/providers/StoreProvider";
 import { GlobalToast } from "@/components/toast";
+import HolyLoader from "holy-loader";
 
 const leagueSpartan = League_Spartan({
   subsets: ["latin"],
@@ -62,6 +63,7 @@ export default async function RootLayout({
           "text-black dark:text-white"
         )}
       >
+        <HolyLoader color="var(--color-ds-1)" />
         <h1 className="sr-only">invoice application</h1>
         <StoreProvider initialIsDarkTheme={isDarkTheme} initialUser={user}>
           {children}
