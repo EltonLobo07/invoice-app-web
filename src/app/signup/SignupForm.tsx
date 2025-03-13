@@ -50,6 +50,7 @@ export function SignupForm() {
           $errorMsg={errors["username"]?.message}
           $padding="sm"
           type="text"
+          autoFocus={true}
           {...register("username")}
         />
         <LabelledInputWithErrMsg

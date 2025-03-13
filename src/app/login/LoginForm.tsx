@@ -56,6 +56,7 @@ export function LoginForm() {
           $errorMsg={errors["email"]?.message}
           $padding="sm"
           type="email"
+          autoFocus={true}
           {...register("email")}
         />
         <LabelledInputWithErrMsg
