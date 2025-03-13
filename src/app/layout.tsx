@@ -37,10 +37,7 @@ export default async function RootLayout({
   let user: User | null = null;
   try {
     if (userJwt !== null) {
-      const decoded = jwt.verify(userJwt, process.env.JWT_SECRET!);
-      if (typeof decoded === "string") {
-        user = v.parse(UserSchema, JSON.parse(decoded));
-      }
+      user = v.parse(UserSchema, jwt.verify(userJwt, process.env.JWT_SECRET!));
     }
   } catch (error) {
     console.error(error);
