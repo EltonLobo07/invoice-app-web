@@ -1,8 +1,5 @@
-"use client";
-
 import { classJoin } from "@/utils/general";
 import Link from "next/link";
-import { useStoreContext } from "@/providers/StoreProvider";
 
 type Props = {
   heading: string;
@@ -18,11 +15,9 @@ export function AuthLayout(props: Props) {
     <div
       className={classJoin(
         "h-full",
-        "px-32px",
         "flex flex-col justify-center items-center gap-y-8"
       )}
     >
-      <ThemeBtn />
       <div className="flex flex-col gap-y-2 items-center">
         <h2 className="typography-heading-l">{props.heading}</h2>
         <p className="font-medium text-base text-gray-600 dark:text-gray-300">
@@ -50,20 +45,5 @@ export function AuthLayout(props: Props) {
         {props.children}
       </div>
     </div>
-  );
-}
-
-function ThemeBtn() {
-  const isDarkTheme = useStoreContext((s) => s.isDarkTheme);
-  const toggleIsDarkTheme = useStoreContext((s) => s.toggleIsDarkTheme);
-
-  return (
-    <button
-      type="button"
-      onClick={toggleIsDarkTheme}
-      className="fixed right-4 bottom-4 bg-black text-white p-2 rounded-md"
-    >
-      {isDarkTheme ? "Light" : "Dark"}
-    </button>
   );
 }

@@ -15,6 +15,7 @@ import { type User, UserSchema } from "@/schemas";
 import { StoreProvider } from "@/providers/StoreProvider";
 import { GlobalToast } from "@/components/toast";
 import HolyLoader from "holy-loader";
+import { Header } from "@/components/header";
 
 const leagueSpartan = League_Spartan({
   subsets: ["latin"],
@@ -57,16 +58,18 @@ export default async function RootLayout({
         className={classJoin(
           "antialiased",
           "font-league-spartan",
-          "relative",
           "h-full",
           "bg-ds-11 dark:bg-ds-12",
-          "text-black dark:text-white"
+          "text-black dark:text-white",
+          "flex flex-col"
         )}
       >
         <HolyLoader color="var(--color-ds-1)" />
-        <h1 className="sr-only">invoice application</h1>
         <StoreProvider initialIsDarkTheme={isDarkTheme} initialUser={user}>
-          {children}
+          <Header />
+          <div className={classJoin("grow", "px-24px md:px-48px")}>
+            {children}
+          </div>
           <GlobalToast />
         </StoreProvider>
       </body>
