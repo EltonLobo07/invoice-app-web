@@ -4,4 +4,6 @@ export { InputWithErrMsg } from "./InputWithErrMsg";
 export { Label } from "./Label";
 export { LabelledInputWithErrMsg } from "./LabelledInputWithErrMsg";
 export { LabelledPasswordWithErrMsg } from "./LabelledPasswordWithErrMsg";
+export { Message } from "./Message";
+export { ProtectedPageMessage } from "./ProtectedPageMessage";
 export { Spinner } from "./Spinner";

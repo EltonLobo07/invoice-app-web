@@ -139,3 +139,7 @@
   line-height: var(--leading-body-var);
   letter-spacing: var(--tracking-body-var);
 }
+
+@utility max-w-app {
+  max-width: 45.625rem; /* 730px */
+}
