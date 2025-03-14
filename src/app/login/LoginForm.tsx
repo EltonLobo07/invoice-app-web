@@ -8,7 +8,11 @@ import { login } from "./login.action";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { useStoreContext } from "@/providers/StoreProvider";
-import { Announcer, LabelledInputWithErrMsg } from "@/components/general";
+import {
+  Announcer,
+  LabelledInputWithErrMsg,
+  LabelledPasswordWithErrMsg,
+} from "@/components/general";
 import { SubmitBtn } from "@/components/auth";
 
 export function LoginForm() {
@@ -59,11 +63,10 @@ export function LoginForm() {
           autoFocus={true}
           {...register("email")}
         />
-        <LabelledInputWithErrMsg
+        <LabelledPasswordWithErrMsg
           $label="Password"
           $errorMsg={errors["password"]?.message}
           $padding="sm"
-          type="password"
           {...register("password")}
         />
         <SubmitBtn isFormSubmitting={formIsSubmitting} />

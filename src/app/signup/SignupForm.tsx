@@ -8,7 +8,11 @@ import { useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useRouter } from "next/navigation";
 import { useStoreContext } from "@/providers/StoreProvider";
-import { Announcer, LabelledInputWithErrMsg } from "@/components/general";
+import {
+  Announcer,
+  LabelledInputWithErrMsg,
+  LabelledPasswordWithErrMsg,
+} from "@/components/general";
 import { SubmitBtn } from "@/components/auth";
 
 export function SignupForm() {
@@ -60,11 +64,10 @@ export function SignupForm() {
           type="email"
           {...register("email")}
         />
-        <LabelledInputWithErrMsg
+        <LabelledPasswordWithErrMsg
           $label="Password"
           $errorMsg={errors["password"]?.message}
           $padding="sm"
-          type="password"
           {...register("password")}
         />
         <LabelledInputWithErrMsg

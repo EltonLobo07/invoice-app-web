@@ -6,3 +6,5 @@ export { AppLogo } from "./AppLogo";
 export { Moon } from "./Moon";
 export { Sun } from "./Sun";
 export { UserCircle } from "./UserCircle";
+export { Eye } from "./Eye";
+export { EyeSlash } from "./EyeSlash";
