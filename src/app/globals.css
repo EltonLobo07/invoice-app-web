@@ -84,6 +84,18 @@
   --tracking-heading-s-var: var(--tracking-heading-s);
   --tracking-body: -0.00625rem; /* -0.1px */
   --tracking-body-var: var(--tracking-heading-s);
+
+  /* ------------ animation ------------ */
+  --animate-wave: wave 1s ease-in-out infinite alternate;
+
+  @keyframes wave {
+    0% {
+      transform: rotate(0turn);
+    }
+    100% {
+      transform: rotate(0.05turn);
+    }
+  }
 }
 
 @utility typography-heading-l {

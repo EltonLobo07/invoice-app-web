@@ -1,7 +1,7 @@
 import { classJoin } from "@/utils/general";
 import { Logo } from "./Logo";
 import { ThemeSwitcher } from "./ThemeSwitcher";
-import { UserBtn } from "./UserBtn";
+import { UserPopoverWrapper } from "./UserPopoverWrapper";
 
 export function Header() {
   return (
@@ -12,7 +12,7 @@ export function Header() {
         "flex justify-between lg:flex-col",
         "lg:h-full",
         "lg:rounded-r-[20px]",
-        "lg:overflow-hidden",
+        // "lg:overflow-hidden",
         "relative"
       )}
     >
@@ -20,7 +20,7 @@ export function Header() {
       <Logo />
       <div className="flex lg:flex-col">
         <ThemeSwitcher />
-        <UserBtn />
+        <UserPopoverWrapper />
       </div>
     </header>
   );
