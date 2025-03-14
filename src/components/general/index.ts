@@ -7,3 +7,4 @@ export { LabelledPasswordWithErrMsg } from "./LabelledPasswordWithErrMsg";
 export { Message } from "./Message";
 export { ProtectedPageMessage } from "./ProtectedPageMessage";
 export { Spinner } from "./Spinner";
+export { ResponsiveText } from "./ResponsiveText";

@@ -8,3 +8,6 @@ export { Sun } from "./Sun";
 export { UserCircle } from "./UserCircle";
 export { Eye } from "./Eye";
 export { EyeSlash } from "./EyeSlash";
+export { ArrowDown } from "./ArrowDown";
+export { Check } from "./Check";
+export { Plus } from "./Plus";
