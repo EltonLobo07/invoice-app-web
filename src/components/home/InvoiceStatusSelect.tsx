@@ -14,26 +14,17 @@ import { AnimatePresence, motion } from "motion/react";
 import { classJoin } from "@/utils/general";
 import { ResponsiveText } from "../general";
 import { ArrowDown, Check } from "@/icons";
+import type { InvoiceStatus } from "@/types/home";
+import { INVOICE_STATUSES, STATUSES_SEARCH_PARAM } from "@/constants/home";
 
-const INVOICE_STATUSES = ["draft", "pending", "paid"] as const;
-const STATUSES_SEARCH_PARAM = "statuses";
+type Props = {
+  selectedStatuses: InvoiceStatus[];
+};
 
-const invoiceStatuesSt = new Set<string>(INVOICE_STATUSES);
-function isInvoiceStatus(status: string): status is InvoiceStatus {
-  return invoiceStatuesSt.has(status);
-}
-
-type InvoiceStatus = (typeof INVOICE_STATUSES)[number];
-
-export function InvoiceStatusSelect() {
+export function InvoiceStatusSelect(props: Props) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [selectedStatues, setSelectedStatues] = useState<InvoiceStatus[]>(() =>
-    (searchParams.get(STATUSES_SEARCH_PARAM) ?? "")
-      .split(",")
-      .filter(isInvoiceStatus)
-  );
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSelect = (statuses: InvoiceStatus[]) => {
@@ -47,7 +38,6 @@ export function InvoiceStatusSelect() {
     router.replace(
       `${pathname}${searchParamsStr.length > 0 ? "?" : ""}${searchParamsStr}`
     );
-    setSelectedStatues(statuses);
   };
 
   return (
@@ -55,7 +45,7 @@ export function InvoiceStatusSelect() {
       <SelectProvider
         open={isOpen}
         setOpen={setIsOpen}
-        value={selectedStatues}
+        value={props.selectedStatuses}
         setValue={handleSelect}
       >
         <SelectLabel className="sr-only">invoice status</SelectLabel>
