@@ -2,11 +2,12 @@ import { classJoin } from "@/utils/general";
 import { ResponsiveText } from "../general";
 import { InvoiceStatusSelect } from "./InvoiceStatusSelect";
 import { CreateInvoiceLink } from "./CreateInvoiceLink";
-import type { InvoiceStatus } from "@/types/home";
+import type { InvoiceStatus, ResponsiveTextType } from "@/types/home";
 
 type Props = {
   numInvoices: number;
   selectedStatuses: InvoiceStatus[];
+  newInvoiceLinkText: ResponsiveTextType;
 };
 
 export function Header(props: Props) {
@@ -38,15 +39,13 @@ export function Header(props: Props) {
         )}
       >
         <InvoiceStatusSelect selectedStatuses={props.selectedStatuses} />
-        <CreateInvoiceLink />
+        <CreateInvoiceLink text={props.newInvoiceLinkText} />
       </div>
     </header>
   );
 }
 
-function getNumInvoiceStr(
-  numInvoices: number
-): Record<"default" | "md", string> {
+function getNumInvoiceStr(numInvoices: number): ResponsiveTextType {
   if (numInvoices === 0) {
     return { default: "No invoices", md: "No invoices" };
   }

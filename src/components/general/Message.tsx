@@ -5,7 +5,7 @@ type Props = {
   img: React.ReactNode;
   title: string;
   headingLvl: HeadingLvl;
-  description: string;
+  description: React.ReactNode;
   action?: React.ReactNode;
   hFull?: boolean;
 };

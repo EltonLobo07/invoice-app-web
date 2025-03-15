@@ -1,17 +1,17 @@
 "use client";
 
 import { ProtectedPageMessage } from "@/components/general";
-import { Header } from "@/components/home";
+import { Header, Invoices } from "@/components/home";
 import { INVOICE_STATUSES, STATUSES_SEARCH_PARAM } from "@/constants/home";
 import { useStoreContext } from "@/providers/StoreProvider";
-import type { InvoiceStatus } from "@/types/home";
+import type { Invoice, InvoiceStatus } from "@/types/home";
 import { classJoin } from "@/utils/general";
 import { useSearchParams } from "next/navigation";
 
 export default function Home() {
   const searchParams = useSearchParams();
   const user = useStoreContext((s) => s.user);
-  const invoices: unknown[] = [];
+  const invoices: Invoice[] = [];
 
   if (user === null) {
     return <ProtectedPageMessage />;
@@ -23,17 +23,22 @@ export default function Home() {
       ?.split(",")
       .filter(isInvoiceStatus) ?? [];
 
+  const newInvoiceLinkText = { default: "New", md: "New Invoice" };
+
   return (
     <div
       className={classJoin(
         "max-w-app mx-auto h-full",
-        "pt-32px md:pt-56px lg:pt-[70px]"
+        "pt-32px md:pt-56px lg:pt-[70px]",
+        "flex flex-col"
       )}
     >
       <Header
         numInvoices={invoices.length}
         selectedStatuses={selectedStatuses}
+        newInvoiceLinkText={newInvoiceLinkText}
       />
+      <Invoices invoices={invoices} newInvoiceLinkText={newInvoiceLinkText} />
     </div>
   );
 }

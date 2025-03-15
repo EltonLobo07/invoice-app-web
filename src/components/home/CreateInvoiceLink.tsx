@@ -4,10 +4,16 @@ import { Plus } from "@/icons";
 import { classJoin } from "@/utils/general";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ResponsiveText } from "../general";
+import type { ResponsiveTextType } from "@/types/home";
 
 const href = "/invoices/create";
 
-export function CreateInvoiceLink() {
+type Props = {
+  text: ResponsiveTextType;
+};
+
+export function CreateInvoiceLink(props: Props) {
   const pathname = usePathname();
   const disabled = pathname === href;
 
@@ -35,7 +41,7 @@ export function CreateInvoiceLink() {
     >
       <Plus className="text-ds-1" />
       <span className="inline-block translate-y-[1.5px]">
-        <span>New</span> <span className="sr-only md:not-sr-only">Invoice</span>
+        <ResponsiveText {...props.text} />
       </span>
     </Link>
   );
