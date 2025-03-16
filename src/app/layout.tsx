@@ -61,13 +61,14 @@ export default async function RootLayout({
           "h-full",
           "bg-ds-11 dark:bg-ds-12",
           "text-black dark:text-white",
-          "flex flex-col"
+          "flex flex-col",
+          "isolate"
         )}
       >
         <HolyLoader color="var(--color-ds-1)" />
         <StoreProvider initialIsDarkTheme={isDarkTheme} initialUser={user}>
           <Header />
-          <div className={classJoin("grow", "px-24px md:px-48px")}>
+          <div className={classJoin("grow overflow-y-auto", "bg-inherit")}>
             {children}
           </div>
           <GlobalToast />

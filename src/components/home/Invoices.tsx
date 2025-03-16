@@ -1,8 +1,10 @@
-import type { Invoice, ResponsiveTextType } from "@/types/home";
+import type { Invoice as InvoiceType, ResponsiveTextType } from "@/types/home";
 import { NoInvoiceMessage } from "./NoInvoiceMessage";
+import { Invoice } from "./Invoice";
+import { classJoin } from "@/utils/general";
 
 type Props = {
-  invoices: Invoice[];
+  invoices: InvoiceType[];
   newInvoiceLinkText: ResponsiveTextType;
 };
 
@@ -10,6 +12,19 @@ export function Invoices(props: Props) {
   if (props.invoices.length === 0) {
     return <NoInvoiceMessage newInvoiceLinkText={props.newInvoiceLinkText} />;
   }
-  // todo
-  return null;
+
+  return (
+    <div className="pb-2">
+      <ol
+        className={classJoin(
+          "flex flex-col gap-y-4",
+          "max-w-app mx-auto w-full"
+        )}
+      >
+        {props.invoices.map((invoice) => (
+          <Invoice key={invoice.id} invoice={invoice} />
+        ))}
+      </ol>
+    </div>
+  );
 }

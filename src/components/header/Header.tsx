@@ -12,8 +12,7 @@ export function Header() {
         "flex justify-between lg:flex-col",
         "lg:h-full",
         "lg:rounded-r-[20px]",
-        // "lg:overflow-hidden",
-        "relative"
+        "relative z-10"
       )}
     >
       <h1 className="sr-only">Invoice Application</h1>

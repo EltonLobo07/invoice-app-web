@@ -12,7 +12,16 @@ type Props = {
 
 export function Header(props: Props) {
   return (
-    <header className="flex items-center gap-x-16px flex-wrap">
+    <header
+      className={classJoin(
+        "flex items-center gap-x-16px flex-wrap",
+        "sticky top-0",
+        "max-w-app mx-auto w-full",
+        "pt-32px md:pt-56px lg:pt-[70px]",
+        "pb-8",
+        "z-10 bg-inherit"
+      )}
+    >
       <div
         className={classJoin(
           "flex flex-col gap-y-[0.09375rem] md:gap-y-[0.375rem]",
