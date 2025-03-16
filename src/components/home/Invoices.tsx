@@ -21,8 +21,8 @@ export function Invoices(props: Props) {
           "max-w-app mx-auto w-full"
         )}
       >
-        {props.invoices.map((invoice) => (
-          <Invoice key={invoice.id} invoice={invoice} />
+        {props.invoices.map((invoice, idx) => (
+          <Invoice key={invoice.id} invoice={invoice} isFirst={idx === 0} />
         ))}
       </ol>
     </div>
