@@ -20,8 +20,8 @@ export function Invoice({ invoice, isFirst }: Props) {
         "rounded-lg",
         "pl-24px lg:pl-32px",
         "pr-24px",
-        "pt-[1.5625rem]",
-        "pb-[1.375rem]",
+        "pt-[1.5625rem] md:pt-4",
+        "pb-[1.375rem] md:pb-[0.9375rem]",
         "relative",
         "mx-4px",
         isFirst && "mt-4px",
@@ -83,7 +83,7 @@ function InvoiceDetailsLg({ invoice }: InvoiceDetailsProps) {
     <dl
       className={classJoin("relative", "hidden md:flex gap-x-5 items-center")}
     >
-      <div className={classJoin("mr-8px lg:mr-24px", "w-[8ch]")}>
+      <div className={classJoin("mr-8px lg:mr-24px", "w-[7ch]")}>
         <InvoiceId value={invoice.id} />
       </div>
       <div className="mr-[31px] lg:mr-[39px]">
@@ -118,8 +118,8 @@ function InvoiceId(props: { value: string }) {
     <>
       <Dt>invoice id</Dt>
       <dd className="typography-heading-s-var">
-        <span className="text-ds-7 ">#</span>
-        <span className="text-dark dark:text-white">{props.value}</span>
+        <span className="text-ds-7">#</span>
+        <span className="text-ds-8 dark:text-white">{props.value}</span>
       </dd>
     </>
   );
@@ -140,7 +140,7 @@ function InvoiceDueDate(props: { value: Date }) {
         className={classJoin(
           "relative",
           "text-ds-6 dark:text-ds-5",
-          "typography-body",
+          "typography-body-md",
           "whitespace-nowrap"
         )}
       >
@@ -158,7 +158,7 @@ function InvoiceName(props: { value: string }) {
       <dd
         className={classJoin(
           "text-[#858BB2] dark:text-white",
-          "typography-body",
+          "typography-body-md",
           "max-w-full overflow-x-hidden whitespace-nowrap text-ellipsis"
         )}
       >

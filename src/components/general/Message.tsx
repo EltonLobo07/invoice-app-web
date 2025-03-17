@@ -35,7 +35,7 @@ export function Message(props: Props) {
       </Heading>
       <p
         className={classJoin(
-          "typography-body",
+          "typography-body-lg",
           "text-ds-6 dark:text-ds-5",
           props.action ? "mb-3" : ""
         )}

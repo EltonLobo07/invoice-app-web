@@ -27,7 +27,7 @@ export function InputWithErrMsg({ $errorMsg, ...inputProps }: Props) {
       <span
         id={errorMsgId}
         className={classJoin(
-          "typography-body-var text-ds-9",
+          "typography-body-sm text-ds-9",
           "inline-block transition-opacity duration-300",
           isInvalid ? "opacity-100" : "opacity-0"
         )}
