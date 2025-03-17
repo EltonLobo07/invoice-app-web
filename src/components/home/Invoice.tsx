@@ -24,7 +24,8 @@ export function Invoice({ invoice, isFirst }: Props) {
         "pb-[1.375rem]",
         "relative",
         "mx-4px",
-        isFirst && "mt-4px"
+        isFirst && "mt-4px",
+        "min-w-[15.5625rem]"
       )}
     >
       <InvoiceDetailsSm invoice={invoice} />
@@ -51,12 +52,23 @@ function InvoiceDetailsSm({ invoice }: InvoiceDetailsProps) {
   return (
     <dl className="relative md:hidden">
       {/* `div`s are valid: https://html.spec.whatwg.org/multipage/grouping-content.html#the-dl-element */}
-      <div className="flex justify-between items-center gap-x-2 mb-6">
+      <div
+        className={classJoin(
+          "flex justify-between items-center gap-x-2",
+          "mb-6",
+          "max-w-full overflow-x-hidden"
+        )}
+      >
         <InvoiceId value={invoice.id} />
         <InvoiceName value={invoice.name} />
       </div>
       <div className="flex justify-between items-center gap-x-2">
-        <div className="flex flex-col gap-y-2 items-start">
+        <div
+          className={classJoin(
+            "flex flex-col gap-y-2 items-start",
+            "grow overflow-x-hidden"
+          )}
+        >
           <InvoiceDueDate value={invoice.dueDate} />
           <InvoiceAmount value={invoice.amount} />
         </div>
@@ -77,16 +89,22 @@ function InvoiceDetailsLg({ invoice }: InvoiceDetailsProps) {
       <div className="mr-[31px] lg:mr-[39px]">
         <InvoiceDueDate value={invoice.dueDate} />
       </div>
-      <div className="grow">
+      <div className="grow overflow-x-hidden">
         <InvoiceName value={invoice.name} />
       </div>
-      <div className={classJoin("grow", "flex justify-end", "mr-20px")}>
+      <div
+        className={classJoin(
+          "grow overflow-x-hidden",
+          "flex justify-end",
+          "mr-20px"
+        )}
+      >
         <InvoiceAmount value={invoice.amount} />
       </div>
       <div>
         <InvoiceStatus value={invoice.status} />
       </div>
-      <ArrowDown className={classJoin("-rotate-90", "text-ds-1")} />
+      <ArrowDown className={classJoin("-rotate-90", "text-ds-1", "shrink-0")} />
     </dl>
   );
 }
@@ -122,7 +140,8 @@ function InvoiceDueDate(props: { value: Date }) {
         className={classJoin(
           "relative",
           "text-ds-6 dark:text-ds-5",
-          "typography-body"
+          "typography-body",
+          "whitespace-nowrap"
         )}
       >
         <span aria-hidden={true}>{"Due "}</span>
@@ -139,7 +158,8 @@ function InvoiceName(props: { value: string }) {
       <dd
         className={classJoin(
           "text-[#858BB2] dark:text-white",
-          "typography-body"
+          "typography-body",
+          "max-w-full overflow-x-hidden whitespace-nowrap text-ellipsis"
         )}
       >
         {props.value}
@@ -163,7 +183,8 @@ function InvoiceAmount(props: { value: number }) {
       <dd
         className={classJoin(
           "typography-heading-s",
-          "text-ds-8 dark:text-white"
+          "text-ds-8 dark:text-white",
+          "whitespace-nowrap max-w-full overflow-x-hidden text-ellipsis"
         )}
       >
         {`${currency} `}
