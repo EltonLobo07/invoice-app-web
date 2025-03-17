@@ -12,7 +12,7 @@ import { useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { classJoin } from "@/utils/general";
-import { ResponsiveText } from "../general";
+import { ResponsiveText } from "@/components/general";
 import { ArrowDown, Check } from "@/icons";
 import type { InvoiceStatus } from "@/types/home";
 import { INVOICE_STATUSES, STATUSES_SEARCH_PARAM } from "@/constants/home";

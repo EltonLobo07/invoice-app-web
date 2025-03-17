@@ -4,7 +4,7 @@ import { Plus } from "@/icons";
 import { classJoin } from "@/utils/general";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ResponsiveText } from "../general";
+import { ResponsiveText } from "@/components/general";
 import type { ResponsiveTextType } from "@/types/home";
 
 const href = "/invoices/create";

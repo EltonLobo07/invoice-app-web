@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Message, ResponsiveText } from "../general";
+import { Message, ResponsiveText } from "@/components/general";
 import AnnouncementImgData from "./announcement.png";
 import { classJoin } from "@/utils/general";
 import type { ResponsiveTextType } from "@/types/home";
