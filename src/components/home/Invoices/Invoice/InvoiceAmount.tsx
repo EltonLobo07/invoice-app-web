@@ -16,7 +16,7 @@ export function InvoiceAmount(props: Props) {
 
   return (
     <>
-      <Dt>invoice amount</Dt>
+      <Dt>Amount</Dt>
       <dd
         className={classJoin(
           "typography-heading-s",

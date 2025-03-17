@@ -15,7 +15,7 @@ export function InvoiceDueDate(props: Props) {
 
   return (
     <>
-      <Dt>due date</Dt>
+      <Dt>Due date</Dt>
       <dd
         className={classJoin(
           "relative",

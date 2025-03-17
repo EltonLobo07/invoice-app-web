@@ -9,7 +9,7 @@ type Props = {
 export function InvoiceStatus(props: Props) {
   return (
     <>
-      <Dt>invoice status</Dt>
+      <Dt>Status</Dt>
       <dd
         className={classJoin(
           "min-w-[6.5rem] w-fit",

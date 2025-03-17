@@ -4,7 +4,7 @@ import { Dt } from "./Dt";
 export function InvoiceName(props: { value: string }) {
   return (
     <>
-      <Dt>name</Dt>
+      <Dt>Name</Dt>
       <dd
         className={classJoin(
           "text-[#858BB2] dark:text-white",

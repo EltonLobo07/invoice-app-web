@@ -36,7 +36,7 @@ export function Invoice({ invoice, isFirst }: Props) {
           "rounded-[inherit]"
         )}
       >
-        <span className="sr-only">more details of invoice ID {invoice.id}</span>
+        <span className="sr-only">to invoice ID {invoice.id} page</span>
       </Link>
     </li>
   );
