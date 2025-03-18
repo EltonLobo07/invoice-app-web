@@ -1,10 +1,10 @@
 import { classJoin } from "@/utils/general";
 import { Dt } from "./Dt";
 
-export function InvoiceName(props: { value: string }) {
+export function InvoiceTo(props: { value: string }) {
   return (
     <>
-      <Dt>Name</Dt>
+      <Dt>To</Dt>
       <dd
         className={classJoin(
           "text-[#858BB2] dark:text-white",

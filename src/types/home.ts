@@ -5,7 +5,7 @@ export type InvoiceStatus = (typeof INVOICE_STATUSES)[number];
 export type Invoice = {
   id: string;
   dueDate: Date;
-  name: string;
+  to: string;
   amount: number;
   status: InvoiceStatus;
 };

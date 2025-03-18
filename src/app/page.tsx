@@ -1,31 +1,55 @@
-"use client";
-
 import { ProtectedPageMessage } from "@/components/general";
 import { Header, Invoices } from "@/components/home";
 import { INVOICE_STATUSES, STATUSES_SEARCH_PARAM } from "@/constants/home";
-import { useStoreContext } from "@/providers/StoreProvider";
-import type { Invoice, InvoiceStatus } from "@/types/home";
+import { db } from "@/db";
+import { getUser } from "@/server-helpers";
+import { InvoiceStatus } from "@/types/home";
 import { classJoin } from "@/utils/general";
-import { useSearchParams } from "next/navigation";
+import { cookies } from "next/headers";
+import * as v from "valibot";
 
-export default function Home() {
-  const searchParams = useSearchParams();
-  const user = useStoreContext((s) => s.user);
+const SearchParamsSchema = v.object({
+  [STATUSES_SEARCH_PARAM]: v.optional(
+    v.pipe(
+      v.fallback(v.string(), ""),
+      v.transform((s) => s.split(",")),
+      v.filterItems(isInvoiceStatus),
+      v.custom<InvoiceStatus[]>(() => true)
+    ),
+    ""
+  ),
+});
 
+const allInvoiceQuery = db
+  .selectFrom("invoices")
+  .select(["id", "dueDate", "to", "amount", "status"]);
+
+type Props = {
+  searchParams?: Promise<Record<string, string>>;
+};
+
+export default async function Home(props: Props) {
+  const user = await getUser(await cookies());
   if (user === null) {
     return <ProtectedPageMessage />;
   }
 
-  const selectedStatuses =
-    searchParams
-      .get(STATUSES_SEARCH_PARAM)
-      ?.split(",")
-      .filter(isInvoiceStatus) ?? [];
-  const selectedStatusesSt = new Set(selectedStatuses);
-  const invoices = INVOICES.filter(
-    ({ status }) =>
-      selectedStatusesSt.size === 0 || selectedStatusesSt.has(status)
+  const { statuses: selectedStatuses } = v.parse(
+    SearchParamsSchema,
+    await props.searchParams
   );
+  let selectedInvoicesQuery = allInvoiceQuery;
+  if (selectedStatuses.length > 0) {
+    selectedInvoicesQuery = selectedInvoicesQuery.where(
+      "status",
+      "in",
+      selectedStatuses
+    );
+  }
+  const invoices = (await selectedInvoicesQuery.execute()).map((invoice) => ({
+    ...invoice,
+    amount: Number(Number(invoice.amount).toFixed(2)),
+  }));
 
   const newInvoiceLinkText = { default: "New", md: "New Invoice" };
 
@@ -53,55 +77,3 @@ const invoiceStatuesSt = new Set<string>(INVOICE_STATUSES);
 function isInvoiceStatus(status: string): status is InvoiceStatus {
   return invoiceStatuesSt.has(status);
 }
-
-const INVOICES: Invoice[] = [
-  {
-    id: "RT3080",
-    dueDate: new Date("2021-08-19"),
-    name: "Jensen Huang",
-    amount: 1800.9,
-    status: "paid",
-  },
-  {
-    id: "XM9141",
-    dueDate: new Date("2021-09-20"),
-    name: "Alex Grim",
-    amount: 556,
-    status: "pending",
-  },
-  {
-    id: "RG0314",
-    dueDate: new Date("2021-10-01"),
-    name: "John Morrison",
-    amount: 14002.33,
-    status: "paid",
-  },
-  {
-    id: "RT2080",
-    dueDate: new Date("2021-10-12"),
-    name: "Alysa Werner",
-    amount: 102.04,
-    status: "pending",
-  },
-  {
-    id: "AA1449",
-    dueDate: new Date("2021-10-14"),
-    name: "Melisha Clarke",
-    amount: 4032.33,
-    status: "pending",
-  },
-  {
-    id: "TY9141",
-    dueDate: new Date("2021-10-31"),
-    name: "Thomas Wayne",
-    amount: 6155.91,
-    status: "pending",
-  },
-  {
-    id: "FV2353",
-    dueDate: new Date("2021-11-12"),
-    name: "Anita Wainwright",
-    amount: 3102.04,
-    status: "draft",
-  },
-];

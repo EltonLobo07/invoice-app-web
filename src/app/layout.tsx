@@ -6,16 +6,13 @@ import { cookies } from "next/headers";
 import {
   DARK_THEME_CLASS_NAME,
   IS_DARK_THEME_COOKIE_NAME,
-  USER_JWT_COOKIE_NAME,
 } from "@/constants/general";
-import jwt from "jsonwebtoken";
-import * as v from "valibot";
 import "dotenv/config";
-import { type User, UserSchema } from "@/schemas";
 import { StoreProvider } from "@/providers/StoreProvider";
 import { GlobalToast } from "@/components/toast";
 import HolyLoader from "holy-loader";
 import { Header } from "@/components/header";
+import { getUser } from "@/server-helpers";
 
 const leagueSpartan = League_Spartan({
   subsets: ["latin"],
@@ -35,15 +32,7 @@ export default async function RootLayout({
   const cookieStore = await cookies();
   const isDarkTheme =
     cookieStore.get(IS_DARK_THEME_COOKIE_NAME)?.value === "true";
-  const userJwt = cookieStore.get(USER_JWT_COOKIE_NAME)?.value ?? null;
-  let user: User | null = null;
-  try {
-    if (userJwt !== null) {
-      user = v.parse(UserSchema, jwt.verify(userJwt, process.env.JWT_SECRET!));
-    }
-  } catch (error) {
-    console.error(error);
-  }
+  const user = await getUser(cookieStore);
 
   return (
     <html

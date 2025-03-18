@@ -6,13 +6,10 @@ type Props = {
 };
 
 export function InvoiceAmount(props: Props) {
-  const [currency, ...rest] = Number(props.value.toFixed(2)).toLocaleString(
-    "en-GB",
-    {
-      style: "currency",
-      currency: "GBP",
-    }
-  );
+  const [currency, ...rest] = props.value.toLocaleString("en-GB", {
+    style: "currency",
+    currency: "GBP",
+  });
 
   return (
     <>
