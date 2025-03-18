@@ -7,7 +7,7 @@ import { getNumInvoiceStr } from "./Header.helpers";
 
 type Props = {
   numInvoices: number;
-  selectedStatuses: InvoiceStatus[];
+  initialSelectedStatuses: InvoiceStatus[];
   newInvoiceLinkText: ResponsiveTextType;
 };
 
@@ -48,7 +48,9 @@ export function Header(props: Props) {
           "flex items-center gap-x-[18px] md:gap-x-40px"
         )}
       >
-        <InvoiceStatusSelect selectedStatuses={props.selectedStatuses} />
+        <InvoiceStatusSelect
+          initialSelectedStatuses={props.initialSelectedStatuses}
+        />
         <CreateInvoiceLink text={props.newInvoiceLinkText} />
       </div>
     </header>

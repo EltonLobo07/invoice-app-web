@@ -65,7 +65,7 @@ export default async function Home(props: Props) {
     >
       <Header
         numInvoices={invoices.length}
-        selectedStatuses={selectedStatuses}
+        initialSelectedStatuses={selectedStatuses}
         newInvoiceLinkText={newInvoiceLinkText}
       />
       <Invoices invoices={invoices} newInvoiceLinkText={newInvoiceLinkText} />

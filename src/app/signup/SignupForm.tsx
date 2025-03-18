@@ -14,6 +14,7 @@ import {
   LabelledPasswordWithErrMsg,
 } from "@/components/general";
 import { SubmitBtn } from "@/components/auth";
+import { startHolyLoader } from "holy-loader";
 
 export function SignupForm() {
   const { formState, formIsSubmitting, formAction } = useFormAction({
@@ -41,6 +42,7 @@ export function SignupForm() {
   React.useEffect(() => {
     if (formState.type === "success") {
       setToast({ type: "Success", message: formState.message });
+      startHolyLoader();
       router.push("/login");
     }
   }, [formState, setToast, router]);

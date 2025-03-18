@@ -16,9 +16,10 @@ import { ResponsiveText } from "@/components/general";
 import { ArrowDown, Check } from "@/icons";
 import type { InvoiceStatus } from "@/types/home";
 import { INVOICE_STATUSES, STATUSES_SEARCH_PARAM } from "@/constants/home";
+import { startHolyLoader } from "holy-loader";
 
 type Props = {
-  selectedStatuses: InvoiceStatus[];
+  initialSelectedStatuses: InvoiceStatus[];
 };
 
 export function InvoiceStatusSelect(props: Props) {
@@ -26,6 +27,9 @@ export function InvoiceStatusSelect(props: Props) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedStatuses, setSelectedStatuses] = useState(
+    props.initialSelectedStatuses
+  );
 
   const handleSelect = (statuses: InvoiceStatus[]) => {
     const newSearchParams = new URLSearchParams(searchParams);
@@ -35,6 +39,8 @@ export function InvoiceStatusSelect(props: Props) {
       newSearchParams.set(STATUSES_SEARCH_PARAM, statuses.join(","));
     }
     const searchParamsStr = newSearchParams.toString();
+    setSelectedStatuses(statuses);
+    startHolyLoader();
     router.replace(
       `${pathname}${searchParamsStr.length > 0 ? "?" : ""}${searchParamsStr}`
     );
@@ -45,7 +51,7 @@ export function InvoiceStatusSelect(props: Props) {
       <SelectProvider
         open={isOpen}
         setOpen={setIsOpen}
-        value={props.selectedStatuses}
+        value={selectedStatuses}
         setValue={handleSelect}
       >
         <SelectLabel className="sr-only">invoice status</SelectLabel>

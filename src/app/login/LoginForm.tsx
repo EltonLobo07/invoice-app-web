@@ -14,6 +14,7 @@ import {
   LabelledPasswordWithErrMsg,
 } from "@/components/general";
 import { SubmitBtn } from "@/components/auth";
+import { startHolyLoader } from "holy-loader";
 
 export function LoginForm() {
   const { formState, formAction, formIsSubmitting } = useFormAction({
@@ -47,6 +48,7 @@ export function LoginForm() {
       } = formState;
       setToast({ type: "Success", message });
       loginFromStore(user, jwt);
+      startHolyLoader();
       router.push("/");
     }
   }, [formState, setToast, loginFromStore, router]);

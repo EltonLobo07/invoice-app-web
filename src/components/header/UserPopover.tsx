@@ -8,6 +8,7 @@ import React from "react";
 import { UserCircle, XCircle } from "@/icons";
 import { useStoreContext } from "@/providers/StoreProvider";
 import { useRouter } from "next/navigation";
+import { startHolyLoader } from "holy-loader";
 
 type Props = {
   user: User;
@@ -85,6 +86,7 @@ export function UserPopover({ user: { username } }: Props) {
             </p>
             <Ariakit.Button
               onClick={() => {
+                startHolyLoader();
                 router.push("/login");
                 logout();
               }}
