@@ -15,7 +15,11 @@ import { classJoin } from "@/utils/general";
 import { ResponsiveText } from "@/components/general";
 import { ArrowDown, Check } from "@/icons";
 import type { InvoiceStatus } from "@/types/home";
-import { INVOICE_STATUSES, STATUSES_SEARCH_PARAM } from "@/constants/home";
+import {
+  INVOICE_STATUSES,
+  PAGE_NUM_SEARCH_PARAM,
+  STATUSES_SEARCH_PARAM,
+} from "@/constants/home";
 import { startHolyLoader } from "holy-loader";
 
 type Props = {
@@ -38,6 +42,9 @@ export function InvoiceStatusSelect(props: Props) {
     } else {
       newSearchParams.set(STATUSES_SEARCH_PARAM, statuses.join(","));
     }
+    if (newSearchParams.get(PAGE_NUM_SEARCH_PARAM) !== null) {
+      newSearchParams.set(PAGE_NUM_SEARCH_PARAM, "1");
+    }
     const searchParamsStr = newSearchParams.toString();
     setSelectedStatuses(statuses);
     startHolyLoader();
@@ -47,7 +54,7 @@ export function InvoiceStatusSelect(props: Props) {
   };
 
   return (
-    <div className="relative">
+    <motion.div layout="position" className="relative">
       <SelectProvider
         open={isOpen}
         setOpen={setIsOpen}
@@ -136,6 +143,6 @@ export function InvoiceStatusSelect(props: Props) {
           )}
         </AnimatePresence>
       </SelectProvider>
-    </div>
+    </motion.div>
   );
 }

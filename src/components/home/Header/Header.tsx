@@ -4,11 +4,16 @@ import { InvoiceStatusSelect } from "./InvoiceStatusSelect";
 import { CreateInvoiceLink } from "./CreateInvoiceLink";
 import type { InvoiceStatus, ResponsiveTextType } from "@/types/home";
 import { getNumInvoiceStr } from "./Header.helpers";
+import { PaginationLinks } from "./PaginationLinks";
+import { LayoutGroup } from "motion/react";
+import React from "react";
+import type { PaginationLinksData } from "./PaginationLinks/types";
 
 type Props = {
   numInvoices: number;
   initialSelectedStatuses: InvoiceStatus[];
   newInvoiceLinkText: ResponsiveTextType;
+  paginationLinksData: PaginationLinksData;
 };
 
 export function Header(props: Props) {
@@ -45,13 +50,19 @@ export function Header(props: Props) {
       <div
         className={classJoin(
           "ml-auto",
-          "flex items-center gap-x-[18px] md:gap-x-40px"
+          "flex justify-end items-center gap-y-2 gap-x-[18px] md:gap-x-40px flex-wrap"
         )}
       >
-        <InvoiceStatusSelect
-          initialSelectedStatuses={props.initialSelectedStatuses}
-        />
-        <CreateInvoiceLink text={props.newInvoiceLinkText} />
+        <LayoutGroup>
+          <InvoiceStatusSelect
+            initialSelectedStatuses={props.initialSelectedStatuses}
+          />
+          <CreateInvoiceLink text={props.newInvoiceLinkText} />
+          {(props.paginationLinksData.nextPageNum !== null ||
+            props.paginationLinksData.prevPageNum !== null) && (
+            <PaginationLinks {...props.paginationLinksData} />
+          )}
+        </LayoutGroup>
       </div>
     </header>
   );

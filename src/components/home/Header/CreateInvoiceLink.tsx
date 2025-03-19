@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ResponsiveText } from "@/components/general";
 import type { ResponsiveTextType } from "@/types/home";
+import { motion } from "motion/react";
 
 const href = "/invoices/create";
 
@@ -13,12 +14,15 @@ type Props = {
   text: ResponsiveTextType;
 };
 
+const MotionLink = motion(Link);
+
 export function CreateInvoiceLink(props: Props) {
   const pathname = usePathname();
   const disabled = pathname === href;
 
   return (
-    <Link
+    <MotionLink
+      layout="position"
       aria-disabled={disabled}
       href={href}
       onClick={(e) => {
@@ -43,6 +47,6 @@ export function CreateInvoiceLink(props: Props) {
       <span className="inline-block translate-y-[1.5px]">
         <ResponsiveText {...props.text} />
       </span>
-    </Link>
+    </MotionLink>
   );
 }

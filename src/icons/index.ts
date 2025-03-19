@@ -11,3 +11,5 @@ export { EyeSlash } from "./EyeSlash";
 export { ArrowDown } from "./ArrowDown";
 export { Check } from "./Check";
 export { Plus } from "./Plus";
+export { ArrowLeft } from "./ArrowLeft";
+export { ArrowRight } from "./ArrowRight";
