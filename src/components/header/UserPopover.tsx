@@ -29,7 +29,8 @@ export function UserPopover({ user: { username } }: Props) {
           "flex items-center justify-center",
           "hover:bg-ds-7/15 dark:hover:bg-[#858BB2]/15",
           "px-24px md:px-32px",
-          "lg:py-24px"
+          "lg:py-24px",
+          "lg:rounded-br-[inherit]"
         )}
       >
         <UserCircle />

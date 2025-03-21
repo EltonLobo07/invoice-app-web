@@ -17,7 +17,7 @@ export function Header() {
     >
       <h1 className="sr-only">Invoice Application</h1>
       <Logo />
-      <div className="flex lg:flex-col">
+      <div className={classJoin("flex lg:flex-col", "lg:rounded-br-[inherit]")}>
         <ThemeSwitcher />
         <UserPopoverWrapper />
       </div>
