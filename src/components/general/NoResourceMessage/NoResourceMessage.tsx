@@ -7,7 +7,7 @@ type Props = {
   description: React.ReactNode;
 };
 
-export function NoInvoiceMessage(props: Props) {
+export function NoResourceMessage(props: Props) {
   return (
     <Message
       headingLvl={3}
