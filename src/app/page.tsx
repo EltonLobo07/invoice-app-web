@@ -40,12 +40,12 @@ export default async function Home(props: Props) {
 
   const lastPageNum =
     invoices.length > 0 ? getLastPageNum(pageNum, invoices[0].total) : 0;
-  const curPageDoesNotExists = pageNum > lastPageNum && pageNum > 1;
 
   const newInvoiceLinkText = { default: "New", md: "New Invoice" };
 
   let invoicesJSX: React.ReactNode = null;
   if (invoices.length === 0) {
+    const curPageDoesNotExists = pageNum > lastPageNum && pageNum > 1;
     invoicesJSX = curPageDoesNotExists ? (
       <NoPageMessage />
     ) : (
@@ -70,7 +70,7 @@ export default async function Home(props: Props) {
         initialSelectedStatuses={selectedStatuses}
         newInvoiceLinkText={newInvoiceLinkText}
         paginationLinksData={getPaginationLinksData(
-          curPageDoesNotExists,
+          invoices.length === 0,
           pageNum,
           lastPageNum
         )}
@@ -81,14 +81,13 @@ export default async function Home(props: Props) {
 }
 
 function getPaginationLinksData(
-  curPageDoesNotExists: boolean,
+  noDataPresent: boolean,
   pageNum: number,
   lastPageNum: number
 ): Record<"prevPageNum" | "nextPageNum", number | null> {
   return {
-    prevPageNum: curPageDoesNotExists || pageNum < 2 ? null : pageNum - 1,
-    nextPageNum:
-      curPageDoesNotExists || pageNum === lastPageNum ? null : pageNum + 1,
+    prevPageNum: noDataPresent || pageNum < 2 ? null : pageNum - 1,
+    nextPageNum: noDataPresent || pageNum === lastPageNum ? null : pageNum + 1,
   };
 }
 
