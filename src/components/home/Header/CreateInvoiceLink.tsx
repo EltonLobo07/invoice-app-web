@@ -22,6 +22,7 @@ export function CreateInvoiceLink(props: Props) {
 
   return (
     <MotionLink
+      prefetch={false}
       layout="position"
       aria-disabled={disabled}
       href={href}

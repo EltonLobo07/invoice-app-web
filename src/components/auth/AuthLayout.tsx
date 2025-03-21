@@ -23,6 +23,7 @@ export function AuthLayout(props: Props) {
         <p className="font-medium text-base text-gray-600 dark:text-gray-300">
           Or{" "}
           <Link
+            prefetch={false}
             href={props.alternative.href}
             className={classJoin(
               "underline",

@@ -29,6 +29,7 @@ export function Invoice({ invoice, isFirst }: Props) {
       <InvoiceDetailsSm invoice={invoice} />
       <InvoiceDetailsLg invoice={invoice} />
       <Link
+        prefetch={false}
         href={`/invoices/${invoice.id}`}
         className={classJoin(
           "absolute top-0 left-0 w-full h-full",
