@@ -11,7 +11,7 @@ import { getUser } from "@/server-helpers";
 import { classJoin } from "@/utils/general";
 import { cookies } from "next/headers";
 import * as v from "valibot";
-import { getInvoiceList } from "./services/invoices";
+import { getInvoiceList } from "@/services/invoices";
 
 type Props = {
   searchParams?: Promise<Record<string, string>>;
