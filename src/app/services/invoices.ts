@@ -69,6 +69,7 @@ export function getInvoiceList(
         ...invoice,
         // todo: converting to number is not safe, fix it
         amount: Number(Number(invoice.amount).toFixed(2)),
+        totalInvoices: Number(invoice.totalInvoices),
         dueDate: new Date(invoice.createdAt.getTime() + invoice.paymentTerm),
       }))
     );

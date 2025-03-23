@@ -34,10 +34,12 @@ export default async function Home(props: Props) {
     selectedStatuses
   );
 
-  const lastPageNum =
-    invoices.length > 0
-      ? getLastPageNum(pageNum, Number(invoices[0].totalInvoices))
-      : 0;
+  let totalInvoices = 0;
+  let lastPageNum = 0;
+  if (invoices.length > 0) {
+    totalInvoices = invoices[0].totalInvoices;
+    lastPageNum = getLastPageNum(pageNum, totalInvoices);
+  }
 
   const newInvoiceLinkText = { default: "New", md: "New Invoice" };
 
@@ -64,7 +66,7 @@ export default async function Home(props: Props) {
       )}
     >
       <Header
-        numInvoices={invoices.length}
+        numInvoices={totalInvoices}
         initialSelectedStatuses={selectedStatuses}
         newInvoiceLinkText={newInvoiceLinkText}
         paginationLinksData={getPaginationLinksData(
