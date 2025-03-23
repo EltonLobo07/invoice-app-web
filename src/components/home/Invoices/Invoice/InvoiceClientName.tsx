@@ -1,7 +1,7 @@
 import { classJoin } from "@/utils/general";
 import { Dt } from "./Dt";
 
-export function InvoiceTo(props: { value: string }) {
+export function InvoiceClientName(props: { value: string }) {
   return (
     <>
       <Dt>To</Dt>

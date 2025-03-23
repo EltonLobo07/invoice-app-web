@@ -24,8 +24,10 @@ const invoices: {
   billFrom: Address;
   billTo: Address;
   items: Item[];
+  id: string;
 }[] = [
   {
+    id: "AB1234",
     status: "pending",
     paymentTerm: 30,
     clientName: "Alex Grim",
@@ -57,6 +59,7 @@ const invoices: {
     ],
   },
   {
+    id: "CD5678",
     status: "pending",
     paymentTerm: 30,
     clientName: "Emma Watson",
@@ -89,6 +92,7 @@ const invoices: {
     ],
   },
   {
+    id: "EF9012",
     status: "paid",
     paymentTerm: 14,
     clientName: "James Carter",
@@ -119,6 +123,7 @@ const invoices: {
     ],
   },
   {
+    id: "GH3456",
     status: "draft",
     paymentTerm: 7,
     clientName: "Olivia Patel",
@@ -150,6 +155,7 @@ const invoices: {
     ],
   },
   {
+    id: "IJ7890",
     status: "pending",
     paymentTerm: 1,
     clientName: "Thomas Reed",
@@ -176,6 +182,7 @@ const invoices: {
     ],
   },
   {
+    id: "KL1234",
     status: "paid",
     paymentTerm: 14,
     clientName: "Sophie Nguyen",
@@ -208,6 +215,7 @@ const invoices: {
     ],
   },
   {
+    id: "MN5678",
     status: "draft",
     paymentTerm: 7,
     clientName: "Liam Brooks",
@@ -233,6 +241,7 @@ const invoices: {
     ],
   },
   {
+    id: "OP9012",
     status: "pending",
     paymentTerm: 30,
     clientName: "Ava Morales",
@@ -265,6 +274,7 @@ const invoices: {
     ],
   },
   {
+    id: "QR3456",
     status: "paid",
     paymentTerm: 1,
     clientName: "Noah Kim",
@@ -290,6 +300,7 @@ const invoices: {
     ],
   },
   {
+    id: "ST7890",
     status: "draft",
     paymentTerm: 7,
     clientName: "Isabella Ford",
@@ -316,6 +327,7 @@ const invoices: {
     ],
   },
   {
+    id: "UV1234",
     status: "pending",
     paymentTerm: 30,
     clientName: "Ethan Hayes",
@@ -347,6 +359,7 @@ const invoices: {
     ],
   },
   {
+    id: "WX5678",
     status: "paid",
     paymentTerm: 14,
     clientName: "Mia Sullivan",
@@ -373,6 +386,7 @@ const invoices: {
     ],
   },
   {
+    id: "YZ9012",
     status: "draft",
     paymentTerm: 1,
     clientName: "Lucas Bennett",
@@ -404,6 +418,7 @@ const invoices: {
     ],
   },
   {
+    id: "BA3456",
     status: "pending",
     paymentTerm: 30,
     clientName: "Charlotte Evans",
@@ -431,6 +446,7 @@ const invoices: {
     ],
   },
   {
+    id: "DC7890",
     status: "paid",
     paymentTerm: 14,
     clientName: "Henry Ortiz",
@@ -461,6 +477,7 @@ const invoices: {
     ],
   },
   {
+    id: "FE1234",
     status: "draft",
     paymentTerm: 7,
     clientName: "Amelia Gray",
@@ -487,6 +504,7 @@ const invoices: {
     ],
   },
   {
+    id: "HG5678",
     status: "pending",
     paymentTerm: 30,
     clientName: "Jack Phillips",
@@ -518,6 +536,7 @@ const invoices: {
     ],
   },
   {
+    id: "JI9012",
     status: "paid",
     paymentTerm: 1,
     clientName: "Lily Turner",
@@ -550,6 +569,7 @@ const invoices: {
     ],
   },
   {
+    id: "LK3456",
     status: "draft",
     paymentTerm: 7,
     clientName: "Mason Lee",
@@ -575,6 +595,7 @@ const invoices: {
     ],
   },
   {
+    id: "NM7890",
     status: "pending",
     paymentTerm: 30,
     clientName: "Harper Diaz",
@@ -606,6 +627,7 @@ const invoices: {
     ],
   },
   {
+    id: "PO1234",
     status: "paid",
     paymentTerm: 14,
     clientName: "Elijah Wood",
@@ -644,10 +666,12 @@ export async function seed(db: Kysely<DB>): Promise<void> {
       .insertInto("invoices")
       .values([
         {
+          id: invoice.id,
           status: invoice.status,
           paymentTerm: invoice.paymentTerm,
           clientName: invoice.clientName,
           clientEmail: invoice.clientEmail,
+          createdAt: invoice.createdAt,
           projectDescription: invoice.projectDescription,
         },
       ])

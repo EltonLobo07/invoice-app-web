@@ -4,7 +4,7 @@ import { sql, type Kysely } from "kysely";
 export async function up(db: Kysely<any>): Promise<void> {
   /*
 		CREATE TABLE invoices (
-			id SERIAL PRIMARY KEY,
+			id CHAR(6) PRIMARY KEY,
 			status invoice_status NOT NULL,
 			created_at DATE NOT NULL DEFAULT NOW(),
 			payment_term INT NOT NULL CHECK payment_term IN (1, 7, 14, 30),
@@ -15,7 +15,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 	*/
   return db.schema
     .createTable("invoices")
-    .addColumn("id", "serial", (c) => c.primaryKey())
+    .addColumn("id", "char(6)", (c) => c.primaryKey())
     .addColumn("status", sql`invoice_status`, (c) => c.notNull())
     .addColumn("created_at", "date", (c) => c.notNull().defaultTo("NOW()"))
     .addColumn("payment_term", "integer", (c) =>

@@ -2,7 +2,7 @@ import type { Invoice as InvoiceType } from "@/types/home";
 import { classJoin } from "@/utils/general";
 import { InvoiceId } from "./InvoiceId";
 import { InvoiceDueDate } from "./InvoiceDueDate";
-import { InvoiceTo } from "./InvoiceTo";
+import { InvoiceClientName } from "./InvoiceClientName";
 import { InvoiceAmount } from "./InvoiceAmount";
 import { InvoiceStatus } from "./InvoiceStatus";
 import { ArrowDown } from "@/icons";
@@ -23,7 +23,7 @@ export function InvoiceDetailsLg({ invoice }: Props) {
         <InvoiceDueDate value={invoice.dueDate} />
       </div>
       <div className="grow overflow-x-hidden">
-        <InvoiceTo value={invoice.to} />
+        <InvoiceClientName value={invoice.clientName} />
       </div>
       <div
         className={classJoin(

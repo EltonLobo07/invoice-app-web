@@ -10,7 +10,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 			city TEXT NOT NULL,
 			country TEXT NOT NULL,
 			type invoice_address_type NOT NULL
-			invoice_id INT NOT NULL,
+			invoice_id CHAR(6) NOT NULL,
 			CONSTRAINT fk_invoice,
 				FOREIGN KEY(invoice_id)
 				REFERENCES invoices(id)
@@ -25,8 +25,14 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("city", "text", (c) => c.notNull())
     .addColumn("country", "text", (c) => c.notNull())
     .addColumn("type", sql`invoice_address_type`, (c) => c.notNull())
-    .addColumn("invoice_id", "integer", (c) => c.notNull())
-    .addForeignKeyConstraint("fk_invoice", ["invoice_id"], "invoices", ["id"])
+    .addColumn("invoice_id", "char(6)", (c) => c.notNull())
+    .addForeignKeyConstraint(
+      "fk_invoice",
+      ["invoice_id"],
+      "invoices",
+      ["id"],
+      (c) => c.onDelete("cascade")
+    )
     .execute();
 
   /*
@@ -35,7 +41,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 			name TEXT NOT NULL,
 			quantity INT NOT NULL CHECK quantity > 0,
 			price NUMERIC NOT NULL CHECK price > 0.0,
-			invoice_id INT NOT NULL,
+			invoice_id CHAR(6) NOT NULL,
 			CONSTRAINT fk_invoice,
 				FOREIGN KEY(invoice_id)
 				REFERENCES invoices(id)
@@ -50,8 +56,14 @@ export async function up(db: Kysely<any>): Promise<void> {
       c.notNull().check(sql`quantity > 0`)
     )
     .addColumn("price", "numeric", (c) => c.notNull().check(sql`price > 0.0`))
-    .addColumn("invoice_id", "integer", (c) => c.notNull())
-    .addForeignKeyConstraint("fk_invoice", ["invoice_id"], "invoices", ["id"])
+    .addColumn("invoice_id", "char(6)", (c) => c.notNull())
+    .addForeignKeyConstraint(
+      "fk_invoice",
+      ["invoice_id"],
+      "invoices",
+      ["id"],
+      (c) => c.onDelete("cascade")
+    )
     .execute();
 }
 

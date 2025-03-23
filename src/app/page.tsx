@@ -36,10 +36,13 @@ export default async function Home(props: Props) {
   const invoices = (await selectedInvoicesQuery.execute()).map((invoice) => ({
     ...invoice,
     amount: Number(Number(invoice.amount).toFixed(2)),
+    dueDate: new Date(invoice.createdAt.getTime() + invoice.paymentTerm),
   }));
 
   const lastPageNum =
-    invoices.length > 0 ? getLastPageNum(pageNum, invoices[0].total) : 0;
+    invoices.length > 0
+      ? getLastPageNum(pageNum, Number(invoices[0].totalInvoices))
+      : 0;
 
   const newInvoiceLinkText = { default: "New", md: "New Invoice" };
 

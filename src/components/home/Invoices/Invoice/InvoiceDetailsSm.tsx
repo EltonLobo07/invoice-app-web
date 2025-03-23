@@ -1,7 +1,7 @@
 import type { Invoice as InvoiceType } from "@/types/home";
 import { classJoin } from "@/utils/general";
 import { InvoiceId } from "./InvoiceId";
-import { InvoiceTo } from "./InvoiceTo";
+import { InvoiceClientName } from "./InvoiceClientName";
 import { InvoiceDueDate } from "./InvoiceDueDate";
 import { InvoiceAmount } from "./InvoiceAmount";
 import { InvoiceStatus } from "./InvoiceStatus";
@@ -22,7 +22,7 @@ export function InvoiceDetailsSm({ invoice }: Props) {
         )}
       >
         <InvoiceId value={invoice.id} />
-        <InvoiceTo value={invoice.to} />
+        <InvoiceClientName value={invoice.clientName} />
       </div>
       <div className="flex justify-between items-center gap-x-2">
         <div
