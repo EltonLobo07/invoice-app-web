@@ -6,12 +6,12 @@ import {
   NoPageMessage,
 } from "@/components/home";
 import { NUM_INVOICES_PER_PAGE } from "@/constants/home";
-import { getInvoicesQuery } from "@/database-queries/home";
 import { SearchParamsSchema } from "@/schemas/home";
 import { getUser } from "@/server-helpers";
 import { classJoin } from "@/utils/general";
 import { cookies } from "next/headers";
 import * as v from "valibot";
+import { getInvoiceList } from "./services/invoices";
 
 type Props = {
   searchParams?: Promise<Record<string, string>>;
@@ -28,16 +28,11 @@ export default async function Home(props: Props) {
     await props.searchParams
   );
 
-  const selectedInvoicesQuery = getInvoicesQuery(
+  const invoices = await getInvoiceList(
     pageNum,
     NUM_INVOICES_PER_PAGE,
     selectedStatuses
   );
-  const invoices = (await selectedInvoicesQuery.execute()).map((invoice) => ({
-    ...invoice,
-    amount: Number(Number(invoice.amount).toFixed(2)),
-    dueDate: new Date(invoice.createdAt.getTime() + invoice.paymentTerm),
-  }));
 
   const lastPageNum =
     invoices.length > 0

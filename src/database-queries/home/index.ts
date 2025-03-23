@@ -1,1 +1,0 @@
-export { getInvoicesQuery } from "./getInvoicesQuery";
