@@ -2,8 +2,8 @@ import { ProtectedPageMessage } from "@/components/general";
 import { ParamsSchema } from "@/schemas/invoice-page";
 import { getUser } from "@/server-helpers";
 import { getInvoiceById } from "@/services/invoices";
-import { classJoin } from "@/utils/general";
 import { cookies } from "next/headers";
+import { notFound } from "next/navigation";
 import * as v from "valibot";
 
 type Props = {
@@ -19,27 +19,15 @@ export default async function Page(props: Props) {
   const params = await props.params;
   const result = v.safeParse(ParamsSchema, params);
   if (!result.success || result.output.invoiceId === "") {
-    return <div>no page</div>;
+    notFound();
   }
 
   let output: React.ReactNode = null;
   const invoice = await getInvoiceById(result.output.invoiceId);
   if (invoice === null) {
-    output = "no invoice found";
-  } else {
-    output = JSON.stringify(invoice);
+    notFound();
   }
+  output = JSON.stringify(invoice);
 
-  return (
-    <div
-      className={classJoin(
-        "h-full overflow-y-auto",
-        "px-app",
-        "bg-inherit",
-        "max-w-app mx-auto"
-      )}
-    >
-      {output}
-    </div>
-  );
+  return <>{output}</>;
 }

@@ -1,16 +1,17 @@
 import Image from "next/image";
 import { Message } from "@/components/general";
 import AnnouncementImgData from "./announcement.png";
-import { classJoin } from "@/utils/general";
+import { classJoin, type HeadingLvl } from "@/utils/general";
 
 type Props = {
+  headingLvl?: HeadingLvl;
   description: React.ReactNode;
 };
 
 export function NoResourceMessage(props: Props) {
   return (
     <Message
-      headingLvl={3}
+      headingLvl={props.headingLvl ?? 3}
       title="There is nothing here"
       description={props.description}
       img={
