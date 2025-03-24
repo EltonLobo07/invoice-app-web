@@ -74,3 +74,64 @@ export function getInvoiceList(
       }))
     );
 }
+
+// todo: improve the query (the transformations should happen in SQL)
+export async function getInvoiceById(id: string) {
+  /*
+    SELECT
+      invoices.id,
+      invoices.status,
+      invoices.project_description,
+      invoices.created_at,
+      invoices.payment_term,
+      invoices.client_name,
+      invoices.client_email,
+      items.id as item_id,
+      items.name,
+      items.price,
+      items.quantity
+    FROM
+      invoices
+    JOIN 
+      items
+        ON items.invoice_id = invoices.id
+    WHERE
+        invoices.id = <ID_VAR;
+  */
+
+  const invoices = await db
+    .selectFrom("invoices")
+    .innerJoin("items", "invoices.id", "items.invoiceId")
+    .select([
+      "invoices.id",
+      "invoices.status",
+      "invoices.projectDescription",
+      "invoices.createdAt",
+      "invoices.paymentTerm",
+      "invoices.clientName",
+      "invoices.clientEmail",
+      "items.id as itemId",
+      "items.name",
+      "items.price",
+      "items.quantity",
+    ])
+    .where("invoices.id", "=", id)
+    .execute();
+
+  if (
+    invoices.length === 0 ||
+    !invoices.every((invoice) => invoice.id === id)
+  ) {
+    return null;
+  }
+  const invoice = invoices[0];
+  return {
+    ...invoice,
+    items: invoices.map(({ itemId, name, price, quantity }) => ({
+      itemId,
+      name,
+      price,
+      quantity,
+    })),
+  };
+}
