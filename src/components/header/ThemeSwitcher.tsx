@@ -19,7 +19,7 @@ export function ThemeSwitcher() {
       pressed={isDarkTheme}
       onPressedChange={toggleIsDarkTheme}
     >
-      <motion.div
+      <motion.button
         layout="position"
         className={classJoin(
           "flex justify-center items-center",
@@ -29,7 +29,7 @@ export function ThemeSwitcher() {
         )}
       >
         <Icon />
-      </motion.div>
+      </motion.button>
     </Toggle.Root>
   );
 }
