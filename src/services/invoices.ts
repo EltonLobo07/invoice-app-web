@@ -135,3 +135,13 @@ export async function getInvoiceById(id: string) {
     })),
   };
 }
+
+export function deleteInvoice(id: string) {
+  /*
+    DELETE FROM
+      invoices
+    WHERE
+      invoices.id = <ID_VAR>;
+  */
+  return db.deleteFrom("invoices").where("id", "=", id).execute();
+}

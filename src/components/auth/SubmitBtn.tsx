@@ -1,7 +1,4 @@
-"use client";
-
-import { Spinner } from "@/components/general";
-import { motion } from "motion/react";
+import { FormSubmitBtn } from "@/components/general";
 import { classJoin } from "@/utils/general";
 
 type Props = {
@@ -10,10 +7,8 @@ type Props = {
 
 export function SubmitBtn(props: Props) {
   return (
-    <motion.button
-      layout="position"
-      aria-disabled={props.isFormSubmitting}
-      type={props.isFormSubmitting ? "button" : "submit"}
+    <FormSubmitBtn
+      isFormSubmitting={props.isFormSubmitting}
       className={classJoin(
         "hover:bg-ds-2",
         "text-white",
@@ -25,14 +20,7 @@ export function SubmitBtn(props: Props) {
         props.isFormSubmitting ? "cursor-not-allowed bg-ds-2" : "bg-ds-1"
       )}
     >
-      <Spinner isLoading={props.isFormSubmitting} />
-      <motion.span
-        layout="position"
-        animate={{ y: 1.5 }}
-        className="inline-block"
-      >
-        Submit
-      </motion.span>
-    </motion.button>
+      Submit
+    </FormSubmitBtn>
   );
 }

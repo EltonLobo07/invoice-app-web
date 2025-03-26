@@ -1,4 +1,5 @@
 import { InvoiceStatusDD, ProtectedPageMessage } from "@/components/general";
+import { DeleteDialog } from "@/components/invoice-page";
 import { ArrowDown } from "@/icons";
 import { ParamsSchema } from "@/schemas/invoice-page";
 import { getUser } from "@/server-helpers";
@@ -29,6 +30,8 @@ export default async function Page(props: Props) {
   if (invoice === null) {
     notFound();
   }
+
+  const showMarkAsPaid = invoice.status === "pending";
 
   return (
     <div
@@ -91,7 +94,10 @@ export default async function Page(props: Props) {
             <InvoiceStatusDD value={invoice.status} />
           </dl>
           <section className="hidden md:block">
-            <ActionsWithHeading />
+            <ActionsWithHeading
+              invoiceId={result.output.invoiceId}
+              showMarkAsPaid={showMarkAsPaid}
+            />
           </section>
         </div>
       </header>
@@ -111,18 +117,26 @@ export default async function Page(props: Props) {
           "sticky bottom-0"
         )}
       >
-        <ActionsWithHeading />
+        <ActionsWithHeading
+          invoiceId={result.output.invoiceId}
+          showMarkAsPaid={showMarkAsPaid}
+        />
       </section>
     </div>
   );
 }
 
-function ActionsWithHeading() {
+type ActionsWithHeadingProps = {
+  invoiceId: string;
+  showMarkAsPaid: boolean;
+};
+
+function ActionsWithHeading(props: ActionsWithHeadingProps) {
   return (
     <div className="flex gap-x-1 gap-y-2 items-center justify-center flex-wrap">
       <h3 className="sr-only">available actions</h3>
       <Link
-        href="/"
+        href={`/invoices/${props.invoiceId}/edit`}
         className={classJoin(
           "bg-[#F9FAFE] hover:bg-ds-5 dark:bg-ds-4 hover:dark:bg-white",
           "text-ds-7",
@@ -133,33 +147,24 @@ function ActionsWithHeading() {
       >
         Edit
       </Link>
-      <button
-        type="button"
-        className={classJoin(
-          "bg-ds-9 hover:bg-ds-10",
-          "text-white",
-          "typography-heading-s-var",
-          "pt-[1.125rem] pb-[0.9375rem] px-6",
-          "rounded-3xl"
-        )}
-      >
-        Delete
-      </button>
-      <form>
-        <button
-          type="submit"
-          className={classJoin(
-            "bg-ds-1 hover:bg-ds-2",
-            "text-white",
-            "typography-heading-s-var",
-            "pt-[1.125rem] pb-[0.9375rem] px-6",
-            "rounded-3xl",
-            "whitespace-nowrap"
-          )}
-        >
-          Mark as Paid
-        </button>
-      </form>
+      <DeleteDialog invoiceId={props.invoiceId} />
+      {props.showMarkAsPaid && (
+        <form>
+          <button
+            type="submit"
+            className={classJoin(
+              "bg-ds-1 hover:bg-ds-2",
+              "text-white",
+              "typography-heading-s-var",
+              "pt-[1.125rem] pb-[0.9375rem] px-6",
+              "rounded-3xl",
+              "whitespace-nowrap"
+            )}
+          >
+            Mark as Paid
+          </button>
+        </form>
+      )}
     </div>
   );
 }
