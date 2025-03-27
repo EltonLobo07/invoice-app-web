@@ -6,7 +6,10 @@ export function GlobalToast() {
   return (
     <RPToast.Provider>
       <Toast />
-      <RPToast.Viewport className={classJoin("fixed top-0 right-0", "p-2")} />
+      <RPToast.Viewport
+        data-global-toast-viewport
+        className={classJoin("fixed top-0 right-0", "p-2", "z-40")}
+      />
     </RPToast.Provider>
   );
 }

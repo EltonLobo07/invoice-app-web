@@ -15,18 +15,21 @@ type Props = {
 };
 
 export function DeleteDialog(props: Props) {
-  const dialog = Ariakit.useDialogStore();
-  const mounted = Ariakit.useStoreState(dialog, "mounted");
+  const [open, setOpen] = React.useState({ ariakit: false, internal: false });
   const [formState, formAction, isFormSubmitting] = React.useActionState(
     deleteInvoice,
     {}
   );
   const setToast = useStoreContext((s) => s.setToast);
   const router = useRouter();
-  const hideDialog = dialog.hide;
+  const hideDialog = React.useCallback(() => {
+    setOpen((open) =>
+      open.ariakit && open.internal ? { internal: true, ariakit: false } : open
+    );
+  }, []);
 
   React.useEffect(() => {
-    if (formState.type === "error") {
+    if (formState.type === "error" || formState.type === "success") {
       hideDialog();
       setToast({ type: "Error", message: formState.message });
     }
@@ -35,17 +38,23 @@ export function DeleteDialog(props: Props) {
   React.useEffect(() => {
     if (formState.type === "success") {
       hideDialog();
+      setToast({ type: "Success", message: formState.message });
       startHolyLoader();
       router.push("/");
       router.refresh();
-      setToast({ type: "Success", message: formState.message });
     }
   }, [formState, hideDialog, router, setToast]);
 
   return (
     <>
       <Ariakit.Button
-        onClick={dialog.show}
+        onClick={() =>
+          setOpen((open) =>
+            open.ariakit && open.internal
+              ? open
+              : { ariakit: true, internal: true }
+          )
+        }
         type="button"
         className={classJoin(
           "bg-ds-9 hover:bg-ds-10",
@@ -57,16 +66,36 @@ export function DeleteDialog(props: Props) {
       >
         Delete
       </Ariakit.Button>
-      <AnimatePresence>
-        {mounted && (
+      <AnimatePresence
+        onExitComplete={() => {
+          /*
+            - this callback is triggered multiple times and 
+            each trigger creates a new open object
+            - creation of new object even though its field values remain the same is somewhat needed 
+            but logically I am not sure why. Essentially, the delete dialog cannot be reopened if I 
+            don't allow this
+
+            todo: figure out the root cause and fix this 
+          */
+          setOpen({ ariakit: false, internal: false });
+        }}
+      >
+        {open.ariakit && (
           <Ariakit.Dialog
-            store={dialog}
-            alwaysVisible={true}
-            onClose={(e) => {
-              if (isFormSubmitting) {
-                e.preventDefault();
-              }
+            getPersistentElements={() => {
+              const element = document.querySelector(
+                "[data-global-toast-viewport]"
+              );
+              return element === null ? [] : [element];
             }}
+            open={open.ariakit || open.internal}
+            onClose={() => {
+              if (isFormSubmitting) {
+                return;
+              }
+              hideDialog();
+            }}
+            unmountOnHide={true}
             backdrop={
               <motion.div
                 initial={{ opacity: 0 }}
@@ -75,7 +104,7 @@ export function DeleteDialog(props: Props) {
                 className={classJoin(
                   "fixed left-0 top-0 w-full h-full",
                   "bg-black/50",
-                  "z-20"
+                  "z-30"
                 )}
               />
             }
@@ -85,15 +114,15 @@ export function DeleteDialog(props: Props) {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 className={classJoin(
-                  "fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2",
+                  "fixed left-24px right-24px top-24px bottom-24px",
                   "bg-white dark:bg-ds-3",
-                  "z-20",
+                  "z-30",
                   "rounded-lg",
                   "px-32px md:px-48px",
                   "pb-8 md:pb-12",
                   "pt-[2.125rem] md:pt-[3.1875rem]",
-                  "m-24px",
-                  "max-w-[30rem]"
+                  "max-w-[30rem] m-auto",
+                  "h-fit"
                 )}
               />
             }
@@ -117,7 +146,7 @@ export function DeleteDialog(props: Props) {
               )}
             >
               {`Are you sure you want to delete invoice #${props.invoiceId}? This action
-              cannot be undone.`}
+            cannot be undone.`}
             </p>
             <div className="flex justify-end gap-x-2 gap-y-1 flex-wrap">
               <Ariakit.DialogDismiss
