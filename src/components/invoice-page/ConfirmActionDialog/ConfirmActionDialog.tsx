@@ -2,59 +2,25 @@
 
 import { classJoin } from "@/utils/general";
 import * as Ariakit from "@ariakit/react";
+import { motion, AnimatePresence } from "motion/react";
+import { FormSubmitBtn } from "@/components/general";
 import React from "react";
-import { AnimatePresence, motion } from "motion/react";
-import { FormSubmitBtn } from "../general";
-import { deleteInvoice } from "./deleteInvoice.action";
-import { useStoreContext } from "@/providers/StoreProvider";
-import { useRouter } from "next/navigation";
-import { startHolyLoader } from "holy-loader";
+import { useConfirmActionDialogState } from "./useConfirmActionDialogState";
 
 type Props = {
+  isFormSubmitting: boolean;
+  formAction: Exclude<React.ComponentProps<"form">["action"], undefined>;
   invoiceId: string;
-};
+  title: string;
+  description: string;
+  submitBtnText: string;
+} & ReturnType<typeof useConfirmActionDialogState>;
 
-export function DeleteDialog(props: Props) {
-  const [open, setOpen] = React.useState({ ariakit: false, internal: false });
-  const [formState, formAction, isFormSubmitting] = React.useActionState(
-    deleteInvoice,
-    {}
-  );
-  const setToast = useStoreContext((s) => s.setToast);
-  const router = useRouter();
-  const hideDialog = React.useCallback(() => {
-    setOpen((open) =>
-      open.ariakit && open.internal ? { internal: true, ariakit: false } : open
-    );
-  }, []);
-
-  React.useEffect(() => {
-    if (formState.type === "error" || formState.type === "success") {
-      hideDialog();
-      setToast({ type: "Error", message: formState.message });
-    }
-  }, [formState, hideDialog, setToast]);
-
-  React.useEffect(() => {
-    if (formState.type === "success") {
-      hideDialog();
-      setToast({ type: "Success", message: formState.message });
-      startHolyLoader();
-      router.push("/");
-      router.refresh();
-    }
-  }, [formState, hideDialog, router, setToast]);
-
+export function ConfirmActionDialog(props: Props) {
   return (
     <>
       <Ariakit.Button
-        onClick={() =>
-          setOpen((open) =>
-            open.ariakit && open.internal
-              ? open
-              : { ariakit: true, internal: true }
-          )
-        }
+        onClick={props.showDialog}
         type="button"
         className={classJoin(
           "bg-ds-9 hover:bg-ds-10",
@@ -64,23 +30,20 @@ export function DeleteDialog(props: Props) {
           "rounded-3xl"
         )}
       >
-        Delete
+        {props.submitBtnText}
       </Ariakit.Button>
       <AnimatePresence
-        onExitComplete={() => {
+        onExitComplete={() =>
           /*
-            - this callback is triggered multiple times and 
-            each trigger creates a new open object
-            - creation of new object even though its field values remain the same is somewhat needed 
-            but logically I am not sure why. Essentially, the delete dialog cannot be reopened if I 
-            don't allow this
+            For some unknown reason, creating a new object even if all of the field values 
+            are the same is needed for the trigger to open the dialog again
 
-            todo: figure out the root cause and fix this 
+            todo: find out the reason and avoid creating a new object
           */
-          setOpen({ ariakit: false, internal: false });
-        }}
+          props._setIsDialogOpen({ ariakit: false, internal: false })
+        }
       >
-        {open.ariakit && (
+        {props.showAriakitDialog && (
           <Ariakit.Dialog
             getPersistentElements={() => {
               const element = document.querySelector(
@@ -88,12 +51,12 @@ export function DeleteDialog(props: Props) {
               );
               return element === null ? [] : [element];
             }}
-            open={open.ariakit || open.internal}
+            open={props.ariakitDialogOpenState}
             onClose={() => {
-              if (isFormSubmitting) {
+              if (props.isFormSubmitting) {
                 return;
               }
-              hideDialog();
+              props.hideAriakitDialog();
             }}
             unmountOnHide={true}
             backdrop={
@@ -136,7 +99,7 @@ export function DeleteDialog(props: Props) {
                 "mb-2 md:mb-3"
               )}
             >
-              Confirm Deletion
+              {props.title}
             </Ariakit.DialogHeading>
             <p
               className={classJoin(
@@ -145,8 +108,7 @@ export function DeleteDialog(props: Props) {
                 "mb-[1.375rem] md:mb-[0.875rem]"
               )}
             >
-              {`Are you sure you want to delete invoice #${props.invoiceId}? This action
-            cannot be undone.`}
+              {props.description}
             </p>
             <div className="flex justify-end gap-x-2 gap-y-1 flex-wrap">
               <Ariakit.DialogDismiss
@@ -159,7 +121,7 @@ export function DeleteDialog(props: Props) {
                       "typography-heading-s-var",
                       "pt-[1.125rem] pb-[0.9375rem] px-6",
                       "rounded-3xl",
-                      isFormSubmitting
+                      props.isFormSubmitting
                         ? "cursor-not-allowed"
                         : "hover:bg-ds-5 hover:dark:bg-white"
                     )}
@@ -168,12 +130,12 @@ export function DeleteDialog(props: Props) {
                   </motion.button>
                 }
               />
-              <form action={formAction}>
+              <form action={props.formAction}>
                 <input type="hidden" name="invoiceId" value={props.invoiceId} />
                 <Ariakit.Button
                   render={
                     <FormSubmitBtn
-                      isFormSubmitting={isFormSubmitting}
+                      isFormSubmitting={props.isFormSubmitting}
                       className={classJoin(
                         "text-white",
                         "typography-heading-s-var",
@@ -181,12 +143,12 @@ export function DeleteDialog(props: Props) {
                         "py-[1.03125rem]",
                         "rounded-3xl",
                         "flex gap-x-1 items-center",
-                        isFormSubmitting
+                        props.isFormSubmitting
                           ? "bg-ds-10 cursor-not-allowed"
                           : "bg-ds-9 hover:bg-ds-10"
                       )}
                     >
-                      Delete
+                      {props.submitBtnText}
                     </FormSubmitBtn>
                   }
                 />
