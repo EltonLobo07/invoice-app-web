@@ -78,7 +78,7 @@ export function getInvoiceList(
 // todo: improve the query (the transformations should happen in SQL)
 export async function getInvoiceById(id: string) {
   /*
-    SELECT
+    SELECT 
       invoices.id,
       invoices.status,
       invoices.project_description,
@@ -89,19 +89,120 @@ export async function getInvoiceById(id: string) {
       items.id as item_id,
       items.name,
       items.price,
-      items.quantity
+      items.quantity,
+      to_address.street AS to_street,
+      to_address.post_code AS to_post_code,
+      to_address.city AS to_city,
+      to_address.country AS to_country,
+      from_address.street AS from_street,
+      from_address.post_code AS from_post_code,
+      from_address.city AS from_city,
+      from_address.country AS from_country
     FROM
-      invoices
-    JOIN 
+      (
+        SELECT 
+          invoices.id,
+          invoices.status,
+          invoices.project_description,
+          invoices.created_at,
+          invoices.payment_term,
+          invoices.client_name,
+          invoices.client_email
+        FROM 
+          invoices
+        WHERE 
+          invoices.id = <ID_VAR>
+      ) AS invoices
+    JOIN
       items
         ON items.invoice_id = invoices.id
-    WHERE
-        invoices.id = <ID_VAR;
+    JOIN 
+      (
+        SELECT 
+          invoice_addresses.street,
+          invoice_addresses.post_code,
+          invoice_addresses.city,
+          invoice_addresses.country,
+          invoice_addresses.invoice_id
+        FROM 
+          invoice_addresses
+        WHERE 
+          invoice_addresses.invoice_id = <ID_VAR> AND invoice_addresses.type = 'to'
+      ) AS to_address
+        ON to_address.invoice_id = invoices.id
+    JOIN 
+      (
+        SELECT 
+          invoice_addresses.street,
+          invoice_addresses.post_code,
+          invoice_addresses.city,
+          invoice_addresses.country,
+          invoice_addresses.invoice_id
+        FROM 
+          invoice_addresses
+        WHERE 
+          invoice_addresses.invoice_id = <ID_VAR> AND invoice_addresses.type = 'from'
+      ) AS from_address
+        ON from_address.invoice_id = invoices.id;
   */
 
   const invoices = await db
-    .selectFrom("invoices")
+    .selectFrom(
+      db
+        .selectFrom("invoices")
+        .select([
+          "invoices.id",
+          "invoices.status",
+          "invoices.projectDescription",
+          "invoices.createdAt",
+          "invoices.paymentTerm",
+          "invoices.clientName",
+          "invoices.clientEmail",
+        ])
+        .where("invoices.id", "=", id)
+        .as("invoices")
+    )
     .innerJoin("items", "invoices.id", "items.invoiceId")
+    .innerJoin(
+      db
+        .selectFrom("invoiceAddresses")
+        .select([
+          "invoiceAddresses.street",
+          "invoiceAddresses.postCode",
+          "invoiceAddresses.city",
+          "invoiceAddresses.country",
+          "invoiceAddresses.invoiceId",
+        ])
+        .where((eb) =>
+          eb.and([
+            eb("invoiceAddresses.invoiceId", "=", id),
+            eb("invoiceAddresses.type", "=", "to"),
+          ])
+        )
+        .as("toAddress"),
+      "invoices.id",
+      "toAddress.invoiceId"
+    )
+    .innerJoin(
+      db
+        .selectFrom("invoiceAddresses")
+        .select([
+          "invoiceAddresses.street",
+          "invoiceAddresses.postCode",
+          "invoiceAddresses.city",
+          "invoiceAddresses.country",
+          "invoiceAddresses.invoiceId",
+        ])
+        .where((eb) =>
+          eb.and([
+            eb("invoiceAddresses.invoiceId", "=", id),
+            eb("invoiceAddresses.type", "=", "from"),
+          ])
+        )
+        .as("fromAddress"),
+      "invoices.id",
+      "fromAddress.invoiceId"
+    )
     .select([
       "invoices.id",
       "invoices.status",
@@ -114,6 +215,14 @@ export async function getInvoiceById(id: string) {
       "items.name",
       "items.price",
       "items.quantity",
+      "toAddress.street as toStreet",
+      "toAddress.postCode as toPostCode",
+      "toAddress.city as toCity",
+      "toAddress.country as toCountry",
+      "fromAddress.street as fromStreet",
+      "fromAddress.postCode as fromPostCode",
+      "fromAddress.city as fromCity",
+      "fromAddress.country as fromCountry",
     ])
     .where("invoices.id", "=", id)
     .execute();
@@ -126,7 +235,25 @@ export async function getInvoiceById(id: string) {
   }
   const invoice = invoices[0];
   return {
-    ...invoice,
+    id: invoice.id,
+    status: invoice.status,
+    projectDescription: invoice.projectDescription,
+    createdAt: invoice.createdAt,
+    paymentTerm: invoice.paymentTerm,
+    clientName: invoice.clientName,
+    clientEmail: invoice.clientEmail,
+    toAddress: {
+      street: invoice.toStreet,
+      postCode: invoice.toPostCode,
+      city: invoice.toCity,
+      country: invoice.toCountry,
+    },
+    fromAddress: {
+      street: invoice.fromStreet,
+      postCode: invoice.fromPostCode,
+      city: invoice.fromCity,
+      country: invoice.fromCountry,
+    },
     items: invoices.map(({ itemId, name, price, quantity }) => ({
       itemId,
       name,
