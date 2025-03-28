@@ -1,52 +1,47 @@
 "use client";
 
 import React from "react";
-import { deleteInvoice } from "./deleteInvoice.action";
 import { useStoreContext } from "@/providers/StoreProvider";
-import { useRouter } from "next/navigation";
-import { startHolyLoader } from "holy-loader";
 import {
   ConfirmActionDialog,
   useConfirmActionDialogState,
 } from "../ConfirmActionDialog";
+import { markInvoiceAsPaid } from "./markInvoiceAsPaid.action";
 
 type Props = {
   invoiceId: string;
 };
 
-export function DeleteDialog(props: Props) {
+export function MarkAsPaidDialog(props: Props) {
   const { hideDialog, ...restConfirmActionDialogState } =
     useConfirmActionDialogState();
   const [formState, formAction, isFormSubmitting] = React.useActionState(
-    deleteInvoice,
+    markInvoiceAsPaid,
     {}
   );
+  // const router = useRouter();
   const setToast = useStoreContext((s) => s.setToast);
-  const router = useRouter();
 
   React.useEffect(() => {
-    if (formState.type === "error" || formState.type === "success") {
+    if (formState.type === "error") {
       hideDialog();
       setToast({ type: "Error", message: formState.message });
     }
   }, [formState, hideDialog, setToast]);
 
-  React.useEffect(() => {
-    if (formState.type === "success") {
-      hideDialog();
-      setToast({ type: "Success", message: formState.message });
-      startHolyLoader();
-      router.push("/");
-      router.refresh();
-    }
-  }, [formState, hideDialog, router, setToast]);
+  // React.useEffect(() => {
+  //   if (formState.type === "success") {
+  //     hideDialog();
+  //     setToast({ type: "Success", message: formState.message });
+  //   }
+  // }, [formState, hideDialog, setToast]);
 
   return (
     <ConfirmActionDialog
-      theme="danger"
-      title="Confirm Deletion"
-      description={`Are you sure you want to delete invoice #${props.invoiceId}? This action cannot be undone.`}
-      submitBtnText="Delete"
+      theme="primary"
+      title="Confirm Status Change"
+      description={`Are you sure you want to change the status of invoice #${props.invoiceId} to "Paid"? This action cannot be undone.`}
+      submitBtnText="Mark as Paid"
       isFormSubmitting={isFormSubmitting}
       formAction={formAction}
       invoiceId={props.invoiceId}

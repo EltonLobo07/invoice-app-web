@@ -1,5 +1,5 @@
 import { InvoiceStatusDD, ProtectedPageMessage } from "@/components/general";
-import { DeleteDialog } from "@/components/invoice-page";
+import { DeleteDialog, MarkAsPaidDialog } from "@/components/invoice-page";
 import { ArrowDown } from "@/icons";
 import { ParamsSchema } from "@/schemas/invoice-page";
 import { getUser } from "@/server-helpers";
@@ -148,23 +148,23 @@ function ActionsWithHeading(props: ActionsWithHeadingProps) {
         Edit
       </Link>
       <DeleteDialog invoiceId={props.invoiceId} />
-      {props.showMarkAsPaid && (
-        <form>
-          <button
-            type="submit"
-            className={classJoin(
-              "bg-ds-1 hover:bg-ds-2",
-              "text-white",
-              "typography-heading-s-var",
-              "pt-[1.125rem] pb-[0.9375rem] px-6",
-              "rounded-3xl",
-              "whitespace-nowrap"
-            )}
-          >
-            Mark as Paid
-          </button>
-        </form>
-      )}
+      {props.showMarkAsPaid && <MarkAsPaidDialog invoiceId={props.invoiceId} />}
     </div>
   );
 }
+
+/*
+  <button
+    type="submit"
+    className={classJoin(
+      "bg-ds-1 hover:bg-ds-2",
+      "text-white",
+      "typography-heading-s-var",
+      "pt-[1.125rem] pb-[0.9375rem] px-6",
+      "rounded-3xl",
+      "whitespace-nowrap"
+    )}
+  >
+    Mark as Paid
+  </button>
+*/

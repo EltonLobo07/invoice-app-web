@@ -145,3 +145,19 @@ export function deleteInvoice(id: string) {
   */
   return db.deleteFrom("invoices").where("id", "=", id).execute();
 }
+
+export function markInvoiceAsPaid(id: string) {
+  /*
+    UPDATE TABLE
+      invoices
+    SET
+      status = "paid"
+    WHERE
+      invoices.id = <ID_VAR>;
+  */
+  return db
+    .updateTable("invoices")
+    .set({ status: "paid" })
+    .where("id", "=", id)
+    .execute();
+}

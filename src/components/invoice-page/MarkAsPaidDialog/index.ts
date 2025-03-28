@@ -1,2 +1,1 @@
-export { DeleteDialog } from "./DeleteDialog";
 export { MarkAsPaidDialog } from "./MarkAsPaidDialog";

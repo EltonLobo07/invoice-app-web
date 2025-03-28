@@ -14,6 +14,7 @@ type Props = {
   title: string;
   description: string;
   submitBtnText: string;
+  theme: "danger" | "primary";
 } & ReturnType<typeof useConfirmActionDialogState>;
 
 export function ConfirmActionDialog(props: Props) {
@@ -23,11 +24,16 @@ export function ConfirmActionDialog(props: Props) {
         onClick={props.showDialog}
         type="button"
         className={classJoin(
-          "bg-ds-9 hover:bg-ds-10",
+          props.theme === "danger"
+            ? "bg-ds-9 hover:bg-ds-10"
+            : props.theme === "primary"
+            ? "bg-ds-1 hover:bg-ds-2"
+            : "",
           "text-white",
           "typography-heading-s-var",
           "pt-[1.125rem] pb-[0.9375rem] px-6",
-          "rounded-3xl"
+          "rounded-3xl",
+          "whitespace-nowrap"
         )}
       >
         {props.submitBtnText}
@@ -144,8 +150,16 @@ export function ConfirmActionDialog(props: Props) {
                         "rounded-3xl",
                         "flex gap-x-1 items-center",
                         props.isFormSubmitting
-                          ? "bg-ds-10 cursor-not-allowed"
-                          : "bg-ds-9 hover:bg-ds-10"
+                          ? props.theme === "danger"
+                            ? "bg-ds-10 cursor-not-allowed"
+                            : props.theme === "primary"
+                            ? "bg-ds-2 cursor-not-allowed"
+                            : ""
+                          : props.theme === "danger"
+                          ? "bg-ds-9 hover:bg-ds-10"
+                          : props.theme === "primary"
+                          ? "bg-ds-1 hover:bg-ds-2"
+                          : ""
                       )}
                     >
                       {props.submitBtnText}
