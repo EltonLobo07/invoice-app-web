@@ -6,7 +6,6 @@ import { LoginSchema } from "./login.schema";
 import { useFormAction } from "@/utils/form";
 import { login } from "./login.action";
 import React from "react";
-import { useRouter } from "next/navigation";
 import { useStoreContext } from "@/providers/StoreProvider";
 import {
   Announcer,
@@ -14,7 +13,7 @@ import {
   LabelledPasswordWithErrMsg,
 } from "@/components/general";
 import { SubmitBtn } from "@/components/auth";
-import { startHolyLoader } from "holy-loader";
+import { useRouter } from "@/hooks";
 
 export function LoginForm() {
   const { formState, formAction, formIsSubmitting } = useFormAction({
@@ -48,7 +47,6 @@ export function LoginForm() {
       } = formState;
       setToast({ type: "Success", message });
       loginFromStore(user, jwt);
-      startHolyLoader();
       router.push("/");
     }
   }, [formState, setToast, loginFromStore, router]);

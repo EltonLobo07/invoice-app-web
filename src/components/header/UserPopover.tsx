@@ -7,8 +7,7 @@ import { AnimatePresence, motion } from "motion/react";
 import React from "react";
 import { UserCircle, XCircle } from "@/icons";
 import { useStoreContext } from "@/providers/StoreProvider";
-import { useRouter } from "next/navigation";
-import { startHolyLoader } from "holy-loader";
+import { useRouter } from "@/hooks";
 
 type Props = {
   user: User;
@@ -87,7 +86,6 @@ export function UserPopover({ user: { username } }: Props) {
             </p>
             <Ariakit.Button
               onClick={() => {
-                startHolyLoader();
                 router.push("/login");
                 logout();
               }}

@@ -28,14 +28,14 @@ export async function markInvoiceAsPaid(
   const { invoiceId } = result.output;
   try {
     await markInvoiceAsPaidService(invoiceId);
-    revalidatePath("/");
-    return {
-      type: "success",
-      message: `Invoice #${invoiceId} was marked as "Paid" successfully`,
-      data: invoiceId,
-    };
   } catch (error) {
     console.error(error);
     return { type: "error", message: GENERIC_ERROR_MESSAGE };
   }
+  revalidatePath("/");
+  return {
+    type: "success",
+    message: `Invoice #${invoiceId} was marked as "Paid" successfully`,
+    data: invoiceId,
+  };
 }

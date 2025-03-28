@@ -19,7 +19,6 @@ export function MarkAsPaidDialog(props: Props) {
     markInvoiceAsPaid,
     {}
   );
-  // const router = useRouter();
   const setToast = useStoreContext((s) => s.setToast);
 
   React.useEffect(() => {
@@ -28,13 +27,6 @@ export function MarkAsPaidDialog(props: Props) {
       setToast({ type: "Error", message: formState.message });
     }
   }, [formState, hideDialog, setToast]);
-
-  // React.useEffect(() => {
-  //   if (formState.type === "success") {
-  //     hideDialog();
-  //     setToast({ type: "Success", message: formState.message });
-  //   }
-  // }, [formState, hideDialog, setToast]);
 
   return (
     <ConfirmActionDialog

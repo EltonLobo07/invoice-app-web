@@ -9,7 +9,7 @@ import {
   SelectProvider,
 } from "@ariakit/react";
 import { useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { classJoin } from "@/utils/general";
 import { ResponsiveText } from "@/components/general";
@@ -20,7 +20,7 @@ import {
   PAGE_NUM_SEARCH_PARAM,
   STATUSES_SEARCH_PARAM,
 } from "@/constants/home";
-import { startHolyLoader } from "holy-loader";
+import { useRouter } from "@/hooks";
 
 type Props = {
   initialSelectedStatuses: InvoiceStatus[];
@@ -47,7 +47,6 @@ export function InvoiceStatusSelect(props: Props) {
     }
     const searchParamsStr = newSearchParams.toString();
     setSelectedStatuses(statuses);
-    startHolyLoader();
     router.replace(
       `${pathname}${searchParamsStr.length > 0 ? "?" : ""}${searchParamsStr}`
     );

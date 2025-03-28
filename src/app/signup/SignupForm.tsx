@@ -6,7 +6,6 @@ import { SignupSchema } from "./signup.schema";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import { useRouter } from "next/navigation";
 import { useStoreContext } from "@/providers/StoreProvider";
 import {
   Announcer,
@@ -14,7 +13,7 @@ import {
   LabelledPasswordWithErrMsg,
 } from "@/components/general";
 import { SubmitBtn } from "@/components/auth";
-import { startHolyLoader } from "holy-loader";
+import { useRouter } from "@/hooks";
 
 export function SignupForm() {
   const { formState, formIsSubmitting, formAction } = useFormAction({
@@ -42,7 +41,6 @@ export function SignupForm() {
   React.useEffect(() => {
     if (formState.type === "success") {
       setToast({ type: "Success", message: formState.message });
-      startHolyLoader();
       router.push("/login");
     }
   }, [formState, setToast, router]);
