@@ -54,7 +54,7 @@ export default async function RootLayout({
           "isolate"
         )}
       >
-        <HolyLoader color="var(--color-ds-1)" />
+        <HolyLoader color="#3B82F6" zIndex={50} />
         <StoreProvider initialIsDarkTheme={isDarkTheme} initialUser={user}>
           <Header />
           <div className={classJoin("grow overflow-y-auto", "bg-inherit")}>
