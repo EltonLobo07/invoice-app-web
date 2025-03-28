@@ -29,12 +29,10 @@ export const login: FormAction<typeof LoginSchema, SuccessData> = async (
       .select(["username", "passwordHash"])
       .execute();
     if (users.length === 0) {
-      console.log({ users });
       return { type: "error", message: "invalid credentials" };
     }
     const [user] = users;
     if (!(await bcrypt.compare(password, user.passwordHash))) {
-      console.log("password mismatch");
       return { type: "error", message: "invalid credentials" };
     }
     const appUser = { username: user.username };

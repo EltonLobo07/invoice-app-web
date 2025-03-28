@@ -10,7 +10,6 @@ type Args = {
 
 export function SaveFormToLocalStorage(args: Args) {
   const formValues = useWatch({ control: args.control });
-  console.log({ formValues });
 
   React.useEffect(() => {
     if (!args.defaultValuesLoaded) {
