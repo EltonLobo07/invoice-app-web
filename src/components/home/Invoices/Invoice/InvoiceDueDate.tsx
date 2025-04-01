@@ -1,4 +1,4 @@
-import { classJoin } from "@/utils/general";
+import { classJoin, getUIDateString } from "@/utils/general";
 import { Dt } from "./Dt";
 
 type Props = {
@@ -6,13 +6,6 @@ type Props = {
 };
 
 export function InvoiceDueDate(props: Props) {
-  const [year, , day] = props.value.toISOString().split("T")[0].split("-");
-  const formattedDate = [
-    day,
-    new Intl.DateTimeFormat("en", { month: "short" }).format(props.value),
-    year,
-  ].join(" ");
-
   return (
     <>
       <Dt>Due date</Dt>
@@ -25,7 +18,7 @@ export function InvoiceDueDate(props: Props) {
         )}
       >
         <span aria-hidden={true}>{"Due "}</span>
-        <span>{formattedDate}</span>
+        <span>{getUIDateString(props.value)}</span>
       </dd>
     </>
   );

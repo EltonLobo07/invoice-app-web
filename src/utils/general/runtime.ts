@@ -15,3 +15,16 @@ export function classJoin(...classes: Array<ClassJoinParam>): string {
   }
   return res.join(" ");
 }
+
+export function getUIDateString(date: Date): string {
+  const [year, , day] = date.toISOString().split("T")[0].split("-");
+  return [
+    day,
+    new Intl.DateTimeFormat("en", { month: "short" }).format(date),
+    year,
+  ].join(" ");
+}
+
+export function getMillisecondsFromDays(days: number): number {
+  return days * 24 * 60 * 60 * 1000;
+}
