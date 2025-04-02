@@ -1,5 +1,9 @@
 import { InvoiceStatusDD, ProtectedPageMessage } from "@/components/general";
-import { DeleteDialog, MarkAsPaidDialog } from "@/components/invoice-page";
+import {
+  Dt,
+  InvoiceAddress,
+  ActionsWithHeading,
+} from "@/components/invoice-page";
 import { ArrowDown } from "@/icons";
 import { ParamsSchema } from "@/schemas/invoice-page";
 import { getUser } from "@/server-helpers";
@@ -37,6 +41,223 @@ export default async function Page(props: Props) {
 
   const showMarkAsPaid = invoice.status === "pending";
 
+  const headerJSX = (
+    <div
+      className={classJoin(
+        "w-full px-app",
+        "max-w-app",
+        "sticky top-0 bg-inherit",
+        "pt-[2.0625rem] md:pt-[3.0625rem] lg:pt-[4.0625rem]",
+        "z-10"
+      )}
+    >
+      <header className="pb-4 md:pb-6">
+        <Link
+          href="/"
+          className={classJoin(
+            "flex items-center gap-x-24px",
+            "typography-heading-s-var",
+            "text-ds-8 hover:text-ds-7 dark:text-white dark:hover:ds-6",
+            "mb-[1.9375rem]",
+            "w-fit"
+          )}
+        >
+          <ArrowDown className={classJoin("rotate-90", "text-ds-1")} />
+          <span>All invoices</span>
+        </Link>
+        <div
+          className={classJoin(
+            "bg-white dark:bg-ds-3",
+            "shadow-[0px_10px_10px_-10px_#48549F1A]",
+            "rounded-lg",
+            "px-24px md:px-32px",
+            "py-4 md:py-5",
+            "flex gap-x-1 items-center justify-between"
+          )}
+        >
+          <dl
+            className={classJoin(
+              "flex gap-x-20px gap-y-1 items-center justify-between flex-wrap",
+              "grow md:grow-0"
+            )}
+          >
+            <dt
+              className={classJoin(
+                "typography-body-md",
+                "text-[#858BB2] dark:text-ds-5",
+                // optic centering
+                "translate-y-0.5"
+              )}
+            >
+              Status
+            </dt>
+            <InvoiceStatusDD value={invoice.status} />
+          </dl>
+          <section className="hidden md:block">
+            <ActionsWithHeading
+              invoiceId={result.output.invoiceId}
+              showMarkAsPaid={showMarkAsPaid}
+            />
+          </section>
+        </div>
+      </header>
+    </div>
+  );
+
+  const invoiceDetailsJSX = (
+    <section
+      className={classJoin(
+        "max-w-app",
+        "w-full px-app",
+        "relative",
+        "grow",
+        "mb-14"
+      )}
+    >
+      <h3 className="sr-only">invoice details</h3>
+      <div
+        className={classJoin(
+          "bg-white dark:bg-ds-3",
+          "shadow-[0px_10px_10px_-10px_#48549F1A]",
+          "rounded-lg",
+          "px-24px md:px-32px lg:px-48px",
+          "py-6 md:py-8 lg:py-12",
+          "flex flex-col gap-y-[1.875rem] md:gap-y-5"
+        )}
+      >
+        <dl
+          className={classJoin(
+            "relative",
+            "flex gap-x-3 md:gap-x-6 lg:gap-x-9 gap-y-[1.875rem] flex-wrap justify-between"
+          )}
+        >
+          <div
+            className={classJoin(
+              "flex flex-col gap-y-[0.4375rem]",
+              "grow overflow-hidden"
+            )}
+          >
+            <div>
+              <dt className="sr-only">ID</dt>
+              <dd className="typography-heading-s-var md:typography-heading-s">
+                <span className="text-ds-7 dark:text-ds-6">#</span>
+                <span className="text-ds-8 dark:text-white">{invoice.id}</span>
+              </dd>
+            </div>
+            <div className="max-w-full overflow-hidden">
+              <dt className="sr-only">project description</dt>
+              <dd
+                className={classJoin(
+                  "text-ds-7 dark:text-ds-5",
+                  "typography-body-md",
+                  "max-w-full overflow-x-hidden break-words hyphens-auto",
+                  "relative"
+                )}
+              >
+                {invoice.projectDescription ? (
+                  invoice.projectDescription
+                ) : (
+                  <>
+                    <span aria-hidden={true}>-</span>
+                    <span className="sr-only">no project description</span>
+                  </>
+                )}
+              </dd>
+            </div>
+          </div>
+          <dt className="sr-only">Bill from</dt>
+          <dd className="grow">
+            <InvoiceAddress {...invoice.fromAddress} textAlignRight={true} />
+          </dd>
+        </dl>
+        <dl className="flex gap-x-[3.875rem] gap-y-8 flex-wrap">
+          <div className="flex flex-col gap-y-[1.875rem]">
+            <div>
+              <Dt>Invoice Date</Dt>
+              <dd
+                className={classJoin(
+                  "text-nowrap",
+                  "text-ds-8 dark:text-white",
+                  "font-bold text-heading-s leading-5 tracking-heading-s"
+                )}
+              >
+                {getUIDateString(invoice.createdAt)}
+              </dd>
+            </div>
+            <div>
+              <Dt>Payment Due</Dt>
+              <dd
+                className={classJoin(
+                  "text-nowrap",
+                  "text-ds-8 dark:text-white",
+                  "font-bold text-heading-s leading-5 tracking-heading-s"
+                )}
+              >
+                {getUIDateString(
+                  new Date(
+                    invoice.createdAt.getTime() +
+                      getMillisecondsFromDays(invoice.paymentTerm)
+                  )
+                )}
+              </dd>
+            </div>
+          </div>
+          <div className="max-w-full overflow-hidden">
+            <Dt>Bill To</Dt>
+            <dd>
+              <span
+                className={classJoin(
+                  "text-ds-8 dark:text-white",
+                  "font-bold text-heading-s leading-5 tracking-heading-s",
+                  "inline-block",
+                  "mb-[0.4375rem]",
+                  "max-w-full overflow-x-hidden break-words hyphens-auto"
+                )}
+              >
+                {invoice.clientName}
+              </span>
+              <InvoiceAddress {...invoice.toAddress} />
+            </dd>
+          </div>
+          <div className="max-w-full overflow-hidden">
+            <Dt>Sent to</Dt>
+            <dd
+              className={classJoin(
+                "text-ds-8 dark:text-white",
+                "font-bold text-heading-s leading-5 tracking-heading-s",
+                "max-w-full overflow-x-hidden break-words hyphens-auto"
+              )}
+            >
+              {invoice.clientEmail}
+            </dd>
+          </div>
+        </dl>
+        <section className="relative">
+          <h4 className="sr-only">items details</h4>
+          {/* todo: add items details view */}
+        </section>
+      </div>
+    </section>
+  );
+
+  const stickyActionsJSX = (
+    <section
+      className={classJoin(
+        "max-w-app",
+        "w-full px-app",
+        "bg-white dark:bg-ds-3",
+        "pt-[1.3125rem] pb-[1.375rem]",
+        "md:hidden",
+        "sticky bottom-0"
+      )}
+    >
+      <ActionsWithHeading
+        invoiceId={result.output.invoiceId}
+        showMarkAsPaid={showMarkAsPaid}
+      />
+    </section>
+  );
+
   return (
     <div
       className={classJoin(
@@ -46,288 +267,9 @@ export default async function Page(props: Props) {
         "flex flex-col items-center"
       )}
     >
-      <div
-        className={classJoin(
-          "w-full px-app",
-          "max-w-app",
-          "sticky top-0 bg-inherit",
-          "pt-[2.0625rem] md:pt-[3.0625rem] lg:pt-[4.0625rem]",
-          "z-10"
-        )}
-      >
-        <header className="pb-4 md:pb-6">
-          <Link
-            href="/"
-            className={classJoin(
-              "flex items-center gap-x-24px",
-              "typography-heading-s-var",
-              "text-ds-8 hover:text-ds-7 dark:text-white dark:hover:ds-6",
-              "mb-[1.9375rem]",
-              "w-fit"
-            )}
-          >
-            <ArrowDown className={classJoin("rotate-90", "text-ds-1")} />
-            <span>All invoices</span>
-          </Link>
-          <div
-            className={classJoin(
-              "bg-white dark:bg-ds-3",
-              "shadow-[0px_10px_10px_-10px_#48549F1A]",
-              "rounded-lg",
-              "px-24px md:px-32px",
-              "py-4 md:py-5",
-              "flex gap-x-1 items-center justify-between"
-            )}
-          >
-            <dl
-              className={classJoin(
-                "flex gap-x-20px gap-y-1 items-center justify-between flex-wrap",
-                "grow md:grow-0"
-              )}
-            >
-              <dt
-                className={classJoin(
-                  "typography-body-md",
-                  "text-[#858BB2] dark:text-ds-5",
-                  // optic centering
-                  "translate-y-0.5"
-                )}
-              >
-                Status
-              </dt>
-              <InvoiceStatusDD value={invoice.status} />
-            </dl>
-            <section className="hidden md:block">
-              <ActionsWithHeading
-                invoiceId={result.output.invoiceId}
-                showMarkAsPaid={showMarkAsPaid}
-              />
-            </section>
-          </div>
-        </header>
-      </div>
-      <section
-        className={classJoin(
-          "max-w-app",
-          "w-full px-app",
-          "relative",
-          "grow",
-          "mb-14"
-        )}
-      >
-        <h3 className="sr-only">invoice details</h3>
-        <div
-          className={classJoin(
-            "bg-white dark:bg-ds-3",
-            "shadow-[0px_10px_10px_-10px_#48549F1A]",
-            "rounded-lg",
-            "px-24px md:px-32px lg:px-48px",
-            "py-6 md:py-8 lg:py-12",
-            "flex flex-col gap-y-[1.875rem] md:gap-y-5"
-          )}
-        >
-          <dl
-            className={classJoin(
-              "relative",
-              "flex gap-x-3 md:gap-x-6 lg:gap-x-9 gap-y-[1.875rem] flex-wrap justify-between"
-            )}
-          >
-            <div
-              className={classJoin(
-                "flex flex-col gap-y-[0.4375rem]",
-                "grow overflow-hidden"
-              )}
-            >
-              <div>
-                <dt className="sr-only">ID</dt>
-                <dd className="typography-heading-s-var md:typography-heading-s">
-                  <span className="text-ds-7 dark:text-ds-6">#</span>
-                  <span className="text-ds-8 dark:text-white">
-                    {invoice.id}
-                  </span>
-                </dd>
-              </div>
-              <div className="max-w-full overflow-hidden">
-                <dt className="sr-only">project description</dt>
-                <dd
-                  className={classJoin(
-                    "text-ds-7 dark:text-ds-5",
-                    "typography-body-md",
-                    "max-w-full overflow-x-hidden break-words hyphens-auto",
-                    "relative"
-                  )}
-                >
-                  {invoice.projectDescription ? (
-                    invoice.projectDescription
-                  ) : (
-                    <>
-                      <span aria-hidden={true}>-</span>
-                      <span className="sr-only">no project description</span>
-                    </>
-                  )}
-                </dd>
-              </div>
-            </div>
-            <dt className="sr-only">Bill from</dt>
-            <dd className="grow">
-              <InvoiceAddress {...invoice.fromAddress} textAlignRight={true} />
-            </dd>
-          </dl>
-          <dl className="flex gap-x-[3.875rem] gap-y-8 md:gap-y-[7.375rem] flex-wrap">
-            <div className="flex flex-col gap-y-[1.875rem]">
-              <div>
-                <Dt>Invoice Date</Dt>
-                <dd
-                  className={classJoin(
-                    "text-nowrap",
-                    "text-ds-8 dark:text-white",
-                    "font-bold text-heading-s leading-5 tracking-heading-s"
-                  )}
-                >
-                  {getUIDateString(invoice.createdAt)}
-                </dd>
-              </div>
-              <div>
-                <Dt>Payment Due</Dt>
-                <dd
-                  className={classJoin(
-                    "text-nowrap",
-                    "text-ds-8 dark:text-white",
-                    "font-bold text-heading-s leading-5 tracking-heading-s"
-                  )}
-                >
-                  {getUIDateString(
-                    new Date(
-                      invoice.createdAt.getTime() +
-                        getMillisecondsFromDays(invoice.paymentTerm)
-                    )
-                  )}
-                </dd>
-              </div>
-            </div>
-            <div className="max-w-full overflow-hidden">
-              <Dt>Bill To</Dt>
-              <dd>
-                <span
-                  className={classJoin(
-                    "text-ds-8 dark:text-white",
-                    "font-bold text-heading-s leading-5 tracking-heading-s",
-                    "inline-block",
-                    "mb-[0.4375rem]",
-                    "max-w-full overflow-x-hidden break-words hyphens-auto"
-                  )}
-                >
-                  {invoice.clientName}
-                </span>
-                <InvoiceAddress {...invoice.toAddress} />
-              </dd>
-            </div>
-            <div>
-              <Dt>Sent to</Dt>
-              <dd
-                className={classJoin(
-                  "text-ds-8 dark:text-white",
-                  "font-bold text-heading-s leading-5 tracking-heading-s"
-                  // "max-w-full overflow-x-hidden break-words hyphens-auto"
-                )}
-              >
-                {invoice.clientEmail}
-              </dd>
-            </div>
-          </dl>
-          <section className="relative">
-            <h4 className="sr-only">items details</h4>
-            {/* todo: add items details view */}
-          </section>
-        </div>
-      </section>
-      <section
-        className={classJoin(
-          "max-w-app",
-          "w-full px-app",
-          "bg-white dark:bg-ds-3",
-          "pt-[1.3125rem] pb-[1.375rem]",
-          "md:hidden",
-          "sticky bottom-0"
-        )}
-      >
-        <ActionsWithHeading
-          invoiceId={result.output.invoiceId}
-          showMarkAsPaid={showMarkAsPaid}
-        />
-      </section>
+      {headerJSX}
+      {invoiceDetailsJSX}
+      {stickyActionsJSX}
     </div>
-  );
-}
-
-type ActionsWithHeadingProps = {
-  invoiceId: string;
-  showMarkAsPaid: boolean;
-};
-
-function ActionsWithHeading(props: ActionsWithHeadingProps) {
-  return (
-    <div className="flex gap-x-1 gap-y-2 items-center justify-center flex-wrap">
-      <h3 className="sr-only">available actions</h3>
-      <Link
-        href={`/invoices/${props.invoiceId}/edit`}
-        className={classJoin(
-          "bg-[#F9FAFE] hover:bg-ds-5 dark:bg-ds-4 hover:dark:bg-white",
-          "text-ds-7",
-          "typography-heading-s-var",
-          "pt-[1.125rem] pb-[0.9375rem] px-6",
-          "rounded-3xl"
-        )}
-      >
-        Edit
-      </Link>
-      <DeleteDialog invoiceId={props.invoiceId} />
-      {props.showMarkAsPaid && <MarkAsPaidDialog invoiceId={props.invoiceId} />}
-    </div>
-  );
-}
-
-type InvoiceAddressDDProps = {
-  street: string;
-  city: string;
-  postCode: string;
-  country: string;
-  textAlignRight?: boolean;
-};
-
-function InvoiceAddress(props: InvoiceAddressDDProps) {
-  return (
-    <span
-      className={classJoin(
-        "flex flex-col",
-        props.textAlignRight && "text-right",
-        "text-ds-7 dark:text-ds-5",
-        "typography-body-lg",
-        "max-w-full overflow-x-hidden break-words hyphens-auto"
-      )}
-    >
-      <span>{props.street}</span>
-      <span>{props.city}</span>
-      <span>{props.postCode}</span>
-      <span>{props.country}</span>
-    </span>
-  );
-}
-
-type DtProps = {
-  children: string;
-};
-
-function Dt(props: DtProps) {
-  return (
-    <dt
-      className={classJoin(
-        "text-ds-7 dark:text-ds-5",
-        "typography-body-md",
-        "mb-[0.8125rem]"
-      )}
-    >
-      {props.children}
-    </dt>
   );
 }
