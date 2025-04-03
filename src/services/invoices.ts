@@ -255,9 +255,10 @@ export async function getInvoiceById(id: string) {
       country: invoice.fromCountry,
     },
     items: invoices.map(({ itemId, name, price, quantity }) => ({
-      itemId,
+      id: itemId,
       name,
-      price,
+      // todo: converting to number is not safe, fix it
+      price: Number(price),
       quantity,
     })),
   };
