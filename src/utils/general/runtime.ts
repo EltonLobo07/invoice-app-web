@@ -28,3 +28,11 @@ export function getUIDateString(date: Date): string {
 export function getMillisecondsFromDays(days: number): number {
   return days * 24 * 60 * 60 * 1000;
 }
+
+export function getUIAmount(value: number): string {
+  const [currency, ...rest] = value.toLocaleString("en-GB", {
+    style: "currency",
+    currency: "GBP",
+  });
+  return [currency, " ", ...rest].join("");
+}

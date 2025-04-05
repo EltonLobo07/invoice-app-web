@@ -1,16 +1,12 @@
 import { classJoin } from "@/utils/general";
 import { Dt } from "./Dt";
+import { getUIAmount } from "@/utils/general/runtime";
 
 type Props = {
   value: number;
 };
 
 export function InvoiceAmount(props: Props) {
-  const [currency, ...rest] = props.value.toLocaleString("en-GB", {
-    style: "currency",
-    currency: "GBP",
-  });
-
   return (
     <>
       <Dt>Amount</Dt>
@@ -21,8 +17,7 @@ export function InvoiceAmount(props: Props) {
           "whitespace-nowrap max-w-full overflow-x-hidden text-ellipsis"
         )}
       >
-        {`${currency} `}
-        {rest.join("")}
+        {getUIAmount(props.value)}
       </dd>
     </>
   );
