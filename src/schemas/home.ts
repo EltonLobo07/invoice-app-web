@@ -1,4 +1,5 @@
 import {
+  CREATE_INVOICE,
   INVOICE_STATUSES,
   PAGE_NUM_SEARCH_PARAM,
   STATUSES_SEARCH_PARAM,
@@ -26,6 +27,16 @@ export const SearchParamsSchema = v.object({
       v.toMinValue(1)
     ),
     "1"
+  ),
+  [CREATE_INVOICE]: v.optional(
+    v.fallback(
+      v.pipe(
+        v.string(),
+        v.transform((v) => v === "true")
+      ),
+      false
+    ),
+    "false"
   ),
 });
 

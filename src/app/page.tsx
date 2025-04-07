@@ -1,5 +1,6 @@
 import { ProtectedPageMessage } from "@/components/general";
 import {
+  CreateInvoiceDialog,
   Header,
   Invoices,
   NoInvoiceMessage,
@@ -23,10 +24,11 @@ export default async function Home(props: Props) {
     return <ProtectedPageMessage />;
   }
 
-  const { statuses: selectedStatuses, pageNum } = v.parse(
-    SearchParamsSchema,
-    await props.searchParams
-  );
+  const {
+    statuses: selectedStatuses,
+    pageNum,
+    createInvoice,
+  } = v.parse(SearchParamsSchema, await props.searchParams);
 
   const invoices = await getInvoiceList(
     pageNum,
@@ -76,6 +78,7 @@ export default async function Home(props: Props) {
         )}
       />
       {invoicesJSX}
+      {createInvoice && <CreateInvoiceDialog />}
     </div>
   );
 }

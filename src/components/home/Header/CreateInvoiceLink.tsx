@@ -3,12 +3,11 @@
 import { Plus } from "@/icons";
 import { classJoin } from "@/utils/general";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { ResponsiveText } from "@/components/general";
 import type { ResponsiveTextType } from "@/types/home";
 import { motion } from "motion/react";
-
-const href = "/invoices/create";
+import { CREATE_INVOICE } from "@/constants/home";
 
 type Props = {
   text: ResponsiveTextType;
@@ -18,23 +17,21 @@ const MotionLink = motion(Link);
 
 export function CreateInvoiceLink(props: Props) {
   const pathname = usePathname();
-  const disabled = pathname === href;
+  const searchParams = useSearchParams();
+  const newSearchParams = new URLSearchParams(searchParams);
+  newSearchParams.set(CREATE_INVOICE, "true");
+  const newSearchParamStr = newSearchParams.toString();
 
   return (
     <MotionLink
       prefetch={false}
       layout="position"
-      aria-disabled={disabled}
-      href={href}
-      onClick={(e) => {
-        if (disabled) {
-          e.preventDefault();
-        }
-      }}
+      href={`${pathname}${
+        newSearchParamStr === "" ? "" : "?"
+      }${newSearchParamStr}`}
       className={classJoin(
         "relative",
-        "bg-ds-1",
-        disabled ? "opacity-75" : "hover:bg-ds-2",
+        "bg-ds-1 hover:bg-ds-2",
         "text-white",
         "rounded-[24px]",
         "py-[6px] md:py-8px",

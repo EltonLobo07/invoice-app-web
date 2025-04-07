@@ -6,6 +6,7 @@ import { UserPopoverWrapper } from "./UserPopoverWrapper";
 export function Header() {
   return (
     <header
+      data-app-header
       className={classJoin(
         "sticky lg:fixed top-0 lg:left-0",
         "bg-[#373B53] dark:bg-ds-3",
