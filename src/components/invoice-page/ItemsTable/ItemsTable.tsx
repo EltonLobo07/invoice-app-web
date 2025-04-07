@@ -1,3 +1,4 @@
+import { ItemsTableLg } from "./ItemsTableLg";
 import { ItemsTableSm } from "./ItemsTableSm";
 
 export type Items = {
@@ -15,6 +16,7 @@ export function ItemsTable(props: Props) {
   return (
     <>
       <ItemsTableSm items={props.items} />
+      <ItemsTableLg items={props.items} />
     </>
   );
 }
