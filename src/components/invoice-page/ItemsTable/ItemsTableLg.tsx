@@ -102,7 +102,7 @@ export function ItemsTableLg(props: Props) {
         <tr
           className={classJoin(
             "rounded-b-lg",
-            "bg-ds-[#373B53] dark:bg-ds-8",
+            "bg-[#373B53] dark:bg-ds-8",
             "text-white"
           )}
         >
