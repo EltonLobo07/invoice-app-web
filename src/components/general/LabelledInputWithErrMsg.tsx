@@ -1,7 +1,7 @@
 "use client";
 
 import { InputWithErrMsg, Label } from "@/components/general";
-import { CustomProps, OmitKey } from "@/utils/general";
+import { classJoin, CustomProps, OmitKey } from "@/utils/general";
 import { motion } from "motion/react";
 import React from "react";
 
@@ -12,11 +12,15 @@ type Props = OmitKey<
   CustomProps<{
     label: string;
     action?: React.ReactNode;
+    flexGrow?: boolean;
+    labelInputGap?: "sm" | "lg";
   }>;
 
 export function LabelledInputWithErrMsg({
   $label,
+  $labelInputGap,
   $action,
+  $flexGrow,
   ...inputWithErrMsgProps
 }: Props) {
   const id = React.useId();
@@ -35,7 +39,14 @@ export function LabelledInputWithErrMsg({
   );
 
   return (
-    <motion.div layout="position" className="flex flex-col gap-y-1">
+    <motion.div
+      layout="position"
+      className={classJoin(
+        "flex flex-col",
+        $flexGrow && "grow",
+        $labelInputGap === "lg" ? "gap-y-2" : "gap-y-1"
+      )}
+    >
       {labelWithAction}
       <InputWithErrMsg {...inputWithErrMsgProps} id={id} />
     </motion.div>

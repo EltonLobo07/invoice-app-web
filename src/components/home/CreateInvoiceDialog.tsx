@@ -1,5 +1,5 @@
 import { InvoiceFormDialog } from "../general";
 
 export function CreateInvoiceDialog() {
-  return <InvoiceFormDialog />;
+  return <InvoiceFormDialog type="create" />;
 }

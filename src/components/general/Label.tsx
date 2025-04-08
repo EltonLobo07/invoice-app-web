@@ -11,8 +11,8 @@ export function Label(props: Props) {
     <label
       htmlFor={props.htmlFor}
       className={classJoin(
-        props.invalidInput ? "text-ds-9" : "text-ds-7 dark:text-ds-5",
-        "font-body-var text-body-var leading-body-var tracking-body"
+        props.invalidInput ? "text-ds-9" : "text-ds-7 dark:text-ds-6",
+        "typography-body-md"
       )}
     >
       {props.children}

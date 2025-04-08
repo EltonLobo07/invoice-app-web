@@ -15,6 +15,7 @@ export function Input({ $padding, ...inputProps }: Props) {
       {...inputProps}
       className={classJoin(
         "grow",
+        "w-full",
         "rounded-sm",
         "border",
         inputProps["aria-invalid"]
