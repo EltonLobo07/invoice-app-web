@@ -13,3 +13,4 @@ export { NoResourceMessage } from "./NoResourceMessage";
 export { InvoiceStatusDD } from "./InvoiceStatusDD";
 export { FormSubmitBtn } from "./FormSubmitBtn";
 export { InvoiceFormDialog } from "./InvoiceFormDialog";
+export { LabelInputContainer } from "./LabelInputContainer";

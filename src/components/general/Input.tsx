@@ -26,7 +26,7 @@ export function Input({ $padding, ...inputProps }: Props) {
         "typography-heading-s-var",
         $padding === "sm"
           ? "px-12px pt-[0.875rem] pb-3"
-          : "px-[19px] pt-[1.125rem] pb-[0.9375rem]"
+          : "px-[19px] pt-[1.0625rem] pb-[0.875rem]"
       )}
     />
   );

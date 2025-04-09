@@ -2,13 +2,24 @@ import { classJoin } from "@/utils/general";
 
 type Props = {
   children: string;
-  htmlFor: string;
   invalidInput?: boolean;
-};
+} & (
+  | { htmlFor: string; as?: undefined }
+  | {
+      htmlFor?: undefined;
+      as?: (props: {
+        htmlFor?: string;
+        className: string;
+        children: string;
+      }) => React.ReactNode;
+    }
+);
 
 export function Label(props: Props) {
+  const LabelComponent = props.as ?? "label";
+
   return (
-    <label
+    <LabelComponent
       htmlFor={props.htmlFor}
       className={classJoin(
         props.invalidInput ? "text-ds-9" : "text-ds-7 dark:text-ds-6",
@@ -16,6 +27,6 @@ export function Label(props: Props) {
       )}
     >
       {props.children}
-    </label>
+    </LabelComponent>
   );
 }

@@ -11,6 +11,7 @@ import React from "react";
 import { LabelledInputWithErrMsg } from "../LabelledInputWithErrMsg";
 import { Legend } from "./Legend";
 import { AddressInputs } from "./AddressInputs";
+import { PaymentTermSelect } from "./PaymentTermSelect";
 
 type Props =
   | { type: "create" }
@@ -86,7 +87,6 @@ export function InvoiceFormDialog(props: Props) {
                 // "pt-8 md:pt-[3.6875rem]",
                 "bg-white dark:bg-ds-12",
                 "w-full max-w-[min(100%,38.5rem)] lg:max-w-[min(100%,45rem)]",
-                // "md:rounded-r-[20px]",
                 "max-h-full overflow-y-auto"
               )}
             />
@@ -94,8 +94,8 @@ export function InvoiceFormDialog(props: Props) {
         >
           <div
             className={classJoin(
-              "pb-[1.375rem]",
-              "pt-8 md:pt-[3.6875rem]",
+              "pb-[1.375rem] md:pb-[2.875rem]",
+              "pt-8 md:pt-[1.125rem]",
               "bg-inherit",
               "sticky top-0"
             )}
@@ -117,7 +117,6 @@ export function InvoiceFormDialog(props: Props) {
                 "font-bold",
                 "text-2xl",
                 "-tracking-[0.03125rem]"
-                // "mb-[1.375rem]"
               )}
             >
               {props.type === "create" ? (
@@ -132,11 +131,11 @@ export function InvoiceFormDialog(props: Props) {
             </Ariakit.DialogHeading>
           </div>
           <form className="px-2px">
-            <fieldset className="mb-10">
+            <fieldset className="mb-10 md:mb-12">
               <Legend>Bill From</Legend>
               <AddressInputs />
             </fieldset>
-            <fieldset className="mb-10">
+            <fieldset className="mb-10 md:mb-12">
               <Legend>Bill To</Legend>
               <LabelledInputWithErrMsg
                 $label="Client's Name"
@@ -151,12 +150,15 @@ export function InvoiceFormDialog(props: Props) {
               />
               <AddressInputs />
             </fieldset>
-            <LabelledInputWithErrMsg
-              $label="Invoice Date"
-              $labelInputGap="lg"
-              $padding="lg"
-              type="date"
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-24px">
+              <LabelledInputWithErrMsg
+                $label="Invoice Date"
+                $labelInputGap="lg"
+                $padding="lg"
+                type="date"
+              />
+              <PaymentTermSelect />
+            </div>
             <LabelledInputWithErrMsg
               $label="Project Description"
               $labelInputGap="lg"

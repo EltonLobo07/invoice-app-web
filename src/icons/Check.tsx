@@ -1,4 +1,8 @@
-export function Check() {
+type Props = {
+  strokeCurrentColor?: boolean;
+};
+
+export function Check(props: Props) {
   return (
     <svg
       aria-hidden={true}
@@ -8,7 +12,7 @@ export function Check() {
     >
       <path
         fill="none"
-        stroke="#FFF"
+        stroke={props.strokeCurrentColor ? "currentColor" : "#FFF"}
         strokeWidth="2"
         d="m1.5 4.5 2.124 2.124L8.97 1.28"
       ></path>

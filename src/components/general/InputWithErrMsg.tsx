@@ -10,25 +10,15 @@ type Props = OmitKey<
 > &
   CustomProps<{
     errorMsg?: string;
-    marginBottomZero?: boolean;
   }>;
 
-export function InputWithErrMsg({
-  $errorMsg,
-  $marginBottomZero,
-  ...inputProps
-}: Props) {
+export function InputWithErrMsg({ $errorMsg, ...inputProps }: Props) {
   const id = React.useId();
   const errorMsgId = `${id}-error`;
   const isInvalid = Boolean($errorMsg);
 
   return (
-    <div
-      className={classJoin(
-        "flex flex-col gap-y-1",
-        $marginBottomZero ? "mb-0" : "mb-6"
-      )}
-    >
+    <div className="flex flex-col gap-y-1">
       <Input
         {...inputProps}
         aria-invalid={isInvalid}
