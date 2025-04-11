@@ -134,7 +134,7 @@ export function InvoiceFormDialog(props: Props) {
               )}
             </Ariakit.DialogHeading>
           </div>
-          <form className="px-2px">
+          <form className={classJoin("px-2px", "bg-inherit")}>
             <fieldset className="mb-10 md:mb-12">
               <Legend>Bill From</Legend>
               <AddressInputs />
@@ -280,6 +280,65 @@ export function InvoiceFormDialog(props: Props) {
                 Add New Item
               </button>
             </fieldset>
+            <div
+              className={classJoin(
+                "px-24px",
+                "py-5",
+                "bg-white dark:bg-ds-3 lg:bg-inherit lg:dark:bg-inherit",
+                "sticky bottom-0",
+                "-ml-24px md:-ml-56px lg:-ml-[calc(103px+56px)]",
+                "-mr-24px md:-mr-56px",
+                "pl-24px md:pl-56px lg:pl-[calc(103px+56px)]",
+                "pr-24px md:pr-56px",
+                "flex items-center gap-x-2"
+              )}
+            >
+              <button
+                type="button"
+                className={classJoin(
+                  "pt-[1.125rem]",
+                  "pb-[0.9375rem]",
+                  "rounded-3xl",
+                  "px-16px",
+                  "typography-heading-s-var",
+                  "bg-[#F9FAFE] hover:bg-ds-5 dark:bg-ds-4 hover:dark:bg-ds-8",
+                  "text-ds-7 dark:text-ds-5"
+                )}
+              >
+                Discard
+              </button>
+              {props.type === "create" && (
+                <button
+                  type="button"
+                  className={classJoin(
+                    "pt-[1.125rem]",
+                    "pb-[0.9375rem]",
+                    "rounded-3xl",
+                    "px-16px",
+                    "typography-heading-s-var",
+                    "bg-[#373B53] hover:bg-ds-8 dark:hover:bg-ds-3",
+                    "text-ds-6 dark:text-ds-5",
+                    "ml-auto"
+                  )}
+                >
+                  Save as Draft
+                </button>
+              )}
+              <button
+                type="button"
+                className={classJoin(
+                  "pt-[1.125rem]",
+                  "pb-[0.9375rem]",
+                  "rounded-3xl",
+                  "px-16px",
+                  "typography-heading-s-var",
+                  "bg-ds-1 hover:bg-ds-2",
+                  "text-white"
+                )}
+              >
+                {props.type === "edit" ? "Save Changes" : "Save & Send"}
+              </button>
+            </div>
           </form>
         </Ariakit.Dialog>
       )}
