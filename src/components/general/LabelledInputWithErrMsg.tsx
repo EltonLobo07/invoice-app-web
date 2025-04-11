@@ -14,6 +14,7 @@ type Props = OmitKey<
 > &
   CustomProps<{
     label: string;
+    mdSrOnlyLabel?: boolean;
     action?: React.ReactNode;
     flexGrow?: boolean;
     labelInputGap?: "sm" | "lg";
@@ -22,6 +23,7 @@ type Props = OmitKey<
 
 export function LabelledInputWithErrMsg({
   $label,
+  $mdSrOnlyLabel,
   $labelInputGap,
   $action,
   $flexGrow,
@@ -30,7 +32,11 @@ export function LabelledInputWithErrMsg({
 }: Props) {
   const id = React.useId();
   const labelJSX = (
-    <Label invalidInput={Boolean(inputWithErrMsgProps.$errorMsg)} htmlFor={id}>
+    <Label
+      mdSrOnlyLabel={$mdSrOnlyLabel}
+      invalidInput={Boolean(inputWithErrMsgProps.$errorMsg)}
+      htmlFor={id}
+    >
       {$label}
     </Label>
   );

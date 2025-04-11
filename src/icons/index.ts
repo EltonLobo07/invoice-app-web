@@ -13,3 +13,4 @@ export { Check } from "./Check";
 export { Plus } from "./Plus";
 export { ArrowLeft } from "./ArrowLeft";
 export { ArrowRight } from "./ArrowRight";
+export { Delete } from "./Delete";

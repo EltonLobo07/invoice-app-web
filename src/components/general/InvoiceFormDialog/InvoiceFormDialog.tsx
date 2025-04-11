@@ -2,7 +2,7 @@
 
 import { CREATE_INVOICE } from "@/constants/home";
 import { useRouter } from "@/hooks";
-import { ArrowDown } from "@/icons";
+import { ArrowDown, Delete } from "@/icons";
 import { classJoin } from "@/utils/general";
 import * as Ariakit from "@ariakit/react";
 import { motion, AnimatePresence } from "motion/react";
@@ -34,6 +34,9 @@ export function InvoiceFormDialog(props: Props) {
       `${pathname}${newSearchParamStr === "" ? "" : "?"}${newSearchParamStr}`
     );
   };
+
+  const [items, setItems] = React.useState([{ id: "1" }, { id: "2" }]);
+  const allowItemDeletion = items.length > 1;
 
   return (
     <AnimatePresence onExitComplete={onExitAnimationComplete}>
@@ -84,10 +87,10 @@ export function InvoiceFormDialog(props: Props) {
                 // set left padding based on the app header's width
                 "pl-24px md:pl-56px lg:pl-[calc(103px+56px)]",
                 "pr-24px md:pr-56px",
-                // "pt-8 md:pt-[3.6875rem]",
                 "bg-white dark:bg-ds-12",
                 "w-full max-w-[min(100%,38.5rem)] lg:max-w-[min(100%,45rem)]",
-                "max-h-full overflow-y-auto"
+                "max-h-full overflow-y-auto",
+                "isolate"
               )}
             />
           }
@@ -97,7 +100,8 @@ export function InvoiceFormDialog(props: Props) {
               "pb-[1.375rem] md:pb-[2.875rem]",
               "pt-8 md:pt-[1.125rem]",
               "bg-inherit",
-              "sticky top-0"
+              "sticky top-0",
+              "z-10"
             )}
           >
             <Ariakit.DialogDismiss
@@ -164,6 +168,118 @@ export function InvoiceFormDialog(props: Props) {
               $labelInputGap="lg"
               $padding="lg"
             />
+            <fieldset className="mt-[4.25rem]">
+              <legend
+                className={classJoin(
+                  "text-[#777F98]",
+                  "mb-[1.375rem]",
+                  "font-bold text-[1.125rem] leading-8 -tracking-[0.02375rem]"
+                )}
+              >
+                Item List
+              </legend>
+              <ol>
+                {items.map((item, i) => {
+                  const isNotFirstItem = i !== 0;
+
+                  return (
+                    <li
+                      key={item.id}
+                      className={classJoin(
+                        "mb-12 md:mb-[1.0625rem]",
+                        "md:flex md:gap-x-16px md:items-center"
+                      )}
+                    >
+                      <div
+                        className={classJoin(
+                          "mb-6 md:mb-0",
+                          "md:basis-[214px] md:shrink-0 md:grow"
+                        )}
+                      >
+                        <LabelledInputWithErrMsg
+                          $label="Invoice Name"
+                          $mdSrOnlyLabel={isNotFirstItem}
+                          $labelInputGap="lg"
+                          $padding="lg"
+                          $marginBottomZero={true}
+                        />
+                      </div>
+                      <div className="grid grid-cols-[repeat(3,minmax(65px,1fr))_min-content] gap-x-16px items-center">
+                        <LabelledInputWithErrMsg
+                          $label="Qty."
+                          $mdSrOnlyLabel={isNotFirstItem}
+                          $labelInputGap="lg"
+                          $padding="lg"
+                          type="text"
+                          inputMode="numeric"
+                          pattern="[0-9]+"
+                          $marginBottomZero={true}
+                        />
+                        <LabelledInputWithErrMsg
+                          $label="Price"
+                          $mdSrOnlyLabel={isNotFirstItem}
+                          $labelInputGap="lg"
+                          $padding="lg"
+                          type="text"
+                          inputMode="numeric"
+                          pattern="[0-9]+"
+                          $marginBottomZero={true}
+                        />
+                        <LabelledInputWithErrMsg
+                          $label="Total"
+                          $mdSrOnlyLabel={isNotFirstItem}
+                          $labelInputGap="lg"
+                          $padding="lg"
+                          readOnly={true}
+                          type="text"
+                          inputMode="numeric"
+                          $marginBottomZero={true}
+                        />
+                        {allowItemDeletion && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setItems((items) =>
+                                items.filter(({ id }) => id !== item.id)
+                              );
+                            }}
+                            className={classJoin(
+                              "relative",
+                              "text-ds-6",
+                              "self-end",
+                              "mb-5"
+                            )}
+                          >
+                            <span className="sr-only">delete this item</span>
+                            <Delete />
+                          </button>
+                        )}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ol>
+              <button
+                type="button"
+                onClick={() =>
+                  setItems((items) => {
+                    return [...items, { id: crypto.randomUUID() }];
+                  })
+                }
+                className={classJoin(
+                  "bg-[#F9FAFE] hover:bg-ds-5 dark:bg-ds-4 hover:dark:bg-ds-8",
+                  "text-ds-7 dark:test-ds-5",
+                  "pt-[1.125rem]",
+                  "pb-[0.9375rem]",
+                  "w-full",
+                  "rounded-3xl",
+                  "typography-heading-s-var",
+                  "mb-[5.5rem]"
+                )}
+              >
+                Add New Item
+              </button>
+            </fieldset>
           </form>
         </Ariakit.Dialog>
       )}

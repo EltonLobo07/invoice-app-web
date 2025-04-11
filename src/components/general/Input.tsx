@@ -18,10 +18,10 @@ export function Input({ $padding, ...inputProps }: Props) {
         "w-full",
         "rounded-sm",
         "border",
+        "bg-white dark:bg-ds-3",
         inputProps["aria-invalid"]
           ? "border-ds-9"
           : "border-ds-5 dark:border-ds-4",
-        "bg-white dark:bg-ds-3",
         "text-ds-8 dark:text-white",
         "typography-heading-s-var",
         $padding === "sm"
