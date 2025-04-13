@@ -12,6 +12,10 @@ import { LabelledInputWithErrMsg } from "../LabelledInputWithErrMsg";
 import { Legend } from "./Legend";
 import { AddressInputs } from "./AddressInputs";
 import { PaymentTermSelect } from "./PaymentTermSelect";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
+import { valibotResolver } from "@hookform/resolvers/valibot";
+import { InputInvoiceSchema } from "./InputInvoiceSchema";
+import * as v from "valibot";
 
 type Props =
   | { type: "create" }
@@ -35,8 +39,32 @@ export function InvoiceFormDialog(props: Props) {
     );
   };
 
-  const [items, setItems] = React.useState([{ id: "1" }, { id: "2" }]);
-  const allowItemDeletion = items.length > 1;
+  const {
+    register,
+    control,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
+    resolver: valibotResolver(InputInvoiceSchema),
+    defaultValues: {
+      paymentTerm: "1",
+      items: [{ id: crypto.randomUUID(), name: "", quantity: "", price: "" }],
+    },
+  });
+  const {
+    fields: itemFields,
+    append,
+    remove,
+  } = useFieldArray({
+    control,
+    name: "items",
+  });
+
+  const allowItemDeletion = itemFields.length > 1;
+
+  const onSubmit = (invoice: v.InferOutput<typeof InputInvoiceSchema>) => {
+    console.log(invoice);
+  };
 
   return (
     <AnimatePresence onExitComplete={onExitAnimationComplete}>
@@ -134,10 +162,30 @@ export function InvoiceFormDialog(props: Props) {
               )}
             </Ariakit.DialogHeading>
           </div>
-          <form className={classJoin("px-2px", "bg-inherit")}>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className={classJoin("px-2px", "bg-inherit")}
+          >
             <fieldset className="mb-10 md:mb-12">
               <Legend>Bill From</Legend>
-              <AddressInputs />
+              <AddressInputs
+                streetAddressProps={{
+                  ...register("billFrom.streetAddress"),
+                  $errorMsg: errors.billFrom?.streetAddress?.message,
+                }}
+                cityProps={{
+                  ...register("billFrom.city"),
+                  $errorMsg: errors.billFrom?.city?.message,
+                }}
+                postCodeProps={{
+                  ...register("billFrom.postCode"),
+                  $errorMsg: errors.billFrom?.postCode?.message,
+                }}
+                countryProps={{
+                  ...register("billFrom.country"),
+                  $errorMsg: errors.billFrom?.country?.message,
+                }}
+              />
             </fieldset>
             <fieldset className="mb-10 md:mb-12">
               <Legend>Bill To</Legend>
@@ -145,14 +193,35 @@ export function InvoiceFormDialog(props: Props) {
                 $label="Client's Name"
                 $labelInputGap="lg"
                 $padding="lg"
+                {...register("billTo.clientName")}
+                $errorMsg={errors.billTo?.clientName?.message}
               />
               <LabelledInputWithErrMsg
                 $label="Client's Email"
                 $labelInputGap="lg"
                 $padding="lg"
                 type="email"
+                {...register("billTo.clientEmail")}
+                $errorMsg={errors.billTo?.clientEmail?.message}
               />
-              <AddressInputs />
+              <AddressInputs
+                streetAddressProps={{
+                  ...register("billTo.streetAddress"),
+                  $errorMsg: errors.billTo?.streetAddress?.message,
+                }}
+                cityProps={{
+                  ...register("billTo.city"),
+                  $errorMsg: errors.billTo?.city?.message,
+                }}
+                postCodeProps={{
+                  ...register("billTo.postCode"),
+                  $errorMsg: errors.billTo?.postCode?.message,
+                }}
+                countryProps={{
+                  ...register("billTo.country"),
+                  $errorMsg: errors.billTo?.country?.message,
+                }}
+              />
             </fieldset>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-24px">
               <LabelledInputWithErrMsg
@@ -160,13 +229,21 @@ export function InvoiceFormDialog(props: Props) {
                 $labelInputGap="lg"
                 $padding="lg"
                 type="date"
+                {...register("date")}
+                $errorMsg={errors.date?.message}
               />
-              <PaymentTermSelect />
+              <Controller
+                name="paymentTerm"
+                control={control}
+                render={({ field }) => <PaymentTermSelect {...field} />}
+              />
             </div>
             <LabelledInputWithErrMsg
               $label="Project Description"
               $labelInputGap="lg"
               $padding="lg"
+              {...register("projectDescription")}
+              $errorMsg={errors.projectDescription?.message}
             />
             <fieldset className="mt-[4.25rem]">
               <legend
@@ -179,12 +256,12 @@ export function InvoiceFormDialog(props: Props) {
                 Item List
               </legend>
               <ol>
-                {items.map((item, i) => {
+                {itemFields.map((itemField, i) => {
                   const isNotFirstItem = i !== 0;
 
                   return (
                     <li
-                      key={item.id}
+                      key={itemField.id}
                       className={classJoin(
                         "mb-12 md:mb-[1.0625rem]",
                         "md:flex md:gap-x-16px md:items-center"
@@ -202,6 +279,8 @@ export function InvoiceFormDialog(props: Props) {
                           $labelInputGap="lg"
                           $padding="lg"
                           $marginBottomZero={true}
+                          {...register(`items.${i}.name`)}
+                          $errorMsg={errors.items?.[i]?.name?.message}
                         />
                       </div>
                       <div className="grid grid-cols-[repeat(3,minmax(65px,1fr))_min-content] gap-x-16px items-center">
@@ -214,6 +293,8 @@ export function InvoiceFormDialog(props: Props) {
                           inputMode="numeric"
                           pattern="[0-9]+"
                           $marginBottomZero={true}
+                          {...register(`items.${i}.quantity`)}
+                          $errorMsg={errors.items?.[i]?.quantity?.message}
                         />
                         <LabelledInputWithErrMsg
                           $label="Price"
@@ -224,6 +305,8 @@ export function InvoiceFormDialog(props: Props) {
                           inputMode="numeric"
                           pattern="[0-9]+"
                           $marginBottomZero={true}
+                          {...register(`items.${i}.price`)}
+                          $errorMsg={errors.items?.[i]?.price?.message}
                         />
                         <LabelledInputWithErrMsg
                           $label="Total"
@@ -239,9 +322,7 @@ export function InvoiceFormDialog(props: Props) {
                           <button
                             type="button"
                             onClick={() => {
-                              setItems((items) =>
-                                items.filter(({ id }) => id !== item.id)
-                              );
+                              remove(i);
                             }}
                             className={classJoin(
                               "relative",
@@ -261,11 +342,14 @@ export function InvoiceFormDialog(props: Props) {
               </ol>
               <button
                 type="button"
-                onClick={() =>
-                  setItems((items) => {
-                    return [...items, { id: crypto.randomUUID() }];
-                  })
-                }
+                onClick={() => {
+                  append({
+                    id: crypto.randomUUID(),
+                    name: "",
+                    quantity: "",
+                    price: "",
+                  });
+                }}
                 className={classJoin(
                   "bg-[#F9FAFE] hover:bg-ds-5 dark:bg-ds-4 hover:dark:bg-ds-8",
                   "text-ds-7 dark:test-ds-5",
@@ -325,7 +409,7 @@ export function InvoiceFormDialog(props: Props) {
                 </button>
               )}
               <button
-                type="button"
+                type="submit"
                 className={classJoin(
                   "pt-[1.125rem]",
                   "pb-[0.9375rem]",

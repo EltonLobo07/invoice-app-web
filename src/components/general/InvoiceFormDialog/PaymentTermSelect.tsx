@@ -17,7 +17,11 @@ import type { PaymentTerm } from "@/types/general";
 import { PAYMENT_TERMS } from "@/constants/general";
 
 type Props = {
-  initialPaymentTerm?: PaymentTerm;
+  onChange: (paymentTerm: PaymentTerm) => void;
+  onBlur: () => void;
+  value: PaymentTerm;
+  name: string;
+  ref: React.ComponentPropsWithRef<typeof Select>["ref"];
 };
 
 const lastPaymentTermIndex = PAYMENT_TERMS.length - 1;
@@ -25,21 +29,20 @@ const lastPaymentTermIndex = PAYMENT_TERMS.length - 1;
 export function PaymentTermSelect(props: Props) {
   const id = React.useId();
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedPaymentTerm, setSelectedPaymentTerm] = useState<PaymentTerm>(
-    props.initialPaymentTerm ?? "1"
-  );
 
   return (
     <LabelInputContainer $labelInputGap="lg" $flexGrow={true}>
       <SelectProvider
         open={isOpen}
         setOpen={setIsOpen}
-        value={selectedPaymentTerm}
-        setValue={(v) => setSelectedPaymentTerm(v as PaymentTerm)}
+        value={props.value}
+        setValue={props.onChange}
       >
         <Label as={SelectLabel}>Payment Terms</Label>
         <Select
           id={id}
+          ref={props.ref}
+          onBlur={props.onBlur}
           className={classJoin(
             "flex gap-x-2 justify-between items-center",
             "rounded-sm",
@@ -50,7 +53,7 @@ export function PaymentTermSelect(props: Props) {
             "px-[19px] pt-[1.0625rem] pb-[0.875rem]"
           )}
         >
-          <span>{getUIPaymentTerm(selectedPaymentTerm)}</span>
+          <span>{getUIPaymentTerm(props.value)}</span>
           <ArrowDown
             className={classJoin(
               "shrink-0",
