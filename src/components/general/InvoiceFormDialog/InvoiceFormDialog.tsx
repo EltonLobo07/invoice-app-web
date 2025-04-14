@@ -2,7 +2,7 @@
 
 import { CREATE_INVOICE } from "@/constants/home";
 import { useRouter } from "@/hooks";
-import { ArrowDown, Delete } from "@/icons";
+import { ArrowDown } from "@/icons";
 import { classJoin } from "@/utils/general";
 import * as Ariakit from "@ariakit/react";
 import { motion, AnimatePresence } from "motion/react";
@@ -14,8 +14,13 @@ import { AddressInputs } from "./AddressInputs";
 import { PaymentTermSelect } from "./PaymentTermSelect";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import { InputInvoiceSchema } from "./InputInvoiceSchema";
+import {
+  InputInvoiceSchema,
+  ItemPriceSchema,
+  ItemQuantitySchema,
+} from "./schemas";
 import * as v from "valibot";
+import { ItemInputs } from "./ItemInputs";
 
 type Props =
   | { type: "create" }
@@ -47,8 +52,12 @@ export function InvoiceFormDialog(props: Props) {
   } = useForm({
     resolver: valibotResolver(InputInvoiceSchema),
     defaultValues: {
+      // always set a default value for this field
+      // todo: TS doesn't warn if the value is not set (improve type safety)
       paymentTerm: "1",
-      items: [{ id: crypto.randomUUID(), name: "", quantity: "", price: "" }],
+      // always set a default value for this field
+      // todo: TS doesn't warn if the value is not set (improve type safety)
+      items: [getNewItemField()],
     },
   });
   const {
@@ -256,99 +265,58 @@ export function InvoiceFormDialog(props: Props) {
                 Item List
               </legend>
               <ol>
-                {itemFields.map((itemField, i) => {
-                  const isNotFirstItem = i !== 0;
-
-                  return (
-                    <li
-                      key={itemField.id}
-                      className={classJoin(
-                        "mb-12 md:mb-[1.0625rem]",
-                        "md:flex md:gap-x-16px md:items-center"
-                      )}
-                    >
-                      <div
-                        className={classJoin(
-                          "mb-6 md:mb-0",
-                          "md:basis-[214px] md:shrink-0 md:grow"
-                        )}
-                      >
-                        <LabelledInputWithErrMsg
-                          $label="Invoice Name"
-                          $mdSrOnlyLabel={isNotFirstItem}
-                          $labelInputGap="lg"
-                          $padding="lg"
-                          $marginBottomZero={true}
-                          {...register(`items.${i}.name`)}
-                          $errorMsg={errors.items?.[i]?.name?.message}
-                        />
-                      </div>
-                      <div className="grid grid-cols-[repeat(3,minmax(65px,1fr))_min-content] gap-x-16px items-center">
-                        <LabelledInputWithErrMsg
-                          $label="Qty."
-                          $mdSrOnlyLabel={isNotFirstItem}
-                          $labelInputGap="lg"
-                          $padding="lg"
-                          type="text"
-                          inputMode="numeric"
-                          pattern="[0-9]+"
-                          $marginBottomZero={true}
-                          {...register(`items.${i}.quantity`)}
-                          $errorMsg={errors.items?.[i]?.quantity?.message}
-                        />
-                        <LabelledInputWithErrMsg
-                          $label="Price"
-                          $mdSrOnlyLabel={isNotFirstItem}
-                          $labelInputGap="lg"
-                          $padding="lg"
-                          type="text"
-                          inputMode="numeric"
-                          pattern="[0-9]+"
-                          $marginBottomZero={true}
-                          {...register(`items.${i}.price`)}
-                          $errorMsg={errors.items?.[i]?.price?.message}
-                        />
-                        <LabelledInputWithErrMsg
-                          $label="Total"
-                          $mdSrOnlyLabel={isNotFirstItem}
-                          $labelInputGap="lg"
-                          $padding="lg"
-                          readOnly={true}
-                          type="text"
-                          inputMode="numeric"
-                          $marginBottomZero={true}
-                        />
-                        {allowItemDeletion && (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              remove(i);
-                            }}
-                            className={classJoin(
-                              "relative",
-                              "text-ds-6",
-                              "self-end",
-                              "mb-5"
-                            )}
-                          >
-                            <span className="sr-only">delete this item</span>
-                            <Delete />
-                          </button>
-                        )}
-                      </div>
-                    </li>
-                  );
-                })}
+                {itemFields.map((itemField, i) => (
+                  <li
+                    key={itemField.id}
+                    className={classJoin(
+                      "mb-12 md:mb-[1.0625rem]",
+                      "md:flex md:gap-x-16px md:items-center"
+                    )}
+                  >
+                    <ItemInputs
+                      hideMdInputLabels={i !== 0}
+                      index={i}
+                      allowDeletion={allowItemDeletion}
+                      onDelete={() => remove(i)}
+                      control={control}
+                      priceFormPath={`items.${i}.price`}
+                      quantityFormPath={`items.${i}.quantity`}
+                      getTotalFieldValue={({ price, quantity }) => {
+                        const priceRes = v.safeParse(ItemPriceSchema, price, {
+                          abortEarly: true,
+                        });
+                        const qtyRes = v.safeParse(
+                          ItemQuantitySchema,
+                          quantity,
+                          { abortEarly: true }
+                        );
+                        if (!priceRes.success || !qtyRes.success) {
+                          return "";
+                        }
+                        return (
+                          Number(priceRes.output) * Number(qtyRes.output)
+                        ).toFixed(2);
+                      }}
+                      nameProps={{
+                        ...register(`items.${i}.name`),
+                        $errorMsg: errors.items?.[i]?.name?.message,
+                      }}
+                      quantityProps={{
+                        ...register(`items.${i}.quantity`),
+                        $errorMsg: errors.items?.[i]?.quantity?.message,
+                      }}
+                      priceProps={{
+                        ...register(`items.${i}.price`),
+                        $errorMsg: errors.items?.[i]?.price?.message,
+                      }}
+                    />
+                  </li>
+                ))}
               </ol>
               <button
                 type="button"
                 onClick={() => {
-                  append({
-                    id: crypto.randomUUID(),
-                    name: "",
-                    quantity: "",
-                    price: "",
-                  });
+                  append(getNewItemField());
                 }}
                 className={classJoin(
                   "bg-[#F9FAFE] hover:bg-ds-5 dark:bg-ds-4 hover:dark:bg-ds-8",
@@ -428,4 +396,8 @@ export function InvoiceFormDialog(props: Props) {
       )}
     </AnimatePresence>
   );
+}
+
+function getNewItemField() {
+  return { id: crypto.randomUUID(), name: "", quantity: "", price: "" };
 }

@@ -8,6 +8,49 @@ const AddressSchema = v.object({
   country: v.pipe(v.string(), v.trim(), v.nonEmpty("can't be empty")),
 });
 
+export const ItemPriceSchema = v.pipe(
+  v.string(),
+  v.trim(),
+  v.nonEmpty("can't be empty"),
+  v.transform(Number),
+  v.number("invalid"),
+  v.gtValue(0, "invalid"),
+  v.transform(String)
+);
+
+export const ItemQuantitySchema = v.pipe(
+  v.string(),
+  v.trim(),
+  v.nonEmpty("can't be empty"),
+  v.transform(Number),
+  v.integer("invalid"),
+  v.minValue(1, "invalid"),
+  v.transform(String)
+);
+
+const ItemSchema = v.object({
+  id: v.string(),
+  name: v.pipe(v.string(), v.trim(), v.nonEmpty("can't be empty")),
+  quantity: v.pipe(
+    v.string(),
+    v.trim(),
+    v.nonEmpty("can't be empty"),
+    v.transform(Number),
+    v.integer("invalid"),
+    v.minValue(1, "invalid"),
+    v.transform(String)
+  ),
+  price: v.pipe(
+    v.string(),
+    v.trim(),
+    v.nonEmpty("can't be empty"),
+    v.transform(Number),
+    v.number("invalid"),
+    v.gtValue(0, "invalid"),
+    v.transform(String)
+  ),
+});
+
 export const InputInvoiceSchema = v.object({
   billFrom: AddressSchema,
   billTo: v.object({
@@ -28,25 +71,5 @@ export const InputInvoiceSchema = v.object({
   ),
   paymentTerm: v.picklist(PAYMENT_TERMS),
   projectDescription: v.optional(v.pipe(v.string(), v.trim())),
-  items: v.pipe(
-    v.array(
-      v.object({
-        id: v.string(),
-        name: v.pipe(v.string(), v.trim(), v.nonEmpty("can't be empty")),
-        quantity: v.pipe(
-          v.string(),
-          v.trim(),
-          v.nonEmpty("can't be empty"),
-          v.decimal()
-        ),
-        price: v.pipe(
-          v.string(),
-          v.trim(),
-          v.nonEmpty("can't be empty"),
-          v.decimal()
-        ),
-      })
-    ),
-    v.minLength(1, "should contain at least one item")
-  ),
+  items: v.tupleWithRest([ItemSchema], ItemSchema),
 });

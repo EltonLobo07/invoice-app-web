@@ -1,22 +1,10 @@
 import { LabelledInputWithErrMsg } from "@/components/general";
-import {
-  // RefCallBack,
-  type UseFormRegisterReturn,
-  // type ChangeHandler,
-} from "react-hook-form";
+import type { FormInputProps } from "./types";
 
-type InputProps = UseFormRegisterReturn<string> &
-  Pick<
-    React.ComponentPropsWithoutRef<typeof LabelledInputWithErrMsg>,
-    "$errorMsg"
-  >;
-
-type Props = {
-  streetAddressProps: InputProps;
-  cityProps: InputProps;
-  postCodeProps: InputProps;
-  countryProps: InputProps;
-};
+type Props = Record<
+  "streetAddressProps" | "cityProps" | "postCodeProps" | "countryProps",
+  FormInputProps
+>;
 
 export function AddressInputs(props: Props) {
   return (
