@@ -6,22 +6,27 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { db } from "@/db";
 import { GENERIC_ERROR_MESSAGE } from "@/constants/general";
+import * as v from "valibot";
 import type { User } from "@/schemas";
 
 type SuccessData = { user: User; jwt: string };
 
+const DataSchema = v.object({ input: LoginSchema });
+
 export const login: FormAction<typeof LoginSchema, SuccessData> = async (
   _formState,
-  inputState
+  data
 ) => {
   // redundant check needed (untrusted senders)
-  if (!isSchemaParseSuccessful(LoginSchema, inputState)) {
+  if (!isSchemaParseSuccessful(DataSchema, data)) {
     return {
       type: "error",
       message: "invalid input",
     };
   }
-  const { email, password } = inputState;
+  const {
+    input: { email, password },
+  } = data;
   try {
     const users = await db
       .selectFrom("users")

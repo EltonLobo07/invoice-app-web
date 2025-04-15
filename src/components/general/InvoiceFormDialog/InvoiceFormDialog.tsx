@@ -21,6 +21,8 @@ import {
 } from "./schemas";
 import * as v from "valibot";
 import { ItemInputs } from "./ItemInputs";
+import { useFormAction } from "@/utils/form";
+import { InvoiceFormAction } from "./invoice-form.action";
 
 type Props =
   | { type: "create" }
@@ -31,6 +33,10 @@ type Props =
 
 export function InvoiceFormDialog(props: Props) {
   const [open, setOpen] = React.useState(true);
+  const { formAction, formIsSubmitting } = useFormAction({
+    action: InvoiceFormAction,
+    initialFormState: {},
+  });
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -49,6 +55,7 @@ export function InvoiceFormDialog(props: Props) {
     control,
     formState: { errors },
     handleSubmit,
+    reset,
   } = useForm({
     resolver: valibotResolver(InputInvoiceSchema),
     defaultValues: {
@@ -71,8 +78,28 @@ export function InvoiceFormDialog(props: Props) {
 
   const allowItemDeletion = itemFields.length > 1;
 
-  const onSubmit = (invoice: v.InferOutput<typeof InputInvoiceSchema>) => {
-    console.log(invoice);
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    if (props.type === "edit") {
+      handleSubmit((input) =>
+        formAction({
+          input,
+          intent: "edit",
+          invoiceId: props.invoiceId,
+        })
+      )(e);
+      return;
+    }
+    let intent: "save-as-draft" | "save" = "save";
+    const { nativeEvent } = e;
+    if (nativeEvent instanceof SubmitEvent) {
+      const intentFromSubmitter = nativeEvent.submitter?.getAttribute("name");
+      intent =
+        intentFromSubmitter === "save-as-draft" ||
+        intentFromSubmitter === "save"
+          ? intentFromSubmitter
+          : "save";
+    }
+    handleSubmit((input) => formAction({ input, intent }))(e);
   };
 
   return (
@@ -81,6 +108,9 @@ export function InvoiceFormDialog(props: Props) {
         <Ariakit.Dialog
           open={true}
           onClose={() => {
+            if (formIsSubmitting) {
+              return;
+            }
             setOpen(false);
           }}
           getPersistentElements={() => {
@@ -172,7 +202,7 @@ export function InvoiceFormDialog(props: Props) {
             </Ariakit.DialogHeading>
           </div>
           <form
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={onSubmit}
             className={classJoin("px-2px", "bg-inherit")}
           >
             <fieldset className="mb-10 md:mb-12">
@@ -347,6 +377,12 @@ export function InvoiceFormDialog(props: Props) {
             >
               <button
                 type="button"
+                onClick={() => {
+                  if (formIsSubmitting) {
+                    return;
+                  }
+                  reset();
+                }}
                 className={classJoin(
                   "pt-[1.125rem]",
                   "pb-[0.9375rem]",
@@ -361,7 +397,8 @@ export function InvoiceFormDialog(props: Props) {
               </button>
               {props.type === "create" && (
                 <button
-                  type="button"
+                  type="submit"
+                  name="save-as-draft"
                   className={classJoin(
                     "pt-[1.125rem]",
                     "pb-[0.9375rem]",
@@ -378,6 +415,13 @@ export function InvoiceFormDialog(props: Props) {
               )}
               <button
                 type="submit"
+                name="save"
+                aria-disabled={formIsSubmitting}
+                onClick={(e) => {
+                  if (formIsSubmitting) {
+                    e.preventDefault();
+                  }
+                }}
                 className={classJoin(
                   "pt-[1.125rem]",
                   "pb-[0.9375rem]",
@@ -388,7 +432,11 @@ export function InvoiceFormDialog(props: Props) {
                   "text-white"
                 )}
               >
-                {props.type === "edit" ? "Save Changes" : "Save & Send"}
+                {formIsSubmitting
+                  ? "submitting..."
+                  : props.type === "edit"
+                  ? "Save Changes"
+                  : "Save & Send"}
               </button>
             </div>
           </form>

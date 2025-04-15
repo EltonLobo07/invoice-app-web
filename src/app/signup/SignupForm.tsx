@@ -48,7 +48,7 @@ export function SignupForm() {
   return (
     <>
       <Announcer message={formIsSubmitting ? "submitting form" : undefined} />
-      <form onSubmit={handleSubmit(formAction)}>
+      <form onSubmit={handleSubmit((input) => formAction({ input }))}>
         <LabelledInputWithErrMsg
           $label="Username"
           $errorMsg={errors["username"]?.message}

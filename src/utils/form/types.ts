@@ -24,11 +24,13 @@ export type FormAction<
   TSuccessData = unknown,
   TFailedData = unknown,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TParams extends any[] = []
+  TParams extends any[] = [],
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  TAdditionalInput extends Record<string, unknown> = {}
 > = (
   ...params: [
     ...TParams,
     FormState<TSuccessData, TFailedData>,
-    v.InferInput<TSchema>
+    { input: v.InferInput<TSchema> } & TAdditionalInput
   ]
 ) => Promise<FormState<TSuccessData, TFailedData>>;

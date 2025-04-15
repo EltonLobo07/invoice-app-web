@@ -33,18 +33,22 @@ function getErrMsg(
   }
 }
 
+const DataSchema = v.object({ input: SignupSchema });
+
 export const signup: FormAction<typeof SignupSchema> = async (
   _formState,
-  inputState
+  data
 ) => {
   // redundant check needed (untrusted senders)
-  if (!isSchemaParseSuccessful(SignupSchema, inputState)) {
+  if (!isSchemaParseSuccessful(DataSchema, data)) {
     return {
       type: "error",
       message: "invalid input",
     };
   }
-  const { username, email, password } = inputState;
+  const {
+    input: { username, email, password },
+  } = data;
   try {
     const passwordHash = await bcrypt.hash(password, 10);
     await db
