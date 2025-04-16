@@ -297,24 +297,23 @@ type InvoiceAddress = {
   country: string;
 };
 
-type InsertInvoiceParams = [
-  invoice: {
-    id: string;
-    paymentTerm: number;
-    clientName: string;
-    clientEmail: string;
-    projectDescription?: string;
-    createdAt: string;
-    items: {
-      name: string;
-      price: number;
-      quantity: number;
-    }[];
-    billFrom: InvoiceAddress;
-    billTo: InvoiceAddress;
-  },
-  saveAsDraft: boolean
-];
+type InvoiceParam = {
+  id: string;
+  paymentTerm: number;
+  clientName: string;
+  clientEmail: string;
+  projectDescription?: string;
+  createdAt: string;
+  items: {
+    name: string;
+    price: number;
+    quantity: number;
+  }[];
+  billFrom: InvoiceAddress;
+  billTo: InvoiceAddress;
+};
+
+type InsertInvoiceParams = [invoice: InvoiceParam, saveAsDraft: boolean];
 
 export async function insertInvoice(...params: InsertInvoiceParams) {
   const [invoice, saveAsDraft] = params;
@@ -404,6 +403,112 @@ export async function insertInvoice(...params: InsertInvoiceParams) {
         },
         {
           invoiceId,
+          street: invoice.billTo.street,
+          postCode: invoice.billTo.postCode,
+          city: invoice.billTo.city,
+          country: invoice.billTo.country,
+          type: "to",
+        },
+      ])
+      .execute();
+  });
+}
+
+export async function editInvoice(invoice: InvoiceParam) {
+  return db.transaction().execute(async (trx) => {
+    /*
+      UPDATE
+        invoices 
+      SET 
+        payment_term = <PAYMENT_TERM>,
+        client_name = <CLIENT_NAME>,
+        client_email = <CLIENT_EMAIL>,
+        project_description = <PROJECT_DESCRIPTION>,
+        created_at = <CREATED_AT>,
+      wHERE 
+        id = <ID>;
+    */
+    await trx
+      .updateTable("invoices")
+      .set({
+        paymentTerm: invoice.paymentTerm,
+        clientName: invoice.clientName,
+        clientEmail: invoice.clientEmail,
+        projectDescription: invoice.projectDescription,
+        createdAt: invoice.createdAt,
+      })
+      .where("id", "=", invoice.id)
+      .execute();
+
+    /*
+      DELETE FROM
+        items
+      WHERE
+        invoice_id = <ID>;
+    */
+    await trx.deleteFrom("items").where("invoiceId", "=", invoice.id).execute();
+
+    /*
+      DELETE FROM
+        invoice_addresses
+      WHERE
+        invoice_id = <ID>;
+    */
+    await trx
+      .deleteFrom("invoiceAddresses")
+      .where("invoiceId", "=", invoice.id)
+      .execute();
+
+    /*
+      INSERT INTO
+        items (
+          name,
+          price,
+          quantity,
+          invoice_id
+        ) VALUES 
+          (<NAME_1>, <QUANTITY_1>, <PRICE_1>, <INVOICE_ID>),
+          (<NAME_2>, <QUANTITY_2>, <PRICE_2>, <INVOICE_ID>),
+          (<NAME_3>, <QUANTITY_3>, <PRICE_3>, <INVOICE_ID>);
+    */
+    await trx
+      .insertInto("items")
+      .values(
+        invoice.items.map((item) => ({
+          invoiceId: invoice.id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+        }))
+      )
+      .execute();
+
+    /*
+      INSERT INTO
+        invoice_addresses (
+          street,
+          post_code,
+          city,
+          country,
+          type,
+          invoice_id
+        ) VALUES 
+          (<STREET_1>, <POST_CODE_1>, <CITY_1>, <COUNTRY_1>, 'from', <INVOICE_ID>),
+          (<STREET_2>, <POST_CODE_2>, <CITY_2>, <COUNTRY_2>, 'to', <INVOICE_ID>);
+    */
+    await trx
+      .insertInto("invoiceAddresses")
+      .values([
+        {
+          invoiceId: invoice.id,
+          street: invoice.billFrom.street,
+          postCode: invoice.billFrom.postCode,
+          city: invoice.billFrom.city,
+          country: invoice.billFrom.country,
+          type: "from",
+        },
+        {
+          invoiceId: invoice.id,
           street: invoice.billTo.street,
           postCode: invoice.billTo.postCode,
           city: invoice.billTo.city,
