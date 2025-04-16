@@ -1,15 +1,22 @@
-import { InvoiceStatusDD, ProtectedPageMessage } from "@/components/general";
+import {
+  InvoiceFormDialog,
+  InvoiceStatusDD,
+  ProtectedPageMessage,
+} from "@/components/general";
 import {
   Dt,
   InvoiceAddress,
   ActionsWithHeading,
   ItemsTable,
 } from "@/components/invoice-page";
+import { EDIT_INVOICE_SEARCH_PARAM } from "@/constants/invoice-page";
 import { ArrowDown } from "@/icons";
-import { ParamsSchema } from "@/schemas/invoice-page";
+import { ParamsSchema, SearchParamsSchema } from "@/schemas/invoice-page";
 import { getUser } from "@/server-helpers";
 import { getInvoiceById } from "@/services/invoices";
+import { NextParamsProp, PaymentTerm } from "@/types/general";
 import {
+  assertMinLengthOne,
   classJoin,
   getMillisecondsFromDays,
   getUIDateString,
@@ -20,7 +27,8 @@ import { notFound } from "next/navigation";
 import * as v from "valibot";
 
 type Props = {
-  params?: Promise<Record<string, string>>;
+  params?: NextParamsProp;
+  searchParams?: NextParamsProp;
 };
 
 export default async function Page(props: Props) {
@@ -29,16 +37,27 @@ export default async function Page(props: Props) {
     return <ProtectedPageMessage />;
   }
 
-  const params = await props.params;
-  const result = v.safeParse(ParamsSchema, params);
-  if (!result.success || result.output.invoiceId === "") {
+  const [params, searchParams] = await Promise.all([
+    props.params,
+    props.searchParams,
+  ]);
+
+  const paramsResult = v.safeParse(ParamsSchema, params);
+  if (!paramsResult.success || paramsResult.output.invoiceId === "") {
     notFound();
   }
 
-  const invoice = await getInvoiceById(result.output.invoiceId);
+  const invoice = await getInvoiceById(paramsResult.output.invoiceId);
   if (invoice === null) {
     notFound();
   }
+
+  const { editInvoice } = v.parse(SearchParamsSchema, searchParams);
+  const newSearchParams = new URLSearchParams(searchParams);
+  newSearchParams.set(EDIT_INVOICE_SEARCH_PARAM, String(true));
+  const editInvoiceHref = `/invoices/${
+    invoice.id
+  }?${newSearchParams.toString()}`;
 
   const showMarkAsPaid = invoice.status === "pending";
 
@@ -96,7 +115,8 @@ export default async function Page(props: Props) {
           </dl>
           <section className="hidden md:block">
             <ActionsWithHeading
-              invoiceId={result.output.invoiceId}
+              invoiceId={invoice.id}
+              editInvoiceHref={editInvoiceHref}
               showMarkAsPaid={showMarkAsPaid}
             />
           </section>
@@ -251,11 +271,21 @@ export default async function Page(props: Props) {
       )}
     >
       <ActionsWithHeading
-        invoiceId={result.output.invoiceId}
+        invoiceId={invoice.id}
+        editInvoiceHref={editInvoiceHref}
         showMarkAsPaid={showMarkAsPaid}
       />
     </section>
   );
+
+  const transformedItems = invoice.items.map((item) => ({
+    ...item,
+    id: String(item.id),
+    price: String(item.price),
+    quantity: String(item.quantity),
+  }));
+
+  assertMinLengthOne(transformedItems);
 
   return (
     <div
@@ -269,6 +299,30 @@ export default async function Page(props: Props) {
       {headerJSX}
       {invoiceDetailsJSX}
       {stickyActionsJSX}
+      {editInvoice && (
+        <InvoiceFormDialog
+          type="edit"
+          onCloseDeleteSearchParam={EDIT_INVOICE_SEARCH_PARAM}
+          invoiceId={invoice.id}
+          invoice={{
+            // todo: get rid of the type assertion
+            paymentTerm: String(invoice.paymentTerm) as PaymentTerm,
+            projectDescription: invoice.projectDescription ?? undefined,
+            billFrom: {
+              ...invoice.fromAddress,
+              streetAddress: invoice.fromAddress.street,
+            },
+            billTo: {
+              ...invoice.toAddress,
+              streetAddress: invoice.toAddress.street,
+              clientEmail: invoice.clientEmail,
+              clientName: invoice.clientName,
+            },
+            items: transformedItems,
+            date: invoice.createdAt.toISOString().split("T")[0],
+          }}
+        />
+      )}
     </div>
   );
 }

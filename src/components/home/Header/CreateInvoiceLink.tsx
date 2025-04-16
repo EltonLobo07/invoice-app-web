@@ -7,7 +7,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { ResponsiveText } from "@/components/general";
 import type { ResponsiveTextType } from "@/types/home";
 import { motion } from "motion/react";
-import { CREATE_INVOICE } from "@/constants/home";
+import { CREATE_INVOICE_SEARCH_PARAM } from "@/constants/home";
 
 type Props = {
   text: ResponsiveTextType;
@@ -19,7 +19,7 @@ export function CreateInvoiceLink(props: Props) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const newSearchParams = new URLSearchParams(searchParams);
-  newSearchParams.set(CREATE_INVOICE, "true");
+  newSearchParams.set(CREATE_INVOICE_SEARCH_PARAM, "true");
   const newSearchParamStr = newSearchParams.toString();
 
   return (

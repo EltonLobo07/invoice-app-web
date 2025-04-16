@@ -1,11 +1,12 @@
 import {
-  CREATE_INVOICE,
+  CREATE_INVOICE_SEARCH_PARAM,
   INVOICE_STATUSES,
   PAGE_NUM_SEARCH_PARAM,
   STATUSES_SEARCH_PARAM,
 } from "@/constants/home";
 import { InvoiceStatus } from "@/types/home";
 import * as v from "valibot";
+import { BoolSearchParamSchema } from "./general";
 
 export const SearchParamsSchema = v.object({
   [STATUSES_SEARCH_PARAM]: v.optional(
@@ -28,16 +29,7 @@ export const SearchParamsSchema = v.object({
     ),
     "1"
   ),
-  [CREATE_INVOICE]: v.optional(
-    v.fallback(
-      v.pipe(
-        v.string(),
-        v.transform((v) => v === "true")
-      ),
-      false
-    ),
-    "false"
-  ),
+  [CREATE_INVOICE_SEARCH_PARAM]: BoolSearchParamSchema,
 });
 
 const invoiceStatuesSt = new Set<string>(INVOICE_STATUSES);

@@ -5,6 +5,7 @@ import { MarkAsPaidDialog } from "./MarkAsPaidDialog";
 
 type ActionsWithHeadingProps = {
   invoiceId: string;
+  editInvoiceHref: string;
   showMarkAsPaid: boolean;
 };
 
@@ -13,7 +14,7 @@ export function ActionsWithHeading(props: ActionsWithHeadingProps) {
     <div className="flex gap-x-1 gap-y-2 items-center justify-center flex-wrap">
       <h3 className="sr-only">available actions</h3>
       <Link
-        href={`/invoices/${props.invoiceId}/edit`}
+        href={props.editInvoiceHref}
         className={classJoin(
           "bg-[#F9FAFE] hover:bg-ds-5 dark:bg-ds-4 hover:dark:bg-white",
           "text-ds-7",

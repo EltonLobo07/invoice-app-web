@@ -13,9 +13,10 @@ import { classJoin } from "@/utils/general";
 import { cookies } from "next/headers";
 import * as v from "valibot";
 import { getInvoiceList } from "@/services/invoices";
+import type { NextParamsProp } from "@/types/general";
 
 type Props = {
-  searchParams?: Promise<Record<string, string>>;
+  searchParams?: NextParamsProp;
 };
 
 export default async function Home(props: Props) {

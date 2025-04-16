@@ -1,6 +1,5 @@
 "use client";
 
-import { CREATE_INVOICE } from "@/constants/home";
 import { useRouter } from "@/hooks";
 import { ArrowDown } from "@/icons";
 import { classJoin } from "@/utils/general";
@@ -24,12 +23,16 @@ import { ItemInputs } from "./ItemInputs";
 import { useFormAction } from "@/utils/form";
 import { InvoiceFormAction } from "./invoice-form.action";
 
-type Props =
+type Props = {
+  onCloseDeleteSearchParam: string;
+} & (
   | { type: "create" }
   | {
       type: "edit";
       invoiceId: string;
-    };
+      invoice: v.InferOutput<typeof InputInvoiceSchema>;
+    }
+);
 
 export function InvoiceFormDialog(props: Props) {
   const [open, setOpen] = React.useState(true);
@@ -43,7 +46,7 @@ export function InvoiceFormDialog(props: Props) {
 
   const onExitAnimationComplete = () => {
     const newSearchParams = new URLSearchParams(searchParams);
-    newSearchParams.delete(CREATE_INVOICE);
+    newSearchParams.delete(props.onCloseDeleteSearchParam);
     const newSearchParamStr = newSearchParams.toString();
     router.push(
       `${pathname}${newSearchParamStr === "" ? "" : "?"}${newSearchParamStr}`
@@ -58,14 +61,17 @@ export function InvoiceFormDialog(props: Props) {
     reset,
   } = useForm({
     resolver: valibotResolver(InputInvoiceSchema),
-    defaultValues: {
-      // always set a default value for this field
-      // todo: TS doesn't warn if the value is not set (improve type safety)
-      paymentTerm: "1",
-      // always set a default value for this field
-      // todo: TS doesn't warn if the value is not set (improve type safety)
-      items: [getNewItemField()],
-    },
+    defaultValues:
+      props.type === "edit"
+        ? props.invoice
+        : {
+            // always set a default value for this field
+            // todo: TS doesn't warn if the value is not set (improve type safety)
+            paymentTerm: "1",
+            // always set a default value for this field
+            // todo: TS doesn't warn if the value is not set (improve type safety)
+            items: [getNewItemField()],
+          },
   });
   const {
     fields: itemFields,

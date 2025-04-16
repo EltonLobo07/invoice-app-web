@@ -36,3 +36,11 @@ export function getUIAmount(value: number): string {
   });
   return [currency, " ", ...rest].join("");
 }
+
+export function assertMinLengthOne<TElem>(
+  lst: TElem[]
+): asserts lst is [TElem, ...TElem[]] {
+  if (lst.length === 0) {
+    throw new Error("should not be empty");
+  }
+}

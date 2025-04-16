@@ -1,2 +1,7 @@
-export { classJoin, getUIDateString, getMillisecondsFromDays } from "./runtime";
+export {
+  classJoin,
+  getUIDateString,
+  getMillisecondsFromDays,
+  assertMinLengthOne,
+} from "./runtime";
 export type { OmitKey, CustomProps, HeadingLvl } from "./types";
