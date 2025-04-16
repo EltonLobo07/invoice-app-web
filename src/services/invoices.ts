@@ -289,3 +289,128 @@ export function markInvoiceAsPaid(id: string) {
     .where("id", "=", id)
     .execute();
 }
+
+type InvoiceAddress = {
+  street: string;
+  postCode: string;
+  city: string;
+  country: string;
+};
+
+type InsertInvoiceParams = [
+  invoice: {
+    id: string;
+    paymentTerm: number;
+    clientName: string;
+    clientEmail: string;
+    projectDescription?: string;
+    createdAt: string;
+    items: {
+      name: string;
+      price: number;
+      quantity: number;
+    }[];
+    billFrom: InvoiceAddress;
+    billTo: InvoiceAddress;
+  },
+  saveAsDraft: boolean
+];
+
+export async function insertInvoice(...params: InsertInvoiceParams) {
+  const [invoice, saveAsDraft] = params;
+
+  return db.transaction().execute(async (trx) => {
+    /*
+      INSERT INTO
+        invoices (
+          id,
+          payment_term,
+          client_name,
+          client_email,
+          project_description,
+          created_at,
+          status
+        ) VALUES (
+          <ID>,
+          <PAYMENT_TERM>,
+          <CLIENT_NAME>,
+          <CLIENT_EMAIL>,
+          <PROJECT_DESCRIPTION>,
+          <CREATED_AT>,
+          'pending'
+        ) RETURNING id;
+    */
+    const { id: invoiceId } = await trx
+      .insertInto("invoices")
+      .values({
+        id: invoice.id,
+        paymentTerm: invoice.paymentTerm,
+        clientName: invoice.clientName,
+        clientEmail: invoice.clientEmail,
+        projectDescription: invoice.projectDescription,
+        createdAt: invoice.createdAt,
+        status: saveAsDraft ? "draft" : "pending",
+      })
+      .returning("id")
+      .executeTakeFirstOrThrow();
+
+    /*
+      INSERT INTO
+        items (
+          name,
+          price,
+          quantity,
+          invoice_id
+        ) VALUES 
+          (<NAME_1>, <QUANTITY_1>, <PRICE_1>, <INVOICE_ID>),
+          (<NAME_2>, <QUANTITY_2>, <PRICE_2>, <INVOICE_ID>),
+          (<NAME_3>, <QUANTITY_3>, <PRICE_3>, <INVOICE_ID>);
+    */
+    await trx
+      .insertInto("items")
+      .values(
+        invoice.items.map((item) => ({
+          invoiceId,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+        }))
+      )
+      .execute();
+
+    /*
+      INSERT INTO
+        invoice_addresses (
+          street,
+          post_code,
+          city,
+          country,
+          type,
+          invoice_id
+        ) VALUES 
+          (<STREET_1>, <POST_CODE_1>, <CITY_1>, <COUNTRY_1>, 'from', <INVOICE_ID>),
+          (<STREET_2>, <POST_CODE_2>, <CITY_2>, <COUNTRY_2>, 'to', <INVOICE_ID>);
+    */
+    await trx
+      .insertInto("invoiceAddresses")
+      .values([
+        {
+          invoiceId,
+          street: invoice.billFrom.street,
+          postCode: invoice.billFrom.postCode,
+          city: invoice.billFrom.city,
+          country: invoice.billFrom.country,
+          type: "from",
+        },
+        {
+          invoiceId,
+          street: invoice.billTo.street,
+          postCode: invoice.billTo.postCode,
+          city: invoice.billTo.city,
+          country: invoice.billTo.country,
+          type: "to",
+        },
+      ])
+      .execute();
+  });
+}
