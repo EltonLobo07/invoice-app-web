@@ -5,6 +5,7 @@ import { InputInvoiceSchema } from "./schemas";
 import * as v from "valibot";
 import { editInvoice, insertInvoice } from "@/services/invoices";
 import { GENERIC_ERROR_MESSAGE } from "@/constants/general";
+import { getUser } from "@/server-helpers";
 
 const DataSchema = v.intersect([
   v.object({
@@ -23,10 +24,17 @@ export const InvoiceFormAction: FormAction<
   typeof InputInvoiceSchema,
   unknown,
   unknown,
-  [],
+  [jwt: string],
   v.InferInput<typeof DataSchema>
-> = async (_formState, data) => {
-  // redundant check needed (untrusted senders)
+> = async (jwt, _formState, data) => {
+  // redundant checks (untrusted senders)
+  const user = await getUser(jwt);
+  if (user === null) {
+    return {
+      type: "error",
+      message: "invalid token",
+    };
+  }
   if (!isSchemaParseSuccessful(DataSchema, data)) {
     return {
       type: "error",

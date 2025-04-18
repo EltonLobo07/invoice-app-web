@@ -8,7 +8,7 @@ import {
 } from "@/components/home";
 import { NUM_INVOICES_PER_PAGE } from "@/constants/home";
 import { SearchParamsSchema } from "@/schemas/home";
-import { getUser } from "@/server-helpers";
+import { getJwt, getUser } from "@/server-helpers";
 import { classJoin } from "@/utils/general";
 import { cookies } from "next/headers";
 import * as v from "valibot";
@@ -20,8 +20,8 @@ type Props = {
 };
 
 export default async function Home(props: Props) {
-  const user = await getUser(await cookies());
-  if (user === null) {
+  const jwt = await getJwt(await cookies());
+  if (jwt === null || (await getUser(jwt)) === null) {
     return <ProtectedPageMessage />;
   }
 
@@ -79,7 +79,7 @@ export default async function Home(props: Props) {
         )}
       />
       {invoicesJSX}
-      {createInvoice && <CreateInvoiceDialog />}
+      {createInvoice && <CreateInvoiceDialog jwt={jwt} />}
     </div>
   );
 }

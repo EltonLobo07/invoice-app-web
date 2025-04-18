@@ -12,7 +12,7 @@ import { StoreProvider } from "@/providers/StoreProvider";
 import { GlobalToast } from "@/components/toast";
 import HolyLoader from "holy-loader";
 import { Header } from "@/components/header";
-import { getUser } from "@/server-helpers";
+import { getJwt, getUser } from "@/server-helpers";
 
 const leagueSpartan = League_Spartan({
   subsets: ["latin"],
@@ -32,7 +32,8 @@ export default async function RootLayout({
   const cookieStore = await cookies();
   const isDarkTheme =
     cookieStore.get(IS_DARK_THEME_COOKIE_NAME)?.value === "true";
-  const user = await getUser(cookieStore);
+  const jwt = await getJwt(cookieStore);
+  const user = await getUser(jwt);
 
   return (
     <html

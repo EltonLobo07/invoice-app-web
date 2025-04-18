@@ -12,7 +12,7 @@ import {
 import { EDIT_INVOICE_SEARCH_PARAM } from "@/constants/invoice-page";
 import { ArrowDown } from "@/icons";
 import { ParamsSchema, SearchParamsSchema } from "@/schemas/invoice-page";
-import { getUser } from "@/server-helpers";
+import { getJwt, getUser } from "@/server-helpers";
 import { getInvoiceById } from "@/services/invoices";
 import { NextParamsProp, PaymentTerm } from "@/types/general";
 import {
@@ -32,8 +32,8 @@ type Props = {
 };
 
 export default async function Page(props: Props) {
-  const user = await getUser(await cookies());
-  if (user === null) {
+  const jwt = await getJwt(await cookies());
+  if (jwt === null || (await getUser(jwt)) === null) {
     return <ProtectedPageMessage />;
   }
 
@@ -301,6 +301,7 @@ export default async function Page(props: Props) {
       {stickyActionsJSX}
       {editInvoice && (
         <InvoiceFormDialog
+          jwt={jwt}
           type="edit"
           onCloseDeleteSearchParam={EDIT_INVOICE_SEARCH_PARAM}
           invoiceId={invoice.id}

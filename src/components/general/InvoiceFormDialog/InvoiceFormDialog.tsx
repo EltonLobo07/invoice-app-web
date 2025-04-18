@@ -25,6 +25,7 @@ import { InvoiceFormAction } from "./invoice-form.action";
 
 type Props = {
   onCloseDeleteSearchParam: string;
+  jwt: string;
 } & (
   | { type: "create" }
   | {
@@ -37,7 +38,7 @@ type Props = {
 export function InvoiceFormDialog(props: Props) {
   const [open, setOpen] = React.useState(true);
   const { formAction, formIsSubmitting } = useFormAction({
-    action: InvoiceFormAction,
+    action: InvoiceFormAction.bind(null, props.jwt),
     initialFormState: {},
   });
   const router = useRouter();
