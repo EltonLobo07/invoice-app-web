@@ -31,7 +31,7 @@ export const login: FormAction<typeof LoginSchema, SuccessData> = async (
     const users = await db
       .selectFrom("users")
       .where("email", "=", email)
-      .select(["username", "passwordHash"])
+      .select(["username", "passwordHash", "id"])
       .execute();
     if (users.length === 0) {
       return { type: "error", message: "invalid credentials" };
@@ -40,7 +40,7 @@ export const login: FormAction<typeof LoginSchema, SuccessData> = async (
     if (!(await bcrypt.compare(password, user.passwordHash))) {
       return { type: "error", message: "invalid credentials" };
     }
-    const appUser = { username: user.username };
+    const appUser = { username: user.username, id: user.id };
     const token = jwt.sign(JSON.stringify(appUser), process.env.JWT_SECRET!);
     return {
       type: "success",

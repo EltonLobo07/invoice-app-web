@@ -21,7 +21,8 @@ type Props = {
 
 export default async function Home(props: Props) {
   const jwt = await getJwt(await cookies());
-  if (jwt === null || (await getUser(jwt)) === null) {
+  const user = await getUser(jwt);
+  if (jwt === null || user === null) {
     return <ProtectedPageMessage />;
   }
 
@@ -32,6 +33,7 @@ export default async function Home(props: Props) {
   } = v.parse(SearchParamsSchema, await props.searchParams);
 
   const invoices = await getInvoiceList(
+    user.id,
     pageNum,
     NUM_INVOICES_PER_PAGE,
     selectedStatuses

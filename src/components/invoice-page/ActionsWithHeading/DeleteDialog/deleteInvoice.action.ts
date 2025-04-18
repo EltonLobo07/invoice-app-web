@@ -6,15 +6,24 @@ import { GENERIC_ERROR_MESSAGE } from "@/constants/general";
 import { deleteInvoice as deleteInvoiceService } from "@/services/invoices";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { getUser } from "@/server-helpers";
 
 const DeleteInvoiceSchema = v.object({
   invoiceId: v.pipe(v.string(), v.trim()),
 });
 
 export async function deleteInvoice(
+  jwt: string,
   state: FormState<string>,
   formData: FormData
 ): Promise<FormState<string>> {
+  const user = await getUser(jwt);
+  if (user === null) {
+    return {
+      type: "error",
+      message: "invalid token",
+    };
+  }
   const result = v.safeParse(
     DeleteInvoiceSchema,
     Object.fromEntries(formData.entries()),

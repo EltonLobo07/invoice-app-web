@@ -10,13 +10,14 @@ import {
 
 type Props = {
   invoiceId: string;
+  jwt: string;
 };
 
 export function DeleteDialog(props: Props) {
   const { hideDialog, ...restConfirmActionDialogState } =
     useConfirmActionDialogState();
   const [formState, formAction, isFormSubmitting] = React.useActionState(
-    deleteInvoice,
+    deleteInvoice.bind(null, props.jwt),
     {}
   );
   const setToast = useStoreContext((s) => s.setToast);

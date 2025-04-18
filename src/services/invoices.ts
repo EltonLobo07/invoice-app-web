@@ -3,6 +3,7 @@ import { sql, type Selectable } from "kysely";
 import type { Invoices } from "kysely-codegen";
 
 export function getInvoiceList(
+  userId: number,
   pageNum: number,
   numInvoicesPerPage: number,
   selectedStatuses: readonly Selectable<Invoices>["status"][]
@@ -38,7 +39,11 @@ export function getInvoiceList(
 
   let invoicesDataSrc = db.selectFrom("invoices");
   if (selectedStatuses.length > 0) {
-    invoicesDataSrc = invoicesDataSrc.where("status", "in", selectedStatuses);
+    invoicesDataSrc = invoicesDataSrc.where((eb) =>
+      eb.and([eb("status", "in", selectedStatuses), eb("userId", "=", userId)])
+    );
+  } else {
+    invoicesDataSrc = invoicesDataSrc.where("userId", "=", userId);
   }
 
   return invoicesDataSrc
@@ -76,7 +81,7 @@ export function getInvoiceList(
 }
 
 // todo: improve the query (the transformations should happen in SQL)
-export async function getInvoiceById(id: string) {
+export async function getInvoiceById(userId: number, id: string) {
   /*
     SELECT 
       invoices.id,
@@ -159,7 +164,9 @@ export async function getInvoiceById(id: string) {
           "invoices.clientName",
           "invoices.clientEmail",
         ])
-        .where("invoices.id", "=", id)
+        .where((eb) =>
+          eb.and([eb("userId", "=", userId), eb("invoices.id", "=", id)])
+        )
         .as("invoices")
     )
     .innerJoin("items", "invoices.id", "items.invoiceId")
@@ -313,10 +320,14 @@ type InvoiceParam = {
   billTo: InvoiceAddress;
 };
 
-type InsertInvoiceParams = [invoice: InvoiceParam, saveAsDraft: boolean];
+type InsertInvoiceParams = [
+  userId: number,
+  invoice: InvoiceParam,
+  saveAsDraft: boolean
+];
 
 export async function insertInvoice(...params: InsertInvoiceParams) {
-  const [invoice, saveAsDraft] = params;
+  const [userId, invoice, saveAsDraft] = params;
 
   return db.transaction().execute(async (trx) => {
     /*
@@ -349,6 +360,7 @@ export async function insertInvoice(...params: InsertInvoiceParams) {
         projectDescription: invoice.projectDescription,
         createdAt: invoice.createdAt,
         status: saveAsDraft ? "draft" : "pending",
+        userId,
       })
       .returning("id")
       .executeTakeFirstOrThrow();
@@ -414,7 +426,7 @@ export async function insertInvoice(...params: InsertInvoiceParams) {
   });
 }
 
-export async function editInvoice(invoice: InvoiceParam) {
+export async function editInvoice(userId: number, invoice: InvoiceParam) {
   return db.transaction().execute(async (trx) => {
     /*
       UPDATE
@@ -437,7 +449,9 @@ export async function editInvoice(invoice: InvoiceParam) {
         projectDescription: invoice.projectDescription,
         createdAt: invoice.createdAt,
       })
-      .where("id", "=", invoice.id)
+      .where((eb) =>
+        eb.and([eb("userId", "=", userId), eb("id", "=", invoice.id)])
+      )
       .execute();
 
     /*

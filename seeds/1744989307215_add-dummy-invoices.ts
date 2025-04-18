@@ -661,6 +661,12 @@ const invoices: {
 ];
 
 export async function seed(db: Kysely<DB>): Promise<void> {
+  const { id: userId } = await db
+    .selectFrom("users")
+    .select("id")
+    .where("username", "=", "guest_user")
+    .executeTakeFirstOrThrow();
+
   for (const invoice of invoices) {
     const [{ id: invoiceId }] = await db
       .insertInto("invoices")
@@ -673,6 +679,7 @@ export async function seed(db: Kysely<DB>): Promise<void> {
           clientEmail: invoice.clientEmail,
           createdAt: invoice.createdAt,
           projectDescription: invoice.projectDescription,
+          userId,
         },
       ])
       .returning("id")

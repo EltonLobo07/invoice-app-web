@@ -33,7 +33,8 @@ type Props = {
 
 export default async function Page(props: Props) {
   const jwt = await getJwt(await cookies());
-  if (jwt === null || (await getUser(jwt)) === null) {
+  const user = await getUser(jwt);
+  if (jwt === null || user === null) {
     return <ProtectedPageMessage />;
   }
 
@@ -47,7 +48,7 @@ export default async function Page(props: Props) {
     notFound();
   }
 
-  const invoice = await getInvoiceById(paramsResult.output.invoiceId);
+  const invoice = await getInvoiceById(user.id, paramsResult.output.invoiceId);
   if (invoice === null) {
     notFound();
   }
@@ -116,6 +117,7 @@ export default async function Page(props: Props) {
           <section className="hidden md:block">
             <ActionsWithHeading
               invoiceId={invoice.id}
+              jwt={jwt}
               editInvoiceHref={editInvoiceHref}
               showMarkAsPaid={showMarkAsPaid}
             />
@@ -272,6 +274,7 @@ export default async function Page(props: Props) {
     >
       <ActionsWithHeading
         invoiceId={invoice.id}
+        jwt={jwt}
         editInvoiceHref={editInvoiceHref}
         showMarkAsPaid={showMarkAsPaid}
       />

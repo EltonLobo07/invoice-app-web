@@ -10,13 +10,14 @@ import { markInvoiceAsPaid } from "./markInvoiceAsPaid.action";
 
 type Props = {
   invoiceId: string;
+  jwt: string;
 };
 
 export function MarkAsPaidDialog(props: Props) {
   const { hideDialog, ...restConfirmActionDialogState } =
     useConfirmActionDialogState();
   const [formState, formAction, isFormSubmitting] = React.useActionState(
-    markInvoiceAsPaid,
+    markInvoiceAsPaid.bind(null, props.jwt),
     {}
   );
   const setToast = useStoreContext((s) => s.setToast);

@@ -7,6 +7,7 @@ type ActionsWithHeadingProps = {
   invoiceId: string;
   editInvoiceHref: string;
   showMarkAsPaid: boolean;
+  jwt: string;
 };
 
 export function ActionsWithHeading(props: ActionsWithHeadingProps) {
@@ -25,8 +26,10 @@ export function ActionsWithHeading(props: ActionsWithHeadingProps) {
       >
         Edit
       </Link>
-      <DeleteDialog invoiceId={props.invoiceId} />
-      {props.showMarkAsPaid && <MarkAsPaidDialog invoiceId={props.invoiceId} />}
+      <DeleteDialog invoiceId={props.invoiceId} jwt={props.jwt} />
+      {props.showMarkAsPaid && (
+        <MarkAsPaidDialog invoiceId={props.invoiceId} jwt={props.jwt} />
+      )}
     </div>
   );
 }

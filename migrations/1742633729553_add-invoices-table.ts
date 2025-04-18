@@ -11,6 +11,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 			client_name TEXT NOT NULL,
 			client_email TEXT NOT NULL,
 			project_description TEXT,
+      user_id INT NOT NULL REFERENCES users(id)
 		);
 	*/
   return db.schema
@@ -24,6 +25,8 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("client_name", "text", (c) => c.notNull())
     .addColumn("client_email", "text", (c) => c.notNull())
     .addColumn("project_description", "text")
+    .addColumn("user_id", "integer", (c) => c.notNull())
+    .addForeignKeyConstraint("user_id_fk", ["user_id"], "users", ["id"])
     .execute();
 }
 

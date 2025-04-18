@@ -41,11 +41,11 @@ export const InvoiceFormAction: FormAction<
       message: "invalid input",
     };
   }
-  // await new Promise((resolve) => setTimeout(resolve, 3000));
   const { input } = data;
   try {
     if (data.intent !== "edit") {
       await insertInvoice(
+        user.id,
         {
           id: generateInvoiceId(),
           paymentTerm: Number(input.paymentTerm),
@@ -65,7 +65,7 @@ export const InvoiceFormAction: FormAction<
       );
       return { type: "success", message: "Invoice was created", data: {} };
     } else {
-      await editInvoice({
+      await editInvoice(user.id, {
         id: data.invoiceId,
         paymentTerm: Number(input.paymentTerm),
         projectDescription: input.projectDescription,
