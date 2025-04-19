@@ -49,7 +49,9 @@ export function StoreProvider({
       } else {
         rootClassList.remove(DARK_THEME_CLASS_NAME);
       }
-      Cookies.set(IS_DARK_THEME_COOKIE_NAME, JSON.stringify(cur.isDarkTheme));
+      Cookies.set(IS_DARK_THEME_COOKIE_NAME, JSON.stringify(cur.isDarkTheme), {
+        expires: 30,
+      });
     }
   });
 
