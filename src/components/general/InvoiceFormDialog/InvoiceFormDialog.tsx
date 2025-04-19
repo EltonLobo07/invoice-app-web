@@ -22,6 +22,7 @@ import * as v from "valibot";
 import { ItemInputs } from "./ItemInputs";
 import { useFormAction } from "@/utils/form";
 import { InvoiceFormAction } from "./invoice-form.action";
+import { useStoreContext } from "@/providers/StoreProvider";
 
 type Props = {
   onCloseDeleteSearchParam: string;
@@ -37,13 +38,14 @@ type Props = {
 
 export function InvoiceFormDialog(props: Props) {
   const [open, setOpen] = React.useState(true);
-  const { formAction, formIsSubmitting } = useFormAction({
+  const { formState, formAction, formIsSubmitting } = useFormAction({
     action: InvoiceFormAction.bind(null, props.jwt),
     initialFormState: {},
   });
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const setToast = useStoreContext((s) => s.setToast);
 
   const onExitAnimationComplete = () => {
     const newSearchParams = new URLSearchParams(searchParams);
@@ -108,6 +110,27 @@ export function InvoiceFormDialog(props: Props) {
     }
     handleSubmit((input) => formAction({ input, intent }))(e);
   };
+
+  React.useEffect(() => {
+    if (formState.type !== "error") {
+      return;
+    }
+    setToast({
+      type: "Error",
+      message: formState.message,
+    });
+  }, [formState, setToast]);
+
+  React.useEffect(() => {
+    if (formState.type !== "success") {
+      return;
+    }
+    setToast({
+      type: "Success",
+      message: formState.message,
+    });
+    setOpen(false);
+  }, [formState, setToast]);
 
   return (
     <AnimatePresence onExitComplete={onExitAnimationComplete}>
