@@ -171,12 +171,12 @@ export function InvoiceFormDialog(props: Props) {
           }
           render={
             <motion.div
-              initial={{ x: -100 }}
-              animate={{ x: 0 }}
-              exit={{ x: -100 }}
+              initial={{ x: "-100%" }}
+              animate={{ x: "0" }}
+              exit={{ x: "-100%" }}
               transition={{
-                stiffness: 500,
-                damping: 40,
+                stiffness: open ? 200 : 250,
+                damping: 50,
               }}
               className={classJoin(
                 // set top based on the app header's height
