@@ -68,6 +68,7 @@ export function InvoiceFormDialog(props: Props) {
       props.type === "edit"
         ? props.invoice
         : {
+            date: new Date().toISOString().split("T")[0],
             // always set a default value for this field
             // todo: TS doesn't warn if the value is not set (improve type safety)
             paymentTerm: "1",
