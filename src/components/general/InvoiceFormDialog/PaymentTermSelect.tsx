@@ -31,7 +31,11 @@ export function PaymentTermSelect(props: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <LabelInputContainer $labelInputGap="lg" $flexGrow={true}>
+    <LabelInputContainer
+      $labelInputGap="lg"
+      $marginBottom="lg"
+      $flexGrow={true}
+    >
       <SelectProvider
         open={isOpen}
         setOpen={setIsOpen}

@@ -23,6 +23,8 @@ import { ItemInputs } from "./ItemInputs";
 import { useFormAction } from "@/utils/form";
 import { InvoiceFormAction } from "./invoice-form.action";
 import { useStoreContext } from "@/providers/StoreProvider";
+import { SubmitBtnContent } from "./SubmitBtnContent";
+import { SubmitBtn } from "./SubmitBtn";
 
 type Props = {
   onCloseDeleteSearchParam: string;
@@ -46,6 +48,9 @@ export function InvoiceFormDialog(props: Props) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const setToast = useStoreContext((s) => s.setToast);
+  const [recentSubmissionIntent, setRecentSubmissionIntent] = React.useState<
+    "save" | "save-as-draft" | null
+  >(null);
 
   const onExitAnimationComplete = () => {
     const newSearchParams = new URLSearchParams(searchParams);
@@ -90,6 +95,7 @@ export function InvoiceFormDialog(props: Props) {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     if (props.type === "edit") {
+      setRecentSubmissionIntent("save");
       handleSubmit((input) =>
         formAction({
           input,
@@ -109,8 +115,27 @@ export function InvoiceFormDialog(props: Props) {
           ? intentFromSubmitter
           : "save";
     }
+    setRecentSubmissionIntent(intent);
     handleSubmit((input) => formAction({ input, intent }))(e);
   };
+
+  const discardBtnJSX = (
+    <button
+      type="button"
+      onClick={() => reset()}
+      className={classJoin(
+        "pt-[1.125rem]",
+        "pb-[0.9375rem]",
+        "rounded-3xl",
+        "px-12px md:px-16px",
+        "typography-heading-s-var",
+        "bg-[#F9FAFE] hover:bg-ds-5 dark:bg-ds-4 hover:dark:bg-ds-8",
+        "text-ds-7 dark:text-ds-5"
+      )}
+    >
+      Discard
+    </button>
+  );
 
   React.useEffect(() => {
     if (formState.type !== "error") {
@@ -236,7 +261,7 @@ export function InvoiceFormDialog(props: Props) {
             onSubmit={onSubmit}
             className={classJoin("px-2px", "bg-inherit")}
           >
-            <fieldset className="mb-10 md:mb-12">
+            <fieldset className="mb-9 md:mb-12">
               <Legend>Bill From</Legend>
               <AddressInputs
                 streetAddressProps={{
@@ -257,7 +282,7 @@ export function InvoiceFormDialog(props: Props) {
                 }}
               />
             </fieldset>
-            <fieldset className="mb-10 md:mb-12">
+            <fieldset className="mb-9 md:mb-12">
               <Legend>Bill To</Legend>
               <LabelledInputWithErrMsg
                 $label="Client's Name"
@@ -312,10 +337,11 @@ export function InvoiceFormDialog(props: Props) {
               $label="Project Description"
               $labelInputGap="lg"
               $padding="lg"
+              $marginBottomZero={true}
               {...register("projectDescription")}
               $errorMsg={errors.projectDescription?.message}
             />
-            <fieldset className="mt-[4.25rem]">
+            <fieldset className="mt-16">
               <legend
                 className={classJoin(
                   "text-[#777F98]",
@@ -330,7 +356,7 @@ export function InvoiceFormDialog(props: Props) {
                   <li
                     key={itemField.id}
                     className={classJoin(
-                      "mb-12 md:mb-[1.0625rem]",
+                      "mb-11 md:mb-[1.0625rem]",
                       "md:flex md:gap-x-16px md:items-center"
                     )}
                   >
@@ -403,72 +429,76 @@ export function InvoiceFormDialog(props: Props) {
                 "-mr-24px md:-mr-56px",
                 "pl-24px md:pl-56px lg:pl-[calc(103px+56px)]",
                 "pr-24px md:pr-56px",
-                "flex items-center gap-x-2"
+                "flex items-center gap-2"
               )}
             >
-              <button
-                type="button"
-                onClick={() => {
-                  if (formIsSubmitting) {
-                    return;
-                  }
-                  reset();
-                }}
+              {props.type === "create" && discardBtnJSX}
+              <div
                 className={classJoin(
-                  "pt-[1.125rem]",
-                  "pb-[0.9375rem]",
-                  "rounded-3xl",
-                  "px-16px",
-                  "typography-heading-s-var",
-                  "bg-[#F9FAFE] hover:bg-ds-5 dark:bg-ds-4 hover:dark:bg-ds-8",
-                  "text-ds-7 dark:text-ds-5"
+                  "ml-auto",
+                  "flex flex-wrap items-center justify-center gap-2"
                 )}
               >
-                Discard
-              </button>
-              {props.type === "create" && (
-                <button
-                  type="submit"
-                  name="save-as-draft"
+                {props.type === "edit" ? (
+                  discardBtnJSX
+                ) : (
+                  <SubmitBtn
+                    name="save-as-draft"
+                    $isFormSubmitting={formIsSubmitting}
+                    className={classJoin(
+                      "pt-[1.125rem]",
+                      "pb-[0.9375rem]",
+                      "rounded-3xl",
+                      "px-12px md:px-16px",
+                      "typography-heading-s-var",
+                      "bg-[#373B53]",
+                      "text-ds-6 dark:text-ds-5",
+                      "whitespace-nowrap",
+                      "relative",
+                      formIsSubmitting &&
+                        recentSubmissionIntent !== "save-as-draft" &&
+                        "opacity-50",
+                      !formIsSubmitting && "hover:bg-ds-8 dark:hover:bg-ds-3"
+                    )}
+                  >
+                    <SubmitBtnContent
+                      isBtnSubmitting={
+                        formIsSubmitting &&
+                        recentSubmissionIntent === "save-as-draft"
+                      }
+                    >
+                      Save as Draft
+                    </SubmitBtnContent>
+                  </SubmitBtn>
+                )}
+                <SubmitBtn
+                  name="save"
+                  $isFormSubmitting={formIsSubmitting}
                   className={classJoin(
                     "pt-[1.125rem]",
                     "pb-[0.9375rem]",
                     "rounded-3xl",
-                    "px-16px",
+                    "px-12px md:px-16px",
                     "typography-heading-s-var",
-                    "bg-[#373B53] hover:bg-ds-8 dark:hover:bg-ds-3",
-                    "text-ds-6 dark:text-ds-5",
-                    "ml-auto"
+                    "bg-ds-1",
+                    "text-white",
+                    "whitespace-nowrap",
+                    "relative",
+                    formIsSubmitting &&
+                      recentSubmissionIntent !== "save" &&
+                      "opacity-50",
+                    !formIsSubmitting && "hover:bg-ds-2"
                   )}
                 >
-                  Save as Draft
-                </button>
-              )}
-              <button
-                type="submit"
-                name="save"
-                aria-disabled={formIsSubmitting}
-                onClick={(e) => {
-                  if (formIsSubmitting) {
-                    e.preventDefault();
-                  }
-                }}
-                className={classJoin(
-                  "pt-[1.125rem]",
-                  "pb-[0.9375rem]",
-                  "rounded-3xl",
-                  "px-16px",
-                  "typography-heading-s-var",
-                  "bg-ds-1 hover:bg-ds-2",
-                  "text-white"
-                )}
-              >
-                {formIsSubmitting
-                  ? "submitting..."
-                  : props.type === "edit"
-                  ? "Save Changes"
-                  : "Save & Send"}
-              </button>
+                  <SubmitBtnContent
+                    isBtnSubmitting={
+                      formIsSubmitting && recentSubmissionIntent === "save"
+                    }
+                  >
+                    {props.type === "edit" ? "Save Changes" : "Save & Send"}
+                  </SubmitBtnContent>
+                </SubmitBtn>
+              </div>
             </div>
           </form>
         </Ariakit.Dialog>

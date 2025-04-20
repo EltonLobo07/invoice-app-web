@@ -41,6 +41,17 @@ export function ItemInputs<
     name: props.quantityFormPath,
   });
 
+  const deleteBtnJSX = props.allowDeletion ? (
+    <button
+      type="button"
+      onClick={props.onDelete}
+      className={classJoin("relative", "text-ds-6", "self-end", "mb-5")}
+    >
+      <span className="sr-only">delete this item</span>
+      <Delete />
+    </button>
+  ) : null;
+
   return (
     <>
       <div
@@ -58,7 +69,14 @@ export function ItemInputs<
           {...props.nameProps}
         />
       </div>
-      <div className="grid grid-cols-[repeat(3,minmax(65px,1fr))_min-content] gap-x-16px items-center">
+      <div
+        className={classJoin(
+          "grid gap-x-16px items-center",
+          deleteBtnJSX !== null
+            ? "grid-cols-[repeat(3,minmax(0,1fr))_min-content]"
+            : "grid-cols-3"
+        )}
+      >
         <LabelledInputWithErrMsg
           $label="Qty."
           $mdSrOnlyLabel={props.hideMdInputLabels}
@@ -90,16 +108,7 @@ export function ItemInputs<
           $marginBottomZero={true}
           value={props.getTotalFieldValue({ price, quantity })}
         />
-        {props.allowDeletion && (
-          <button
-            type="button"
-            onClick={props.onDelete}
-            className={classJoin("relative", "text-ds-6", "self-end", "mb-5")}
-          >
-            <span className="sr-only">delete this item</span>
-            <Delete />
-          </button>
-        )}
+        {deleteBtnJSX}
       </div>
     </>
   );
