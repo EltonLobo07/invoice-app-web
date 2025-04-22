@@ -57,7 +57,7 @@ export function ItemInputs<
       <div
         className={classJoin(
           "mb-6 md:mb-0",
-          "md:basis-[214px] md:shrink-0 md:grow"
+          "md:basis-[214px] md:shrink-0 md:grow md:min-w-0"
         )}
       >
         <LabelledInputWithErrMsg

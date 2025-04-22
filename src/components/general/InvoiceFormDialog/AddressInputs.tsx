@@ -21,6 +21,7 @@ export function AddressInputs(props: Props) {
           $labelInputGap="lg"
           $padding="lg"
           $flexGrow={true}
+          $zeroMinWidth={true}
           {...props.cityProps}
         />
         <LabelledInputWithErrMsg
@@ -28,6 +29,7 @@ export function AddressInputs(props: Props) {
           $labelInputGap="lg"
           $padding="lg"
           $flexGrow={true}
+          $zeroMinWidth={true}
           {...props.postCodeProps}
         />
       </div>

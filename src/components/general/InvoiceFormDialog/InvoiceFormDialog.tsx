@@ -261,7 +261,7 @@ export function InvoiceFormDialog(props: Props) {
             onSubmit={onSubmit}
             className={classJoin("px-2px", "bg-inherit")}
           >
-            <fieldset className="mb-9 md:mb-12">
+            <fieldset className="mb-9 md:mb-12 min-w-0">
               <Legend>Bill From</Legend>
               <AddressInputs
                 streetAddressProps={{
@@ -282,7 +282,7 @@ export function InvoiceFormDialog(props: Props) {
                 }}
               />
             </fieldset>
-            <fieldset className="mb-9 md:mb-12">
+            <fieldset className="mb-9 md:mb-12 min-w-0">
               <Legend>Bill To</Legend>
               <LabelledInputWithErrMsg
                 $label="Client's Name"
@@ -341,7 +341,7 @@ export function InvoiceFormDialog(props: Props) {
               {...register("projectDescription")}
               $errorMsg={errors.projectDescription?.message}
             />
-            <fieldset className="mt-16">
+            <fieldset className="mt-16 min-w-0">
               <legend
                 className={classJoin(
                   "text-[#777F98]",

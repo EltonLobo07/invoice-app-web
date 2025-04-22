@@ -19,6 +19,7 @@ type Props = OmitKey<
     flexGrow?: boolean;
     labelInputGap?: "sm" | "lg";
     marginBottomZero?: boolean;
+    zeroMinWidth?: boolean;
   }>;
 
 export function LabelledInputWithErrMsg({
@@ -28,6 +29,7 @@ export function LabelledInputWithErrMsg({
   $action,
   $flexGrow,
   $marginBottomZero,
+  $zeroMinWidth,
   ...inputWithErrMsgProps
 }: Props) {
   const id = React.useId();
@@ -54,6 +56,7 @@ export function LabelledInputWithErrMsg({
       $flexGrow={$flexGrow}
       $labelInputGap={$labelInputGap}
       $marginBottomZero={$marginBottomZero}
+      $zeroMinWidth={$zeroMinWidth}
     >
       {labelWithAction}
       <InputWithErrMsg {...inputWithErrMsgProps} id={id} />
