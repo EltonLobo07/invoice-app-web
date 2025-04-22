@@ -11,9 +11,14 @@ type Props = OmitKey<
 > &
   CustomProps<{
     errorMsg?: string;
+    errorMsgZIdxOnFocus?: `z-${10 | 20 | 30 | 40 | 50}`;
   }>;
 
-export function InputWithErrMsg({ $errorMsg, ...inputProps }: Props) {
+export function InputWithErrMsg({
+  $errorMsg,
+  $errorMsgZIdxOnFocus,
+  ...inputProps
+}: Props) {
   const id = React.useId();
   const errorMsgId = `${id}-error`;
   const isInvalid = Boolean($errorMsg);
@@ -78,7 +83,8 @@ export function InputWithErrMsg({ $errorMsg, ...inputProps }: Props) {
               "rounded-sm",
               "origin-[--popover-transform-origin]",
               "max-w-full overflow-x-hidden break-words hyphens-auto",
-              "shadow-sm"
+              "shadow-sm",
+              $errorMsgZIdxOnFocus
             )}
           >
             {$errorMsg}

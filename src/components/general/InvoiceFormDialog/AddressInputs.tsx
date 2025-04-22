@@ -4,7 +4,9 @@ import type { FormInputProps } from "./types";
 type Props = Record<
   "streetAddressProps" | "cityProps" | "postCodeProps" | "countryProps",
   FormInputProps
->;
+> & {
+  errorMsgZIdxOnFocus?: `z-${10 | 20 | 30 | 40 | 50}`;
+};
 
 export function AddressInputs(props: Props) {
   return (
@@ -13,6 +15,7 @@ export function AddressInputs(props: Props) {
         $label="Street Address"
         $labelInputGap="lg"
         $padding="lg"
+        $errorMsgZIdxOnFocus={props.errorMsgZIdxOnFocus}
         {...props.streetAddressProps}
       />
       <div className="flex gap-x-[1.4375rem] items-center">
@@ -22,6 +25,7 @@ export function AddressInputs(props: Props) {
           $padding="lg"
           $flexGrow={true}
           $zeroMinWidth={true}
+          $errorMsgZIdxOnFocus={props.errorMsgZIdxOnFocus}
           {...props.cityProps}
         />
         <LabelledInputWithErrMsg
@@ -30,6 +34,7 @@ export function AddressInputs(props: Props) {
           $padding="lg"
           $flexGrow={true}
           $zeroMinWidth={true}
+          $errorMsgZIdxOnFocus={props.errorMsgZIdxOnFocus}
           {...props.postCodeProps}
         />
       </div>
@@ -38,6 +43,7 @@ export function AddressInputs(props: Props) {
         $labelInputGap="lg"
         $padding="lg"
         $marginBottomZero={true}
+        $errorMsgZIdxOnFocus={props.errorMsgZIdxOnFocus}
         {...props.countryProps}
       />
     </>

@@ -92,6 +92,7 @@ export function InvoiceFormDialog(props: Props) {
   });
 
   const allowItemDeletion = itemFields.length > 1;
+  const errorMsgZIdxOnFocus: `z-${10 | 20 | 30 | 40 | 50}` = `z-10`;
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     if (props.type === "edit") {
@@ -224,7 +225,7 @@ export function InvoiceFormDialog(props: Props) {
               "pt-8 md:pt-[1.125rem]",
               "bg-inherit",
               "sticky top-0",
-              "z-10"
+              "z-30"
             )}
           >
             <Ariakit.DialogDismiss
@@ -264,6 +265,7 @@ export function InvoiceFormDialog(props: Props) {
             <fieldset className="mb-9 md:mb-12 min-w-0">
               <Legend>Bill From</Legend>
               <AddressInputs
+                errorMsgZIdxOnFocus={errorMsgZIdxOnFocus}
                 streetAddressProps={{
                   ...register("billFrom.streetAddress"),
                   $errorMsg: errors.billFrom?.streetAddress?.message,
@@ -288,6 +290,7 @@ export function InvoiceFormDialog(props: Props) {
                 $label="Client's Name"
                 $labelInputGap="lg"
                 $padding="lg"
+                $errorMsgZIdxOnFocus={errorMsgZIdxOnFocus}
                 {...register("billTo.clientName")}
                 $errorMsg={errors.billTo?.clientName?.message}
               />
@@ -296,10 +299,12 @@ export function InvoiceFormDialog(props: Props) {
                 $labelInputGap="lg"
                 $padding="lg"
                 type="email"
+                $errorMsgZIdxOnFocus={errorMsgZIdxOnFocus}
                 {...register("billTo.clientEmail")}
                 $errorMsg={errors.billTo?.clientEmail?.message}
               />
               <AddressInputs
+                errorMsgZIdxOnFocus={errorMsgZIdxOnFocus}
                 streetAddressProps={{
                   ...register("billTo.streetAddress"),
                   $errorMsg: errors.billTo?.streetAddress?.message,
@@ -324,6 +329,7 @@ export function InvoiceFormDialog(props: Props) {
                 $labelInputGap="lg"
                 $padding="lg"
                 type="date"
+                $errorMsgZIdxOnFocus={errorMsgZIdxOnFocus}
                 {...register("date")}
                 $errorMsg={errors.date?.message}
               />
@@ -337,6 +343,7 @@ export function InvoiceFormDialog(props: Props) {
               $label="Project Description"
               $labelInputGap="lg"
               $padding="lg"
+              $errorMsgZIdxOnFocus={errorMsgZIdxOnFocus}
               $marginBottomZero={true}
               {...register("projectDescription")}
               $errorMsg={errors.projectDescription?.message}
@@ -384,6 +391,7 @@ export function InvoiceFormDialog(props: Props) {
                           Number(priceRes.output) * Number(qtyRes.output)
                         ).toFixed(2);
                       }}
+                      errorMsgZIdxOnFocus={errorMsgZIdxOnFocus}
                       nameProps={{
                         ...register(`items.${i}.name`),
                         $errorMsg: errors.items?.[i]?.name?.message,
@@ -429,7 +437,8 @@ export function InvoiceFormDialog(props: Props) {
                 "-mr-24px md:-mr-56px",
                 "pl-24px md:pl-56px lg:pl-[calc(103px+56px)]",
                 "pr-24px md:pr-56px",
-                "flex items-center gap-2"
+                "flex items-center gap-2",
+                "relative z-30"
               )}
             >
               {props.type === "create" && discardBtnJSX}

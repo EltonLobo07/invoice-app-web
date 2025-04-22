@@ -28,6 +28,7 @@ type Props<
     price: PathValue<TFieldValues, TPriceFieldPath>;
     quantity: PathValue<TFieldValues, TQuantityFieldPath>;
   }) => string;
+  errorMsgZIdxOnFocus?: `z-${10 | 20 | 30 | 40 | 50}`;
 } & Record<"nameProps" | "quantityProps" | "priceProps", FormInputProps>;
 
 export function ItemInputs<
@@ -66,6 +67,7 @@ export function ItemInputs<
           $labelInputGap="lg"
           $padding="lg"
           $marginBottomZero={true}
+          $errorMsgZIdxOnFocus={props.errorMsgZIdxOnFocus}
           {...props.nameProps}
         />
       </div>
@@ -85,6 +87,7 @@ export function ItemInputs<
           type="text"
           inputMode="numeric"
           $marginBottomZero={true}
+          $errorMsgZIdxOnFocus={props.errorMsgZIdxOnFocus}
           {...props.quantityProps}
         />
         <LabelledInputWithErrMsg
@@ -106,6 +109,7 @@ export function ItemInputs<
           type="text"
           inputMode="numeric"
           $marginBottomZero={true}
+          $errorMsgZIdxOnFocus={props.errorMsgZIdxOnFocus}
           value={props.getTotalFieldValue({ price, quantity })}
         />
         {deleteBtnJSX}

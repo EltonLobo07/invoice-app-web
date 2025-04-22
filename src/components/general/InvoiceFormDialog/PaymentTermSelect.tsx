@@ -89,6 +89,7 @@ export function PaymentTermSelect(props: Props) {
               gutter={8}
               alwaysVisible={true}
               className={classJoin(
+                "z-20",
                 "bg-white dark:bg-ds-4",
                 // "p-24px",
                 "rounded-[8px]",
