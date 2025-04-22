@@ -46,7 +46,7 @@ export function ItemInputs<
     <button
       type="button"
       onClick={props.onDelete}
-      className={classJoin("relative", "text-ds-6", "self-end", "mb-5")}
+      className={classJoin("relative", "text-ds-6", "self-end", "mb-8")}
     >
       <span className="sr-only">delete this item</span>
       <Delete />
@@ -57,7 +57,7 @@ export function ItemInputs<
     <>
       <div
         className={classJoin(
-          "mb-6 md:mb-0",
+          "mb-3 md:mb-0",
           "md:basis-[214px] md:shrink-0 md:grow md:min-w-0"
         )}
       >
