@@ -20,7 +20,7 @@ export function LabelInputContainer(props: Props) {
         "flex flex-col",
         props.$zeroMinWidth && "min-w-0",
         props.$flexGrow && "grow",
-        props.$labelInputGap === "lg" ? "gap-y-1" : "gap-y-0.5",
+        props.$labelInputGap === "lg" ? "gap-y-2" : "gap-y-1",
         props.$marginBottomZero
           ? "mb-0"
           : props.$marginBottom === "lg"

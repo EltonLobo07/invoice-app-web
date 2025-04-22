@@ -222,7 +222,7 @@ export function InvoiceFormDialog(props: Props) {
           <div
             className={classJoin(
               "pb-[1.375rem] md:pb-[2.875rem]",
-              "pt-8 md:pt-[1.125rem]",
+              "pt-8 md:pt-[3.6875rem]",
               "bg-inherit",
               "sticky top-0",
               "z-30"
@@ -233,7 +233,8 @@ export function InvoiceFormDialog(props: Props) {
                 "flex gap-x-6 items-center",
                 "mb-[1.625rem]",
                 "typography-heading-s-var",
-                "text-ds-8 dark:text-white"
+                "text-ds-8 dark:text-white",
+                "md:hidden"
               )}
             >
               <ArrowDown className={classJoin("rotate-90", "text-ds-1")} />
@@ -262,7 +263,7 @@ export function InvoiceFormDialog(props: Props) {
             onSubmit={onSubmit}
             className={classJoin("px-2px", "bg-inherit")}
           >
-            <fieldset className="mb-8 md:mb-12 min-w-0">
+            <fieldset className="mb-8 md:mb-10 min-w-0">
               <Legend>Bill From</Legend>
               <AddressInputs
                 errorMsgZIdxOnFocus={errorMsgZIdxOnFocus}
@@ -284,7 +285,7 @@ export function InvoiceFormDialog(props: Props) {
                 }}
               />
             </fieldset>
-            <fieldset className="mb-8 md:mb-12 min-w-0">
+            <fieldset className="mb-8 md:mb-10 min-w-0">
               <Legend>Bill To</Legend>
               <LabelledInputWithErrMsg
                 $label="Client's Name"
@@ -348,11 +349,11 @@ export function InvoiceFormDialog(props: Props) {
               {...register("projectDescription")}
               $errorMsg={errors.projectDescription?.message}
             />
-            <fieldset className="mt-[3.125rem] min-w-0">
+            <fieldset className="mt-[3.125rem] md:mt-10 min-w-0">
               <legend
                 className={classJoin(
                   "text-[#777F98]",
-                  "mb-[1.375rem]",
+                  "mb-[1.375rem] md:mb-[0.875rem]",
                   "font-bold text-[1.125rem] leading-8 -tracking-[0.02375rem]"
                 )}
               >
@@ -363,7 +364,7 @@ export function InvoiceFormDialog(props: Props) {
                   <li
                     key={itemField.id}
                     className={classJoin(
-                      "mb-[1.875rem] md:mb-[1.0625rem]",
+                      "mb-[1.875rem] md:mb-4",
                       "md:flex md:gap-x-16px md:items-center"
                     )}
                   >
@@ -421,7 +422,7 @@ export function InvoiceFormDialog(props: Props) {
                   "w-full",
                   "rounded-3xl",
                   "typography-heading-s-var",
-                  "mb-[5.5rem]"
+                  "mb-[5.5rem] md:mb-14"
                 )}
               >
                 Add New Item
