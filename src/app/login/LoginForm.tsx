@@ -14,6 +14,7 @@ import {
 } from "@/components/general";
 import { SubmitBtn } from "@/components/auth";
 import { useRouter } from "@/hooks";
+import { classJoin } from "@/utils/general";
 
 export function LoginForm() {
   const { formState, formAction, formIsSubmitting } = useFormAction({
@@ -28,6 +29,7 @@ export function LoginForm() {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm({
     resolver: valibotResolver(LoginSchema),
     defaultValues: {},
@@ -70,6 +72,33 @@ export function LoginForm() {
           {...register("password")}
         />
         <SubmitBtn isFormSubmitting={formIsSubmitting} />
+        <button
+          type="button"
+          onClick={() => {
+            setValue("email", "guest_user@gmail.com", {
+              shouldDirty: true,
+              shouldTouch: true,
+              shouldValidate: true,
+            });
+            setValue("password", "guest_user@123", {
+              shouldDirty: true,
+              shouldTouch: true,
+              shouldValidate: true,
+            });
+          }}
+          className={classJoin(
+            "bg-[#F9FAFE] hover:bg-ds-5 dark:bg-ds-4 hover:dark:bg-ds-8",
+            "text-ds-7 dark:test-ds-5",
+            "rounded-sm",
+            "px-16px py-3",
+            "typography-heading-s-var",
+            "w-full",
+            "flex justify-center items-center gap-x-1",
+            "mt-4"
+          )}
+        >
+          Add guest details
+        </button>
       </form>
     </>
   );
