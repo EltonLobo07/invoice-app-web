@@ -26,6 +26,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import * as v from "valibot";
 
+export const metadata = {
+  title: "Invoice",
+};
+
 type Props = {
   params?: NextParamsProp;
   searchParams?: NextParamsProp;
