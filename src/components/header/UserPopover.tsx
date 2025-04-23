@@ -8,6 +8,7 @@ import React from "react";
 import { UserCircle, XCircle } from "@/icons";
 import { useStoreContext } from "@/providers/StoreProvider";
 import { useRouter } from "@/hooks";
+import Link from "next/link";
 
 type Props = {
   user: User;
@@ -94,11 +95,41 @@ export function UserPopover({ user: { username } }: Props) {
                 "rounded-sm",
                 "w-full",
                 "py-1 px-2",
-                "text-base"
+                "text-sm",
+                "mb-1"
               )}
             >
-              Logout
+              Log out
             </Ariakit.Button>
+            <Link
+              prefetch={false}
+              href="/login"
+              className={classJoin(
+                "bg-ds-4 hover:bg-white text-ds-5 hover:text-black",
+                "rounded-sm",
+                "w-full",
+                "py-1 px-2",
+                "text-sm",
+                "text-center",
+                "mb-1"
+              )}
+            >
+              Sign in
+            </Link>
+            <Link
+              prefetch={false}
+              href="/signup"
+              className={classJoin(
+                "bg-ds-4 hover:bg-white text-ds-5 hover:text-black",
+                "rounded-sm",
+                "w-full",
+                "py-1 px-2",
+                "text-sm",
+                "text-center"
+              )}
+            >
+              Sign up
+            </Link>
           </Ariakit.Popover>
         )}
       </AnimatePresence>
