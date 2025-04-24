@@ -13,6 +13,7 @@ import { GlobalToast } from "@/components/toast";
 import HolyLoader from "holy-loader";
 import { Header } from "@/components/header";
 import { getJwt, getUser } from "@/server-helpers";
+import { MotionConfig } from "motion/react";
 
 const leagueSpartan = League_Spartan({
   subsets: ["latin"],
@@ -58,14 +59,16 @@ export default async function RootLayout({
           "isolate"
         )}
       >
-        <HolyLoader color="#3B82F6" zIndex={50} />
-        <StoreProvider initialIsDarkTheme={isDarkTheme} initialUser={user}>
-          <Header />
-          <div className={classJoin("grow overflow-y-auto", "bg-inherit")}>
-            {children}
-          </div>
-          <GlobalToast />
-        </StoreProvider>
+        <MotionConfig reducedMotion="user">
+          <HolyLoader color="#3B82F6" zIndex={50} />
+          <StoreProvider initialIsDarkTheme={isDarkTheme} initialUser={user}>
+            <Header />
+            <div className={classJoin("grow overflow-y-auto", "bg-inherit")}>
+              {children}
+            </div>
+            <GlobalToast />
+          </StoreProvider>
+        </MotionConfig>
       </body>
     </html>
   );

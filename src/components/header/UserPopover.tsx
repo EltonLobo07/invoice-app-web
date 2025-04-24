@@ -79,7 +79,7 @@ export function UserPopover({ user: { username } }: Props) {
               <span className="sr-only">hi</span>
               <span
                 aria-hidden={true}
-                className="inline-block animate-wave origin-[80%_90%]"
+                className="inline-block motion-safe:animate-wave origin-[80%_90%]"
               >
                 👋
               </span>
