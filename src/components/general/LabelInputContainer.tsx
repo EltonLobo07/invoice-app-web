@@ -1,5 +1,4 @@
 import { classJoin, type CustomProps } from "@/utils/general";
-import { motion } from "motion/react";
 
 type Props = { children: React.ReactNode } & CustomProps<
   {
@@ -14,8 +13,7 @@ type Props = { children: React.ReactNode } & CustomProps<
 
 export function LabelInputContainer(props: Props) {
   return (
-    <motion.div
-      layout="position"
+    <div
       className={classJoin(
         "flex flex-col",
         props.$zeroMinWidth && "min-w-0",
@@ -29,6 +27,6 @@ export function LabelInputContainer(props: Props) {
       )}
     >
       {props.children}
-    </motion.div>
+    </div>
   );
 }
