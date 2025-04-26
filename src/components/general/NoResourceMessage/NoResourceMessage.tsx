@@ -5,7 +5,9 @@ import { classJoin, type HeadingLvl } from "@/utils/general";
 
 type Props = {
   headingLvl?: HeadingLvl;
+  hFull?: boolean;
   description: React.ReactNode;
+  action?: React.ReactNode;
 };
 
 export function NoResourceMessage(props: Props) {
@@ -14,6 +16,8 @@ export function NoResourceMessage(props: Props) {
       headingLvl={props.headingLvl ?? 3}
       title="There is nothing here"
       description={props.description}
+      hFull={props.hFull}
+      action={props.action}
       img={
         <Image
           src={AnnouncementImgData}
