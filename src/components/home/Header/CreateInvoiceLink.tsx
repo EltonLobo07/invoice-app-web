@@ -13,7 +13,7 @@ type Props = {
   text: ResponsiveTextType;
 };
 
-const MotionLink = motion(Link);
+const MotionLink = motion.create(Link);
 
 export function CreateInvoiceLink(props: Props) {
   const pathname = usePathname();
